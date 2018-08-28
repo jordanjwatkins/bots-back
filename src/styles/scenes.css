@@ -1,0 +1,17 @@
+.level-select-container {
+    user-select: none;
+}
+
+.level-select-button {
+    background: #a0ceab;
+    border: 2px solid #85bb96;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.level-select-button:hover {
+    opacity: 0.8;
+}

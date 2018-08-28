@@ -1,0 +1,142 @@
+import images from './images'
+
+class MainCanvas {
+  constructor({ width = 200, height = 200 } = {}) {
+    this.canvas = document.createElement('canvas')
+
+    this.canvas.width = width
+    this.canvas.height = height
+
+    this.context = this.canvas.getContext('2d')
+
+    //this.canvas.style.backgroundColor = '#c6c6ff'
+    //this.canvas.style.backgroundColor = '#5fcde4'
+    this.canvas.style.backgroundColor = '#639bff'
+
+    this.context.imageSmoothingEnabled = false
+  }
+
+  get width() {
+    return this.canvas.width
+  }
+
+  get height() {
+    return this.canvas.height
+  }
+
+  clear() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  }
+
+  testRect(color) {
+    this.context.fillStyle = color || '#000'
+
+    this.context.fillRect(0, 0, 40, 20)
+  }
+
+  transform(thing) {
+    this.context.translate(thing.x, thing.y + (thing.height / 2))
+
+    if (thing.scaleX) this.flipX(thing)
+    if (thing.rotation) this.rotate(thing)
+
+    this.context.translate(-thing.x, -thing.y - (thing.height / 2))
+  }
+
+  flipX(thing) {
+    this.context.scale(thing.scaleX, 1)
+  }
+
+  rotate(thing) {
+    this.context.rotate(thing.rotation * (Math.PI / 180))
+  }
+
+  drawRect({ x, y, color, width = 30, height = 60 }) {
+    this.context.fillStyle = color || '#000'
+
+    this.context.fillRect(x, y, width, height)
+  }
+
+  drawThing(thing, frame = 0) {
+    if (thing.spriteName) thing.sprite = images[thing.spriteName]
+
+    if (!thing.sprite) return
+
+    const spriteX = thing.x - (thing.width / 2)
+    const spriteY = thing.y - (thing.height / 2)
+
+    this.context.drawImage(
+      thing.sprite,
+
+      // sprite frame box
+      frame * thing.frameWidth, 0, thing.frameWidth, thing.frameHeight,
+
+      // position in world
+      spriteX, spriteY,
+
+      // dimensions in world
+      thing.width, thing.height,
+    )
+  }
+
+  makeScanlines(vh, vw) {
+    const lines = []
+    let y = 0
+
+    while (y < vh * 2) {
+      const line = {
+        start: [0, y],
+        end: [vw * 2, y],
+        width: 3,
+      }
+
+      y += 7
+
+      lines.push(line)
+    }
+
+    return lines
+  }
+
+  drawScanlines() {
+    const { context, canvas } = this
+    const vh = canvas.height
+    const vw = canvas.width
+
+    const m = context.moveTo.bind(context)
+    const l = context.lineTo.bind(context)
+    const bp = context.beginPath.bind(context)
+    const cp = context.closePath.bind(context)
+
+    context.save()
+
+    context.setTransform(1, 0, 0, 1, 0, 0)
+    context.scale(0.5, 0.5)
+
+    context.globalAlpha = 0.05
+
+    context.lineWidth = '0.1'
+    context.strokeStyle = '#000'
+
+    this.scanlines = this.scanlines || this.makeScanlines(vh, vw)
+
+
+    this.scanlines.forEach((line) => {
+      context.lineWidth = line.width
+
+      bp()
+      //console.log(line);
+
+
+      m(line.start[0], line.start[1])
+      l(line.end[0], line.end[1])
+      cp()
+
+      context.stroke()
+    })
+
+    context.restore()
+  }
+}
+
+export default MainCanvas
