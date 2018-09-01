@@ -2,6 +2,8 @@ import { jump3, jump4 } from '../sound'
 
 const colorPrimary = '#3F3F74'
 
+let isOpen = false
+
 class WinSplash {
   constructor(scene) {
     const { mainCanvas } = scene
@@ -22,10 +24,14 @@ class WinSplash {
 
     this.scene = scene
 
+    isOpen = true
+
     this.attachEvents()
   }
 
   destroy() {
+    isOpen = false
+
     this.detachEvents()
 
     this.scene.entities = this.scene.entities.filter(entity => entity !== this)
@@ -44,12 +50,12 @@ class WinSplash {
   }
 
   onClick = (event) => {
-    if (this.isRestartClick(event)) return console.log('restart') || this.scene.freshStart()
-    if (this.isNextLevelClick(event)) return console.log('next level') || this.scene.startNextLevel()
+    if (this.isRestartClick(event)) this.scene.freshStart()
+    if (this.isNextLevelClick(event)) this.scene.startNextLevel()
   }
 
   isRestartClick(event) {
-    const { mainCanvas } = this.scene
+    const { mainCanvas, debug } = this.scene
 
     const clickRect = {
       y: 300,
@@ -58,7 +64,7 @@ class WinSplash {
       width: 120
     }
 
-    if (true && !this.restartDebugRect) {
+    if (debug && !this.restartDebugRect) {
       this.restartDebugRect = mainCanvas.clickAreaDebug(clickRect)
     }
 
@@ -66,7 +72,7 @@ class WinSplash {
   }
 
   isNextLevelClick(event) {
-    const { mainCanvas } = this.scene
+    const { mainCanvas, debug } = this.scene
 
     const clickRect = {
       y: 300,
@@ -75,7 +81,7 @@ class WinSplash {
       width: 120
     }
 
-    if (true && !this.nextLevelDebugRect) {
+    if (debug && !this.nextLevelDebugRect) {
       this.nextLevelDebugRect = mainCanvas.clickAreaDebug(clickRect)
     }
 
@@ -174,9 +180,7 @@ class WinSplash {
       this.startSound4 = true
 
       setTimeout(() => {
-        console.log('jump4');
-
-        jump4()
+        if (isOpen) jump4()
       }, 1000);
     }
 
@@ -230,8 +234,6 @@ class WinSplash {
     context.rotate(0.003 * Math.PI)
 
     mainCanvas.drawRect(this)
-
-    context.stroke()
   }
 
   drawTriangle(context, x, y, scale, flip = false) {

@@ -42,19 +42,19 @@ export default (scene) => {
         }),
 
         new Bird({
-          x: 600,
-          y: lineTop - birdSize,
-          absorber: true,
-        }),
-
-        new Bird({
           x: 400,
           y: line2Top - birdSize,
           absorber: true,
         }),
 
         new Bird({
-          x: 700,
+          x: 600,
+          y: lineTop - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 620,
           y: line2Top - birdSize,
           absorber,
         }),
@@ -67,8 +67,10 @@ export default (scene) => {
       ]
 
       return {
-        optimalPulseCount: 2,
-        absorberOptimalPulseCount: 3,
+        starThresholds: [15, 11, 7],
+        absorberStarThresholds: [19, 14, 9],
+        optimalPulseCount: 7,
+        absorberOptimalPulseCount: 9,
         birdCount: getBirdCount(entities),
         entities,
       }
@@ -87,20 +89,20 @@ export default (scene) => {
         }),
 
         new Bird({
-          x: 600,
-          y: lineTop - birdSize,
-          absorber: true,
-          verticalSwapper: true
-        }),
-
-        new Bird({
           x: 400,
           y: line2Top - birdSize,
           absorber: true,
         }),
 
         new Bird({
-          x: 700,
+          x: 580,
+          y: lineTop - birdSize,
+          absorber: true,
+          verticalSwapper: true
+        }),
+
+        new Bird({
+          x: 620,
           y: line2Top - birdSize,
           absorber,
         }),
@@ -113,8 +115,9 @@ export default (scene) => {
       ]
 
       return {
-        optimalPulseCount: 2,
-        absorberOptimalPulseCount: 3,
+        starThresholds: [14, 10, 7],
+        optimalPulseCount: 7,
+        absorberOptimalPulseCount: 0,
         birdCount: getBirdCount(entities),
         entities,
       }
@@ -139,6 +142,7 @@ export default (scene) => {
 
       return {
         starThresholds: [4, 3, 2],
+        absorberStarThresholds: [5, 4, 3],
         optimalPulseCount: 2,
         absorberOptimalPulseCount: 3,
         birdCount: getBirdCount(entities),
@@ -167,6 +171,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [4, 3, 2],
+        absorberStarThresholds: [4, 3, 2],
         optimalPulseCount: 2,
         absorberOptimalPulseCount: 2,
         birdCount: getBirdCount(entities),
@@ -195,6 +201,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [4, 3, 2],
+        absorberStarThresholds: [5, 4, 3],
         optimalPulseCount: 2,
         absorberOptimalPulseCount: 3,
         birdCount: getBirdCount(entities),
@@ -234,6 +242,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [8, 6, 4],
+        absorberStarThresholds: [13, 10, 8],
         optimalPulseCount: 4,
         absorberOptimalPulseCount: 8,
         birdCount: getBirdCount(entities),
@@ -272,6 +282,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [7, 5, 3],
+        absorberStarThresholds: [9, 7, 5],
         optimalPulseCount: 3,
         absorberOptimalPulseCount: 5,
         birdCount: getBirdCount(entities),
@@ -309,6 +321,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [8, 6, 4],
+        absorberStarThresholds: [9, 7, 5],
         optimalPulseCount: 4,
         absorberOptimalPulseCount: 5,
         birdCount: getBirdCount(entities),
@@ -351,6 +365,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [7, 5, 3],
+        absorberStarThresholds: [10, 8, 6],
         optimalPulseCount: 3,
         absorberOptimalPulseCount: 6,
         birdCount: getBirdCount(entities),
@@ -393,6 +409,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [8, 6, 4],
+        absorberStarThresholds: [14, 11, 8],
         optimalPulseCount: 4,
         absorberOptimalPulseCount: 8,
         birdCount: getBirdCount(entities),
@@ -427,6 +445,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [11, 8, 5],
+        absorberStarThresholds: [14, 11, 8],
         optimalPulseCount: 5,
         absorberOptimalPulseCount: 8,
         birdCount: getBirdCount(entities),
@@ -483,6 +503,8 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [20, 16, 12],
+        absorberStarThresholds: [34, 28, 24],
         optimalPulseCount: 12,
         absorberOptimalPulseCount: 24,
         birdCount: getBirdCount(entities),

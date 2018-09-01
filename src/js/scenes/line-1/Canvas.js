@@ -148,20 +148,17 @@ class MainCanvas {
     context.setTransform(1, 0, 0, 1, 0, 0)
     context.scale(0.5, 0.5)
 
-    context.globalAlpha = 0.05
+    context.globalAlpha = 0.2
 
     context.lineWidth = '0.1'
     context.strokeStyle = '#000'
 
     this.scanlines = this.scanlines || this.makeScanlines(vh, vw)
 
-
     this.scanlines.forEach((line) => {
       context.lineWidth = line.width
 
       bp()
-      //console.log(line);
-
 
       m(line.start[0], line.start[1])
       l(line.end[0], line.end[1])

@@ -1,18 +1,18 @@
 import { jump4 } from './sound'
 
-function update(scene) {
+function update(scene, delta) {
   const { mainCanvas, entities } = scene
 
   mainCanvas.clear()
 
   // background z of 1
-  updateEntities(entities, scene, 1)
+  updateEntities(entities, scene, 1, delta)
 
   // draw foreground at z of 3
-  //updateEntities(entities, scene, 3)
+  updateEntities(entities, scene, 3, delta)
 
   // draw overlay at z of 4
-  //updateEntities(entities, scene, 4)
+  updateEntities(entities, scene, 4, delta)
 
   mainCanvas.drawScanlines()
 
@@ -34,13 +34,13 @@ function update(scene) {
   }
 }
 
-function updateEntities(entities, scene, z) {
+function updateEntities(entities, scene, z, delta) {
   if (!entities) return
 
   scene.flyingBirdCount = 0
 
   entities.forEach((entity) => {
-    if (entity.z === z) entity.update(scene)
+    if (entity.z === z) entity.update(scene, delta)
 
     if (entity.constructor.name === 'Bird' && entity.flying) {
       scene.flyingBirdCount += 1

@@ -21,7 +21,7 @@ class Cloud {
     scene.entities = scene.entities.filter(entity => entity !== this)
   }
 
-  update(scene) {
+  update(scene, delta) {
     const { mainCanvas } = scene
 
     if (this.x > mainCanvas.width) {
@@ -30,8 +30,8 @@ class Cloud {
     }
 
     if (this.moving) {
-      this.x += this.speed.x
-      this.y += this.speed.y
+      this.x += this.speed.x / 16 * delta
+      this.y += this.speed.y / 16 * delta
     }
 
     mainCanvas.drawRect(this)

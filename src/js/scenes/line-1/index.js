@@ -58,9 +58,11 @@ class Line1Scene {
   }
 
   get starScore() {
-    if (!this.level.starThresholds) return 0
+    const starThresholds = (this.currentLevel.indexOf('Absorber') > -1) ?
+      this.level.absorberStarThresholds :
+      this.level.starThresholds
 
-    return this.level.starThresholds.filter((threshold) => {
+    return starThresholds.filter((threshold) => {
       return (this.pulser.pulsesFiredCount <= threshold)
     }).length
   }
@@ -176,8 +178,6 @@ class Line1Scene {
   initEntities() {
     this.entities = this.level.entities
     this.birdCount = this.level.birdCount
-
-    console.log('init entities');
 
     this.level.entities.unshift(new Cloud({ x: Math.round(100 + (this.mainCanvas.width / 2 - 100) * Math.random()),  y: Math.round(50 + 200 * Math.random()) }))
     this.level.entities.unshift(new Cloud({ x: Math.round(400 + (this.mainCanvas.width - 400) * Math.random()),  y: Math.round(150 + 300 * Math.random()) }))
