@@ -7,9 +7,9 @@ export default (scene) => {
   const birdSize = 20
   const lineHeight = 5
 
-  const lineTop = 400
-  const line2Top = 200
-  const line3Top = 300
+  const lineTop = 350
+  const line2Top = 150
+  const line3Top = 250
 
   const line1 = new Line({
     y: lineTop,
@@ -30,6 +30,96 @@ export default (scene) => {
   })
 
   const levels = {
+    fiveMixedAbsorber({ absorber = false } = {}) {
+      const entities = [
+        line1,
+        line2,
+
+        new Bird({
+          x: 300,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 600,
+          y: lineTop - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 400,
+          y: line2Top - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 700,
+          y: line2Top - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 750,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+      ]
+
+      return {
+        optimalPulseCount: 2,
+        absorberOptimalPulseCount: 3,
+        birdCount: getBirdCount(entities),
+        entities,
+      }
+    },
+
+    fiveMixedSwitch({ absorber = false } = {}) {
+      const entities = [
+        line1,
+        line2,
+
+        new Bird({
+          x: 300,
+          y: lineTop - birdSize,
+          absorber,
+          verticalSwapper: true
+        }),
+
+        new Bird({
+          x: 600,
+          y: lineTop - birdSize,
+          absorber: true,
+          verticalSwapper: true
+        }),
+
+        new Bird({
+          x: 400,
+          y: line2Top - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 700,
+          y: line2Top - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 750,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+      ]
+
+      return {
+        optimalPulseCount: 2,
+        absorberOptimalPulseCount: 3,
+        birdCount: getBirdCount(entities),
+        entities,
+      }
+    },
+
     oneLineTwoSimple({ absorber = false } = {}) {
       const entities = [
         line1,
@@ -48,6 +138,7 @@ export default (scene) => {
       ]
 
       return {
+        starThresholds: [4, 3, 2],
         optimalPulseCount: 2,
         absorberOptimalPulseCount: 3,
         birdCount: getBirdCount(entities),

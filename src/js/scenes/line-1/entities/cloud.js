@@ -2,7 +2,7 @@ class Cloud {
   constructor({ x = 0, y = 100, width = 100, height = 30, speedX = 0.5, speedY = 0 } = {}) {
     this.x = x
     this.y = y
-    this.z = 3
+    this.z = 1
 
     this.width = width
     this.height = height

@@ -9,46 +9,43 @@ function update(scene) {
   updateEntities(entities, scene, 1)
 
   // draw foreground at z of 3
-  updateEntities(entities, scene, 3)
+  //updateEntities(entities, scene, 3)
+
+  // draw overlay at z of 4
+  //updateEntities(entities, scene, 4)
+
+  mainCanvas.drawScanlines()
 
   // win scene
-  if (scene.win && !scene.gameOver) {
-    scene.gameOver = true
+  if (scene.flyingBirdCount === scene.birdCount) {
+    if (scene.allFlying) return
 
-    setTimeout(() => {
-      scene.fadingOut = true
-    }, 1000)
+    const fired = scene.pulser.pulsesFiredCount
 
-    setTimeout(() => {
-      scene.freshStart()
-    }, 2000)
+    if (scene.bestScoreForLevel === 0 || fired < scene.bestScoreForLevel) scene.bestScoreForLevel = fired
+
+    console.log('WWWIIIINNNN!!!!!', fired)
+
+    scene.winSplash();
+
+    scene.allFlying = true
+
+    jump4()
   }
 }
 
 function updateEntities(entities, scene, z) {
   if (!entities) return
 
-  let flyingBirdCount = 0
+  scene.flyingBirdCount = 0
 
   entities.forEach((entity) => {
     if (entity.z === z) entity.update(scene)
 
     if (entity.constructor.name === 'Bird' && entity.flying) {
-      flyingBirdCount += 1
+      scene.flyingBirdCount += 1
     }
   })
-
-  scene.mainCanvas.drawScanlines()
-
-  if (flyingBirdCount === scene.birdCount) {
-    if (scene.allFlying) return
-
-    console.log('WWWIIIINNNN!!!!!')
-
-    scene.allFlying = true
-
-    jump4()
-  }
 }
 
 export default update

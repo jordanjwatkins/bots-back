@@ -6,24 +6,29 @@ import update from './update'
 import Cloud from './entities/cloud'
 import Ground from './entities/ground'
 import Pulser from './entities/pulser'
+import WinSplash from './entities/win-splash'
 
 import levels from './entities/levels'
+import Storage from './storage'
 
 class Line1Scene {
   constructor() {
+    this.debug = false
+
     this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
+
+    this.storage = new Storage('OfflineDevLine1')
 
     this.levels = levels(this)
 
     this.initializeDom()
 
-    this.initLevel()
+    // load/save current level
+    this.currentLevel = this.currentLevel
 
     this.freshStart()
 
     this.attachEvents()
-
-    //jump1()
 
     // start game loop last
     this.gameLoop = new GameLoop((delta) => {
@@ -31,9 +36,50 @@ class Line1Scene {
     })
   }
 
-  attachEvents() {
-    this.onClick = this.onClick.bind(this)
+  get currentLevel() {
+    return this.storage.state.currentLevel
+  }
 
+  set currentLevel(currentLevel) {
+    this.storage.state.currentLevel = currentLevel
+    this.storage.state.levels[currentLevel] = this.storage.state.levels[currentLevel] || {}
+    this.storage.save()
+
+    this.findNextLevel()
+  }
+
+  get bestScoreForLevel() {
+    return this.storage.state.levels[this.currentLevel].bestScore || 0
+  }
+
+  set bestScoreForLevel(bestScore) {
+    this.storage.state.levels[this.currentLevel].bestScore = bestScore
+    this.storage.save()
+  }
+
+  get starScore() {
+    if (!this.level.starThresholds) return 0
+
+    return this.level.starThresholds.filter((threshold) => {
+      return (this.pulser.pulsesFiredCount <= threshold)
+    }).length
+  }
+
+  findNextLevel() {
+    const levelKeys =  Object.keys(this.levels)
+
+    levelKeys.some((levelName, index) => {
+      if (this.currentLevel === levelName) {
+        this.nextLevel = (index + 1 > this.levels.length - 1) ?
+          levelKeys[0] :
+          levelKeys[index + 1]
+
+        return true
+      }
+    })
+  }
+
+  attachEvents() {
     this.mainCanvas.canvas.addEventListener('click', this.onClick)
   }
 
@@ -42,16 +88,37 @@ class Line1Scene {
   }
 
   initLevel() {
-    const savedLevel = localStorage.getItem('currentLevel')
+    const savedLevel = this.currentLevel
+
+    this.cleanupEntities()
 
     if (savedLevel && this.levels[savedLevel]) {
       this.level = this.levels[savedLevel]()
+
+      console.log('Current level: ', savedLevel);
+      console.log('Personal best: ', this.bestScoreForLevel);
+
+      let optimalScore = (savedLevel.indexOf('Absorber') > -1) ?
+        this.level.absorberOptimalPulseCount :
+        this.level.optimalPulseCount;
+
+      console.log('Best possible score for level: ',  optimalScore);
     } else {
-      this.level = this.levels.oneLineTwoSimple()
+      console.log(`Failed to load level "${savedLevel}`);
     }
   }
 
-  onClick(event) {
+  cleanupEntities() {
+    if (this.entities) {
+      this.entities.forEach((entity) => {
+        if (entity.destroy) entity.destroy(this)
+      })
+    }
+  }
+
+  onClick = (event) => {
+    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event))
+
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
         this.pulser.firePulse(this, entity)
@@ -87,7 +154,7 @@ class Line1Scene {
     this.levelSelectContainer = dom.make('<div class="level-select-container"></div>')
     this.sceneContainer.appendChild(this.levelSelectContainer)
 
-    Object.keys(this.levels).forEach((levelName) => {
+    Object.keys(this.levels).forEach((levelName, index) => {
       const friendlyLevelName = levelName.split('').map((c, i) => {
         if (i === 0) c = c.toUpperCase()
 
@@ -99,9 +166,7 @@ class Line1Scene {
       this.levelSelectContainer.appendChild(levelSelectButton)
 
       levelSelectButton.addEventListener('click', () => {
-        this.level = this.levels[levelName]()
-
-        localStorage.setItem('currentLevel', levelName)
+        this.currentLevel = levelName
 
         this.freshStart()
       })
@@ -111,6 +176,8 @@ class Line1Scene {
   initEntities() {
     this.entities = this.level.entities
     this.birdCount = this.level.birdCount
+
+    console.log('init entities');
 
     this.level.entities.unshift(new Cloud({ x: Math.round(100 + (this.mainCanvas.width / 2 - 100) * Math.random()),  y: Math.round(50 + 200 * Math.random()) }))
     this.level.entities.unshift(new Cloud({ x: Math.round(400 + (this.mainCanvas.width - 400) * Math.random()),  y: Math.round(150 + 300 * Math.random()) }))
@@ -124,11 +191,24 @@ class Line1Scene {
   }
 
   freshStart() {
+    this.mainCanvas.context.globalAlpha = 1.0
+
+    this.initLevel()
     this.initEntities()
 
     this.allFlying = false
     this.gameOver = false
     this.fadingOut = false
+  }
+
+  startNextLevel() {
+    this.currentLevel = this.nextLevel
+
+    this.freshStart()
+  }
+
+  winSplash() {
+    this.entities.push(new WinSplash(this))
   }
 
   end() {

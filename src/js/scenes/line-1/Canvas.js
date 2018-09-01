@@ -24,6 +24,10 @@ class MainCanvas {
     return this.canvas.height
   }
 
+  get boundingRect() {
+    return this.canvas.getBoundingClientRect();
+  }
+
   clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
@@ -77,6 +81,37 @@ class MainCanvas {
       // dimensions in world
       thing.width, thing.height,
     )
+  }
+
+  isClickHit(event, clickRect) {
+    const canvasRect = this.boundingRect
+
+    return (
+      event.pageY < canvasRect.y + clickRect.y + clickRect.height &&
+      event.pageY > canvasRect.y + clickRect.y &&
+      event.pageX < canvasRect.x + clickRect.x + clickRect.width &&
+      event.pageX > canvasRect.x + clickRect.x
+    )
+  }
+
+  clickCoords = (event) => {
+    const canvasRect = this.boundingRect
+
+    return {
+      x: event.pageX - canvasRect.x,
+      y: event.pageY - canvasRect.y
+    }
+  }
+
+  clickAreaDebug(clickRect) {
+    return () => {
+      this.context.setTransform(1, 0, 0, 1, 0, 0)
+
+      this.drawRect({
+        ...clickRect,
+        color: 'red'
+      })
+    }
   }
 
   makeScanlines(vh, vw) {

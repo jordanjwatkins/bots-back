@@ -1,5 +1,7 @@
 // import Tone from 'tone'
 
+const soundDisabled = false
+
 export const brown = () => {
   new Tone.Noise({
     volume: -20,
@@ -311,6 +313,7 @@ let note = 0
 let note1 = 0
 
 export function jump2(offset) {
+  if (soundDisabled) return;
   // create a synth and connect it to the master output (your speakers)
   const synth = new Tone.Synth().toMaster()
 
@@ -333,6 +336,8 @@ export function jump2(offset) {
 }
 
 export function jump3() {
+  if (soundDisabled) return;
+
   const synth = new Tone.Synth().toMaster()
 
   if (note1 == 2) {
@@ -348,6 +353,8 @@ export function jump3() {
 }
 
 export function jump4() {
+  if (soundDisabled) return;
+
   const synth = new Tone.Synth().toMaster()
 
   synth.triggerAttackRelease('E6', '8n', '+0.8')

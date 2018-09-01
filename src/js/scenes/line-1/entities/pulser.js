@@ -23,6 +23,7 @@ class Pulser {
     this.chargeSpeed = 4
     this.maxChargeCount = 3
     this.chargeCount = this.maxChargeCount
+    this.pulsesFiredCount = 0
   }
 
   destroy(scene) {
@@ -33,10 +34,12 @@ class Pulser {
     return (this.chargeCount > 0)
   }
 
-  firePulse({ lines, entities }, lineToPulse) {
+  firePulse({ lines, entities, allFlying }, lineToPulse) {
     if (!this.canPulse()) return
 
     this.chargeCount -= 1
+
+    if (!allFlying) this.pulsesFiredCount += 1
 
     const lineIndex = lines.findIndex(line => line === lineToPulse)
 
@@ -52,7 +55,7 @@ class Pulser {
 
   updateChargeProgress(scene) {
     const { mainCanvas } = scene;
-    
+
     if (this.chargeProgress >= 100) {
       this.chargeProgress = 0
 
@@ -86,7 +89,7 @@ class Pulser {
   drawCharges(mainCanvas) {
     const gutterWidth = 2
     const fullBarWidth = this.width - 6
-    const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount - 1)) / this.maxChargeCount 
+    const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount - 1)) / this.maxChargeCount
 
     for (let i = 0; i < this.chargeCount; i++) {
       mainCanvas.drawRect({
