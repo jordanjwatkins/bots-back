@@ -10,6 +10,7 @@ import WinSplash from './entities/win-splash'
 
 import levels from './entities/levels'
 import Storage from './storage'
+import AmericaOfflineTitle from './entities/america-offline-title';
 
 class Line1Scene {
   constructor() {
@@ -188,6 +189,10 @@ class Line1Scene {
     this.level.entities.unshift(this.pulser)
 
     this.lines = this.lines || this.entities.filter(entity => entity.constructor.name === 'Line')
+
+    this.titleScreen = new AmericaOfflineTitle(this)
+
+    this.level.entities.push(this.titleScreen)
   }
 
   freshStart() {
