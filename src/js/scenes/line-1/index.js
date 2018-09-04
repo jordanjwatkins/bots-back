@@ -10,7 +10,9 @@ import WinSplash from './entities/win-splash'
 
 import levels from './entities/levels'
 import Storage from './storage'
-import AmericaOfflineTitle from './entities/america-offline-title';
+import AmericaOfflineTitle from './entities/america-offline-title'
+
+import * as sounds from './sounds'
 
 class Line1Scene {
   constructor() {
@@ -63,13 +65,11 @@ class Line1Scene {
       this.level.absorberStarThresholds :
       this.level.starThresholds
 
-    return starThresholds.filter((threshold) => {
-      return (this.pulser.pulsesFiredCount <= threshold)
-    }).length
+    return starThresholds.filter(threshold => (this.pulser.pulsesFiredCount <= threshold)).length
   }
 
   findNextLevel() {
-    const levelKeys =  Object.keys(this.levels)
+    const levelKeys = Object.keys(this.levels)
 
     levelKeys.some((levelName, index) => {
       if (this.currentLevel === levelName) {
@@ -79,6 +79,8 @@ class Line1Scene {
 
         return true
       }
+
+      return false
     })
   }
 
@@ -98,16 +100,16 @@ class Line1Scene {
     if (savedLevel && this.levels[savedLevel]) {
       this.level = this.levels[savedLevel]()
 
-      console.log('Current level: ', savedLevel);
-      console.log('Personal best: ', this.bestScoreForLevel);
+      console.log('Current level: ', savedLevel) // eslint-disable-line no-console
+      console.log('Personal best: ', this.bestScoreForLevel) // eslint-disable-line no-console
 
-      let optimalScore = (savedLevel.indexOf('Absorber') > -1) ?
+      const optimalScore = (savedLevel.indexOf('Absorber') > -1) ?
         this.level.absorberOptimalPulseCount :
-        this.level.optimalPulseCount;
+        this.level.optimalPulseCount
 
-      console.log('Best possible score for level: ',  optimalScore);
+      console.log('Best possible score for level: ', optimalScore) // eslint-disable-line no-console
     } else {
-      console.log(`Failed to load level "${savedLevel}`);
+      console.log(`Failed to load level "${savedLevel}`) // eslint-disable-line no-console
     }
   }
 
@@ -120,7 +122,7 @@ class Line1Scene {
   }
 
   onClick = (event) => {
-    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event))
+    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
 
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
@@ -157,7 +159,7 @@ class Line1Scene {
     this.levelSelectContainer = dom.make('<div class="level-select-container"></div>')
     this.sceneContainer.appendChild(this.levelSelectContainer)
 
-    Object.keys(this.levels).forEach((levelName, index) => {
+    Object.keys(this.levels).forEach((levelName) => {
       const friendlyLevelName = levelName.split('').map((c, i) => {
         if (i === 0) c = c.toUpperCase()
 
@@ -174,25 +176,54 @@ class Line1Scene {
         this.freshStart()
       })
     })
+
+    this.initSoundSelect()
+  }
+
+  initSoundSelect() {
+    this.soundSelectContainer = dom.make('<div class="sound-select-container"></div>')
+    this.sceneContainer.appendChild(this.soundSelectContainer)
+
+    Object.keys(sounds).forEach((soundName) => {
+      const soundSelectButton = dom.make(`<button class="level-select-button">${soundName}</button>`)
+
+      this.soundSelectContainer.appendChild(soundSelectButton)
+
+      soundSelectButton.addEventListener('click', () => {
+        sounds[soundName]()
+      })
+    })
   }
 
   initEntities() {
     this.entities = this.level.entities
     this.birdCount = this.level.birdCount
 
-    this.level.entities.unshift(new Cloud({ x: Math.round(100 + (this.mainCanvas.width / 2 - 100) * Math.random()),  y: Math.round(50 + 200 * Math.random()) }))
-    this.level.entities.unshift(new Cloud({ x: Math.round(400 + (this.mainCanvas.width - 400) * Math.random()),  y: Math.round(150 + 300 * Math.random()) }))
+    this.level.entities.unshift(new Cloud({
+      x: Math.round(100 + (((this.mainCanvas.width / 2) - 100) * Math.random())),
+      y: Math.round(50 + (200 * Math.random())),
+    }))
 
-    this.level.entities.unshift(new Ground({ width: this.mainCanvas.width, height: 50, y: this.mainCanvas.height - 50 }))
+    this.level.entities.unshift(new Cloud({
+      x: Math.round(400 + ((this.mainCanvas.width - 400) * Math.random())),
+      y: Math.round(150 + (300 * Math.random())),
+    }))
+
+    this.level.entities.unshift(new Ground({
+      width: this.mainCanvas.width,
+      height: 50,
+      y: this.mainCanvas.height - 50,
+    }))
 
     this.pulser = new Pulser({ x: 100, y: 500 })
     this.level.entities.unshift(this.pulser)
 
     this.lines = this.lines || this.entities.filter(entity => entity.constructor.name === 'Line')
 
-    this.titleScreen = new AmericaOfflineTitle(this)
-
-    this.level.entities.push(this.titleScreen)
+    if (!this.titleScreen) {
+      this.titleScreen = new AmericaOfflineTitle(this)
+      this.level.entities.push(this.titleScreen)
+    }
   }
 
   freshStart() {

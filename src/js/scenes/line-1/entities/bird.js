@@ -1,4 +1,4 @@
-import { jump3 } from '../sound'
+import * as sounds from '../sounds'
 
 class Bird {
   constructor(props) {
@@ -8,9 +8,9 @@ class Bird {
       z: 3,
       width: 20,
       height: 20,
-      //color: '#3F3F74',
+      // color: '#3F3F74',
       color: '#AC3232',
-      //color: 'blue'
+      // color: 'blue'
       speed: {
         x: 0,
         y: 0,
@@ -37,7 +37,7 @@ class Bird {
       return
     }
 
-    jump3()
+    sounds.hop()
 
     this.flying = true
     this.speed.y = -this.maxSpeed.y
@@ -74,7 +74,7 @@ class Bird {
   }
 
   isOnLowestLine() {
-    const lowestLine = this.lines[0]
+    const [lowestLine] = this.lines
 
     return (this.y + this.height + 1 >= lowestLine.y)
   }
@@ -93,7 +93,11 @@ class Bird {
         if (line.y === this.y + this.height) {
           this.currentLine = line
           this.currentLineIndex = index
+
+          return true
         }
+
+        return false
       })
     }
 
@@ -166,23 +170,21 @@ class Bird {
     const yellow = '#FBF236'
 
     // feet
-    if (true) {
-      mainCanvas.drawRect({
-        x: this.x + 2,
-        y: this.y + this.height,
-        width: 3,
-        height: 3,
-        color: yellow,
-      })
+    mainCanvas.drawRect({
+      x: this.x + 2,
+      y: this.y + this.height,
+      width: 3,
+      height: 3,
+      color: yellow,
+    })
 
-      mainCanvas.drawRect({
-        x: this.x + this.width - 5,
-        y: this.y + this.height,
-        width: 3,
-        height: 3,
-        color: yellow,
-      })
-    }
+    mainCanvas.drawRect({
+      x: this.x + this.width - 5,
+      y: this.y + this.height,
+      width: 3,
+      height: 3,
+      color: yellow,
+    })
 
     // wings
     if (this.flying && Math.sin(this.y / 5) > 0) {
@@ -204,90 +206,86 @@ class Bird {
     }
 
     // eyes
-    if (true) {
-      if (this.heavy) {
-        if (this.absorbed === 1) {
-          mainCanvas.drawRect({
-            x: this.x,
-            y: this.y + 3,
-            width: 7,
-            height: 7,
-            color: 'white',
-          })
+    if (this.heavy) {
+      if (this.absorbed === 1) {
+        mainCanvas.drawRect({
+          x: this.x,
+          y: this.y + 3,
+          width: 7,
+          height: 7,
+          color: 'white',
+        })
 
-          mainCanvas.drawRect({
-            x: this.x + this.width - 7,
-            y: this.y + 3,
-            width: 7,
-            height: 7,
-            color: 'white',
-          })
-        }
-
-        if (this.absorbed === 2) {
-          mainCanvas.drawRect({
-            x: this.x,
-            y: this.y + 3,
-            width: 7,
-            height: 7,
-            color: 'white',
-          })
-
-          mainCanvas.drawRect({
-            x: this.x + this.width - 9,
-            y: this.y + 1,
-            width: 11,
-            height: 11,
-            color: 'white',
-          })
-        }
-
-        if (this.absorbed === 3) {
-          mainCanvas.drawRect({
-            x: this.x,
-            y: this.y + 3,
-            width: 7,
-            height: 7,
-            color: 'white',
-          })
-
-          mainCanvas.drawRect({
-            x: this.x + this.width - 10,
-            y: this.y,
-            width: 13,
-            height: 13,
-            color: 'white',
-          })
-        }
+        mainCanvas.drawRect({
+          x: this.x + this.width - 7,
+          y: this.y + 3,
+          width: 7,
+          height: 7,
+          color: 'white',
+        })
       }
 
-      mainCanvas.drawRect({
-        x: this.x + 2,
-        y: this.y + 5,
-        width: 3,
-        height: 3,
-        color: 'black',
-      })
+      if (this.absorbed === 2) {
+        mainCanvas.drawRect({
+          x: this.x,
+          y: this.y + 3,
+          width: 7,
+          height: 7,
+          color: 'white',
+        })
 
-      mainCanvas.drawRect({
-        x: this.x + this.width - 5,
-        y: this.y + 5,
-        width: 3,
-        height: 3,
-        color: 'black',
-      })
+        mainCanvas.drawRect({
+          x: this.x + this.width - 9,
+          y: this.y + 1,
+          width: 11,
+          height: 11,
+          color: 'white',
+        })
+      }
+
+      if (this.absorbed === 3) {
+        mainCanvas.drawRect({
+          x: this.x,
+          y: this.y + 3,
+          width: 7,
+          height: 7,
+          color: 'white',
+        })
+
+        mainCanvas.drawRect({
+          x: this.x + this.width - 10,
+          y: this.y,
+          width: 13,
+          height: 13,
+          color: 'white',
+        })
+      }
     }
+
+    mainCanvas.drawRect({
+      x: this.x + 2,
+      y: this.y + 5,
+      width: 3,
+      height: 3,
+      color: 'black',
+    })
+
+    mainCanvas.drawRect({
+      x: this.x + this.width - 5,
+      y: this.y + 5,
+      width: 3,
+      height: 3,
+      color: 'black',
+    })
 
     // beak
-    if (true) {
-      mainCanvas.drawRect({
-        x: this.x + 9,
-        y: this.y + 8,
-        width: 3,
-        height: 4,
-        color: yellow,
-      })
-    }
+    mainCanvas.drawRect({
+      x: this.x + 9,
+      y: this.y + 8,
+      width: 3,
+      height: 4,
+      color: yellow,
+    })
   }
 }
 

@@ -10,6 +10,8 @@ module.exports = {
     node: true,
   },
 
+  parser: 'babel-eslint',
+
   parserOptions: {
     sourceType: 'module',
   },
@@ -20,6 +22,8 @@ module.exports = {
         config: 'webpack.config.js',
       },
     },
+
+    "import/parser": "babel-eslint",
   },
 
   rules: {
@@ -34,7 +38,10 @@ module.exports = {
       ],
     }],
 
+    'max-len': ['error', { code: 120 }],
+
     'no-multiple-empty-lines': ['error'],
+    'no-mixed-operators': ['off'],
     'no-param-reassign': ['off', { props: false }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-return-assign': ['off'],
@@ -51,6 +58,19 @@ module.exports = {
       { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*'},
       { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var']},
     ],
+
+    'prefer-destructuring':  ['error', {
+      'VariableDeclarator': {
+        'array': true,
+        'object': true
+      },
+      'AssignmentExpression': {
+        'array': false,
+        'object': true
+      }
+    }, {
+      'enforceForRenamedProperties': false
+    }],
 
     'semi': ['error', 'never'],
   },

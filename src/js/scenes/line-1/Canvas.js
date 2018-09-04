@@ -9,8 +9,8 @@ class MainCanvas {
 
     this.context = this.canvas.getContext('2d')
 
-    //this.canvas.style.backgroundColor = '#c6c6ff'
-    //this.canvas.style.backgroundColor = '#5fcde4'
+    // this.canvas.style.backgroundColor = '#c6c6ff'
+    // this.canvas.style.backgroundColor = '#5fcde4'
     this.canvas.style.backgroundColor = '#639bff'
 
     this.context.imageSmoothingEnabled = false
@@ -25,7 +25,7 @@ class MainCanvas {
   }
 
   get boundingRect() {
-    return this.canvas.getBoundingClientRect();
+    return this.canvas.getBoundingClientRect()
   }
 
   clear() {
@@ -99,7 +99,7 @@ class MainCanvas {
 
     return {
       x: event.pageX - canvasRect.x,
-      y: event.pageY - canvasRect.y
+      y: event.pageY - canvasRect.y,
     }
   }
 
@@ -109,7 +109,7 @@ class MainCanvas {
 
       this.drawRect({
         ...clickRect,
-        color: 'red'
+        color: 'red',
       })
     }
   }

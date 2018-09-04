@@ -1,3 +1,5 @@
+import { intro } from '../sounds'
+
 const colorBackground = '#2f3b4f'
 const colorAmerica = 'white'
 const colorOffline = 'red'
@@ -17,13 +19,16 @@ class AmericaOfflineTitle {
     this.z = 4
 
     this.opacity = 1
-    this.delay = 0
+    this.delay = 10
     this.americaOffDelay = 50
     this.offlineOnDelay = 50
+    this.destroyDelay = 5000
 
     this.scene = scene
 
     this.isOnline = true
+
+    intro()
 
     this.attachEvents()
   }
@@ -31,27 +36,28 @@ class AmericaOfflineTitle {
   destroy() {
     this.detachEvents()
 
+    this.scene.titleScreen = null
     this.scene.entities = this.scene.entities.filter(entity => entity !== this)
   }
 
   attachEvents() {
-    const canvas = this.scene.mainCanvas.canvas
+    const { canvas } = this.scene.mainCanvas
 
     canvas.addEventListener('click', this.onClick)
   }
 
   detachEvents() {
-    const canvas = this.scene.mainCanvas.canvas
+    const { canvas } = this.scene.mainCanvas
 
     canvas.removeEventListener('click', this.onClick)
   }
 
-  onClick = (event) => {
+  onClick = () => {
 
   }
 
   drawText() {
-    const { mainCanvas, pulser, bestScoreForLevel } = this.scene
+    const { mainCanvas } = this.scene
     const { context } = mainCanvas
 
     context.globalAlpha = this.opacity - 0.1
@@ -63,11 +69,11 @@ class AmericaOfflineTitle {
     context.fillStyle = colorAmerica
 
     context.globalAlpha = (this.isOnline && !this.isFlickering) ?
-        this.opacity - 0.1 :
-        this.opacity - 0.8
+      this.opacity - 0.1 :
+      this.opacity - 0.8
 
     context.font = `148px ${fontFamily}`
-    context.fillText('America', this.x + this.width / 2, this.y + 270)
+    context.fillText('America', this.x + (this.width / 2), this.y + 270)
 
     context.fillStyle = colorOffline
 
@@ -80,7 +86,7 @@ class AmericaOfflineTitle {
     }
 
     context.font = `148px ${fontFamily}`
-    context.fillText(`Offline`, this.x + this.width / 2, this.y + 430)
+    context.fillText('Offline', this.x + (this.width / 2), this.y + 430)
 
     context.restore()
   }
@@ -97,7 +103,7 @@ class AmericaOfflineTitle {
   }
 
   flicker(offOpacity, onOpacity, toggleRate = 1) {
-    const { context } =  this.scene.mainCanvas
+    const { context } = this.scene.mainCanvas
 
     if (Math.sin(new Date() / (100 * toggleRate)) > 0) {
       context.globalAlpha = offOpacity
@@ -110,7 +116,7 @@ class AmericaOfflineTitle {
     this.drawBackground()
 
     if (this.delay > 0) {
-      this.delay--
+      this.delay -= 1
 
       return
     }
@@ -127,7 +133,7 @@ class AmericaOfflineTitle {
 
       setTimeout(() => {
         this.destroy()
-      }, 1900)
+      }, this.destroyDelay)
     }
 
     this.drawText()

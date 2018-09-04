@@ -1,4 +1,4 @@
-import { jump2 } from '../sound'
+import * as sounds from '../sounds'
 import Pulse from './pulse'
 
 class Pulser {
@@ -34,16 +34,16 @@ class Pulser {
     return (this.chargeCount > 0)
   }
 
-  firePulse({ lines, entities, allFlying }, lineToPulse) {
-    if (!this.canPulse()) return
+  firePulse({ lines, entities, allFlying, titleScreen }, lineToPulse) {
+    if (!this.canPulse() || allFlying || titleScreen) return
 
     this.chargeCount -= 1
 
-    if (!allFlying) this.pulsesFiredCount += 1
+    this.pulsesFiredCount += 1
 
     const lineIndex = lines.findIndex(line => line === lineToPulse)
 
-    jump2(lineIndex)
+    sounds.pulse(lineIndex)
 
     entities.push((
       new Pulse({
@@ -54,7 +54,7 @@ class Pulser {
   }
 
   updateChargeProgress(scene) {
-    const { mainCanvas } = scene;
+    const { mainCanvas } = scene
 
     if (this.chargeProgress >= 100) {
       this.chargeProgress = 0
@@ -81,7 +81,7 @@ class Pulser {
         y: this.y + this.height - chunkWidth - 4,
         width: chunkWidth,
         height: chunkWidth,
-        color: 'yellow'
+        color: 'yellow',
       })
     }
   }
@@ -97,7 +97,7 @@ class Pulser {
         y: this.y + 4,
         width: chunkWidth,
         height: chunkWidth / 2,
-        color: 'yellow'
+        color: 'yellow',
       })
     }
   }

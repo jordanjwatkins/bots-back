@@ -85,7 +85,7 @@ export default (scene) => {
           x: 300,
           y: lineTop - birdSize,
           absorber,
-          verticalSwapper: true
+          verticalSwapper: true,
         }),
 
         new Bird({
@@ -98,7 +98,7 @@ export default (scene) => {
           x: 580,
           y: lineTop - birdSize,
           absorber: true,
-          verticalSwapper: true
+          verticalSwapper: true,
         }),
 
         new Bird({

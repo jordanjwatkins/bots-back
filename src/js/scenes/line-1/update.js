@@ -1,4 +1,4 @@
-import { jump4 } from './sound'
+import * as sounds from './sounds'
 
 function update(scene, delta) {
   const { mainCanvas, entities } = scene
@@ -24,13 +24,13 @@ function update(scene, delta) {
 
     if (scene.bestScoreForLevel === 0 || fired < scene.bestScoreForLevel) scene.bestScoreForLevel = fired
 
-    console.log('WWWIIIINNNN!!!!!', fired)
-
-    scene.winSplash();
+    scene.winSplash()
 
     scene.allFlying = true
 
-    jump4()
+    setTimeout(() => {
+      sounds.quickEnd()
+    }, 500)
   }
 }
 
