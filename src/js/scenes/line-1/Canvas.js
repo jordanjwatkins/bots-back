@@ -28,6 +28,13 @@ class MainCanvas {
     return this.canvas.getBoundingClientRect()
   }
 
+  set opacity(value) {
+    if (value < 0) value = 0
+    if (value > 1) value = 1
+
+    this.context.globalAlpha = value
+  }
+
   clear() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }

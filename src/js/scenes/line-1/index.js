@@ -73,7 +73,7 @@ class Line1Scene {
 
     levelKeys.some((levelName, index) => {
       if (this.currentLevel === levelName) {
-        this.nextLevel = (index + 1 > this.levels.length - 1) ?
+        this.nextLevel = (index + 1 >= this.levels.length - 1) ?
           levelKeys[0] :
           levelKeys[index + 1]
 
@@ -220,7 +220,8 @@ class Line1Scene {
 
     this.lines = this.lines || this.entities.filter(entity => entity.constructor.name === 'Line')
 
-    if (!this.titleScreen) {
+    if (!this.titleScreen && !this.showedTitle) {
+      this.showedTitle = true
       this.titleScreen = new AmericaOfflineTitle(this)
       this.level.entities.push(this.titleScreen)
     }

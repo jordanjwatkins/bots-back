@@ -30,14 +30,14 @@ class Bird {
     this.initialY = this.y
   }
 
-  pulseHit() {
+  pulseHit(mute = false) {
     if (this.heavy && this.absorbed < 3) {
       this.absorbed += 1
 
       return
     }
 
-    sounds.hop()
+    if (!mute) sounds.hop()
 
     this.flying = true
     this.speed.y = -this.maxSpeed.y
@@ -86,6 +86,8 @@ class Bird {
   }
 
   update({ mainCanvas, allFlying, entities }) {
+    if (!this.y) return
+
     this.lines = this.lines || entities.filter(entity => entity.constructor.name === 'Line')
 
     if (!this.currentLine) {

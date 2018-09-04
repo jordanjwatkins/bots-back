@@ -2,8 +2,11 @@ import knote from '../../../libs/knote'
 import brownNoise from './brown-noise'
 
 export function intro() {
-  songNoise(7, 1.5)
-  songNoise(26, 1.5)
+  songNoise(13, 2)
+  songNoise(24, 2.7)
+  songNoise(36, 16)
+
+  songNote('C5', 1, 0)
 
   songNote('C5', 1, 4)
 
@@ -28,15 +31,19 @@ export function intro() {
   songNote('G5', 25, 1)
   songNote('C5', 26, 1)
   songNote('E5', 27, 1)
+
+  // song interrupted
+  /*
   songNote('D5', 28, 4)
 
   songNote('Db5', 32, 1)
   songNote('D5', 33, 1)
   songNote('G5', 34, 4)
+  */
 }
 
 function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration) {
-  const eighthNoteTime = 0.15
+  const eighthNoteTime = 0.20
   const time = knote.audioContext.currentTime
   const note = knote.makeNote(noteName)
   const start = time + eighthNoteTime * (eighthNoteInBar - 1)

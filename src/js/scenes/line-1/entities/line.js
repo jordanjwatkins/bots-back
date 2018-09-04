@@ -1,8 +1,8 @@
 class Line {
-  constructor({ x = 0, y = 0, width = 5, height = 10 }) {
+  constructor({ x = 0, y = 0, width = 5, height = 5, z = 3 }) {
     this.x = x
     this.y = y
-    this.z = 3
+    this.z = z
 
     this.width = width
     this.height = height

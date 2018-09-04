@@ -1,10 +1,16 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const webpack = require('webpack')
 
 const projectTitle = require('./package.json').displayName
 
 module.exports = {
+  devServer: {
+    hot: true,
+    inline: true,
+  },
+
   entry: {
     app: './src/js/index.js',
     styles: './src/styles/app.css',
@@ -64,8 +70,8 @@ module.exports = {
         query: {
           presets: ['@babel/preset-env'],
           plugins: [
-            ["@babel/plugin-proposal-class-properties", { "loose": true }]
-          ]
+            ['@babel/plugin-proposal-class-properties', { loose: true }],
+          ],
         },
       },
     ],
@@ -78,5 +84,6 @@ module.exports = {
       favicon: './favicon.ico',
       template: 'index.html',
     }),
+    new webpack.HotModuleReplacementPlugin(),
   ],
 }
