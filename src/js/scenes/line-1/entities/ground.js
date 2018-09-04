@@ -10,24 +10,26 @@ class Ground {
     }
 
     Object.assign(this, defaults, props)
+
+    this.spotSize = this.height / 5
   }
 
   update({ mainCanvas }) {
     mainCanvas.drawRect(this)
 
     mainCanvas.drawRect({
-      width: 15,
-      height: 15,
+      width: this.spotSize,
+      height: this.spotSize,
       x: 280,
-      y: this.y + 18,
+      y: this.y + this.spotSize * 1.2,
       color: '#663931',
     })
 
     mainCanvas.drawRect({
-      width: 15,
-      height: 15,
+      width: this.spotSize,
+      height: this.spotSize,
       x: 780,
-      y: this.y + 10,
+      y: this.y + this.spotSize * 0.9,
       color: '#8F563B',
     })
   }

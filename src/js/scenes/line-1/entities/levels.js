@@ -329,7 +329,7 @@ export default (scene) => {
         entities,
       }
     },
-
+/*
     switchFourClose({ absorber = false } = {}) {
       const entities = [
         line1,
@@ -510,7 +510,7 @@ export default (scene) => {
         birdCount: getBirdCount(entities),
         entities,
       }
-    },
+    },*/
   }
 
   const preppedLevels = Object.entries(levels).reduce((obj, entry) => {

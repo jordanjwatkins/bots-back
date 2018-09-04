@@ -40,7 +40,7 @@ class AmericaOfflineTitle {
 
     this.lines = [
       new Line({ width: mainCanvas.width, y: 100, z: 4 }),
-      new Line({ width: mainCanvas.width, y: line1Top, z: 4 })
+      new Line({ width: mainCanvas.width, y: line1Top, z: 4 }),
     ]
 
     const birdSize = 20

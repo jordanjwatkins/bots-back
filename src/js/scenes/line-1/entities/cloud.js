@@ -25,8 +25,8 @@ class Cloud {
     const { mainCanvas } = scene
 
     if (this.x > mainCanvas.width) {
-      this.x = -250
-      this.y = this.y - 40 + Math.round(80 * Math.random())
+      this.x = -(this.width * 2) - (this.width * Math.random())
+      this.y = this.y - this.height + Math.round(this.height * 2 * Math.random())
     }
 
     if (this.moving) {
@@ -37,10 +37,10 @@ class Cloud {
     mainCanvas.drawRect(this)
 
     mainCanvas.drawRect({
-      x: this.x + 20,
-      y: this.y - 20,
-      height: 20,
-      width: 70,
+      x: this.x + this.width / 2 - this.width / 3.4,
+      y: this.y - (this.height - (this.height / 3)),
+      height: this.height - (this.height / 3),
+      width: this.width * 0.7,
       color: this.color,
     })
   }

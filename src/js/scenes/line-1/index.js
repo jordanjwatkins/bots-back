@@ -13,6 +13,7 @@ import Storage from './storage'
 import AmericaOfflineTitle from './entities/america-offline-title'
 
 import * as sounds from './sounds'
+import LevelSelect from './entities/level-select'
 
 class Line1Scene {
   constructor() {
@@ -23,6 +24,8 @@ class Line1Scene {
     this.storage = new Storage('OfflineDevLine1')
 
     this.levels = levels(this)
+
+    //this.showedTitle = true
 
     this.initializeDom()
 
@@ -52,7 +55,7 @@ class Line1Scene {
   }
 
   get bestScoreForLevel() {
-    return this.storage.state.levels[this.currentLevel].bestScore || 0
+    return this.getBestScoreForLevel(this.currentLevel)
   }
 
   set bestScoreForLevel(bestScore) {
@@ -66,6 +69,14 @@ class Line1Scene {
       this.level.starThresholds
 
     return starThresholds.filter(threshold => (this.pulser.pulsesFiredCount <= threshold)).length
+  }
+
+  getBestScoreForLevel(levelName) {
+    const level = (levelName) ?
+      this.storage.state.levels[levelName] :
+      this.storage.state.levels[this.currentLevel]
+
+    return level.bestScore || 0
   }
 
   findNextLevel() {
@@ -199,20 +210,30 @@ class Line1Scene {
     this.entities = this.level.entities
     this.birdCount = this.level.birdCount
 
-    this.level.entities.unshift(new Cloud({
-      x: Math.round(100 + (((this.mainCanvas.width / 2) - 100) * Math.random())),
-      y: Math.round(50 + (200 * Math.random())),
-    }))
+    let cloudSize = 50 + 60 * Math.random()
 
     this.level.entities.unshift(new Cloud({
-      x: Math.round(400 + ((this.mainCanvas.width - 400) * Math.random())),
-      y: Math.round(150 + (300 * Math.random())),
+      x: Math.round(-100 + ((this.mainCanvas.width / 3) * Math.random())),
+      y: Math.round(150 + (200 * Math.random())),
+      width: cloudSize,
+      height: cloudSize * 0.3,
+    }))
+
+    cloudSize = 50 + 60 * Math.random()
+
+    this.level.entities.unshift(new Cloud({
+      x: Math.round(400 + ((this.mainCanvas.width / 2) * Math.random())),
+      y: Math.round(350 + (150 * Math.random())),
+      width: cloudSize,
+      height: cloudSize * 0.3,
+      speedX: 0.5 - 0.2 * Math.random(),
     }))
 
     this.level.entities.unshift(new Ground({
       width: this.mainCanvas.width,
       height: 50,
       y: this.mainCanvas.height - 50,
+      speedX: 0.5 - 0.2 * Math.random(),
     }))
 
     this.pulser = new Pulser({ x: 100, y: 500 })
@@ -225,6 +246,9 @@ class Line1Scene {
       this.titleScreen = new AmericaOfflineTitle(this)
       this.level.entities.push(this.titleScreen)
     }
+
+    this.levelSelect = new LevelSelect(this)
+    this.level.entities.push(this.levelSelect)
   }
 
   freshStart() {
