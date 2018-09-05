@@ -17,6 +17,34 @@ class Line {
 
   update({ mainCanvas }) {
     mainCanvas.drawRect(this)
+
+    mainCanvas.drawRect({
+      x: 20,
+      y: this.y,
+      height: mainCanvas.height - (this.y) - 50,
+      width: 3,
+    })
+
+    mainCanvas.drawRect({
+      x: 20,
+      y: this.y + mainCanvas.height - (this.y) - 50,
+      height: 3,
+      width: 140,
+    })
+
+    mainCanvas.drawRect({
+      x: 160,
+      y: this.y + mainCanvas.height - (this.y) - 50 - 20,
+      height: 23,
+      width: 3,
+    })
+
+    mainCanvas.drawRect({
+      x: 150,
+      y: this.y + mainCanvas.height - (this.y) - 50 - 20,
+      height: 23,
+      width: 3,
+    })
   }
 }
 

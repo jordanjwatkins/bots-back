@@ -181,7 +181,7 @@ class WinSplash {
 
       setTimeout(() => {
         if (isOpen) sounds.quickEnd()
-      }, 1200)
+      }, 1500)
     }
 
     x += 120

@@ -17,7 +17,7 @@ import LevelSelect from './entities/level-select'
 
 class Line1Scene {
   constructor() {
-    this.debug = false
+    this.debug = true
 
     this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
 
@@ -25,7 +25,7 @@ class Line1Scene {
 
     this.levels = levels(this)
 
-    //this.showedTitle = true
+    this.showedTitle = true
 
     this.initializeDom()
 

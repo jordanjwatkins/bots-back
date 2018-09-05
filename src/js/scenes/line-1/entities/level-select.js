@@ -79,7 +79,9 @@ class LevelSelect {
     this.ground.update(this.scene)
   }
 
-  drawClouds(scene, delta) {
+  drawClouds(delta) {
+    const scene = this.scene
+
     this.clouds = this.clouds || [
 
       new Cloud({
@@ -262,9 +264,17 @@ class LevelSelect {
   update(scene, delta) {
     this.drawBackground()
 
-    this.drawGround(scene, delta)
-    this.drawClouds(scene, delta)
-    this.drawRoad(scene, delta)
+    this.drawGround()
+    this.drawClouds()
+    this.drawRoad(delta)
+
+    this.scene.mainCanvas.drawThing({
+      x: 125, y: 43, width: 48, height: 20, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
+    })
+
+    this.scene.mainCanvas.drawThing({
+      x: 325, y: 513, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
+    })
   }
 }
 
