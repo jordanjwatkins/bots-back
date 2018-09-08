@@ -68,7 +68,13 @@ class Line1Scene {
       this.level.absorberStarThresholds :
       this.level.starThresholds
 
-    return starThresholds.filter(threshold => (this.pulser.pulsesFiredCount <= threshold)).length
+    const score = starThresholds.filter(
+      threshold => (this.pulser.pulsesFiredCount <= threshold)
+    ).length
+
+    this.storage.state.levels[this.currentLevel].starScore = score
+
+    return score
   }
 
   getBestScoreForLevel(levelName) {
@@ -79,12 +85,21 @@ class Line1Scene {
     return level.bestScore || 0
   }
 
+  getBestStarScoreForLevel = (levelName) => {
+    const level = (levelName) ?
+      this.storage.state.levels[levelName] :
+      this.storage.state.levels[this.currentLevel]
+
+    return level.starScore || 0
+  }
+
   findNextLevel() {
     const levelKeys = Object.keys(this.levels)
 
     levelKeys.some((levelName, index) => {
       if (this.currentLevel === levelName) {
-        this.nextLevel = (index + 1 >= this.levels.length - 1) ?
+
+        this.nextLevel = (index + 1 >= levelKeys.length - 1) ?
           levelKeys[0] :
           levelKeys[index + 1]
 
@@ -127,7 +142,7 @@ class Line1Scene {
   cleanupEntities() {
     if (this.entities) {
       this.entities.forEach((entity) => {
-        if (entity.destroy) entity.destroy(this)
+        if (entity.destroy && entity.constructor.name !== 'LevelSelect') entity.destroy(this)
       })
     }
   }
@@ -247,7 +262,7 @@ class Line1Scene {
       this.level.entities.push(this.titleScreen)
     }
 
-    this.levelSelect = new LevelSelect(this)
+    this.levelSelect = this.levelSelect || new LevelSelect(this)
     this.level.entities.push(this.levelSelect)
   }
 

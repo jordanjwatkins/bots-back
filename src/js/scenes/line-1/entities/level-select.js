@@ -23,15 +23,9 @@ class LevelSelect {
 
     this.levels = this.scene.levels
 
-    this.levelCount = Object.keys(this.levels).length
-
-    this.init()
+    this.levelCount = Object.keys(this.levels).length + 0.5
 
     this.attachEvents()
-  }
-
-  init() {
-
   }
 
   destroy() {
@@ -52,8 +46,18 @@ class LevelSelect {
     canvas.removeEventListener('click', this.onClick)
   }
 
-  onClick = () => {
+  onClick = (event) => {
+    console.log('level select click')
 
+    Object.keys(this.clickBoxes).forEach((levelName) => {
+      if (this.scene.mainCanvas.isClickHit(event, this.clickBoxes[levelName])) {
+        console.log(levelName)
+
+        this.scene.currentLevel = levelName
+
+        this.scene.freshStart()
+      }
+    })
   }
 
   drawBackground() {
@@ -135,8 +139,17 @@ class LevelSelect {
       color: '#EEC39A',
     })
 
+    this.clickBoxes = this.clickBoxes || {}
+
     // level markers
-    Object.keys(this.levels).forEach((level, index) => {
+    Object.keys(this.levels).reverse().forEach((level, index) => {
+      this.clickBoxes[level] = this.clickBoxes[level] || {
+        x: x + (this.width / this.levelCount) * index,
+        y: roadY - 55,
+        height: 70,
+        width: 70,
+      }
+
       this.scene.mainCanvas.drawRect({
         x: x + (this.width / this.levelCount) * index,
         y: roadY - 2,
@@ -174,6 +187,13 @@ class LevelSelect {
 
       // stars
       this.drawStars((this.width / this.levelCount) * index, level)
+
+      if (level !== this.scene.currentLevel) return
+
+      // small squad
+      this.scene.mainCanvas.drawThing({
+        x: x + (this.width / this.levelCount) * index + 36, y: 43, width: 48, height: 20, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
+      })
     })
   }
 
@@ -219,22 +239,24 @@ class LevelSelect {
   }
 
   drawStars(xIn, levelName) {
-    const { mainCanvas, starScore } = this.scene
+    const { mainCanvas, getBestStarScoreForLevel } = this.scene
     const { context } = mainCanvas
 
     if (!this.scene.getBestScoreForLevel(levelName)) {
       return
     }
 
+    const starScore = getBestStarScoreForLevel(levelName)
+
     context.save()
 
-    let x = xIn + 30
+    let x = xIn + 40
     const y = 15
 
     const fadedAlpha = (this.opacity - 0.6 > 0) ? this.opacity - 0.6 : 0
-    const alpha = (this.opacity - 0.1 > 0) ? this.opacity - 0.1 : 0
+    const alpha = (this.opacity - 0.1 > 0) ? this.opacity : 0
 
-    this.starDelay -= 1
+    this.starDelay = -100
 
     context.globalAlpha = (starScore > 0 && this.starDelay < 0) ?
       alpha :
@@ -265,13 +287,10 @@ class LevelSelect {
     this.drawBackground()
 
     this.drawGround()
-    this.drawClouds()
-    this.drawRoad(delta)
+    this.drawClouds(delta)
+    this.drawRoad()
 
-    this.scene.mainCanvas.drawThing({
-      x: 125, y: 43, width: 48, height: 20, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
-    })
-
+    // big squad
     this.scene.mainCanvas.drawThing({
       x: 325, y: 513, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
     })
