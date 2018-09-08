@@ -47,17 +47,29 @@ class LevelSelect {
   }
 
   onClick = (event) => {
-    console.log('level select click')
-
-    Object.keys(this.clickBoxes).forEach((levelName) => {
+    Object.keys(this.clickBoxes).forEach((levelName, index) => {
       if (this.scene.mainCanvas.isClickHit(event, this.clickBoxes[levelName])) {
-        console.log(levelName)
-
         this.scene.currentLevel = levelName
+
+        this.updateSquadNextX(levelName)
 
         this.scene.freshStart()
       }
     })
+  }
+
+  updateSquadNextX(levelName) {
+    const levelIndex = this.getLevelIndexByName(levelName)
+
+    this.squadNextX = Math.round(25 + (this.width / this.levelCount) * levelIndex + 36)
+  }
+
+  getLevelIndexByName(name) {
+    return Object.keys(this.levels).reverse().reduce((acc, levelName, index) => {
+      return levelName === name ?
+        index :
+        acc
+    }, 0)
   }
 
   drawBackground() {
@@ -190,9 +202,26 @@ class LevelSelect {
 
       if (level !== this.scene.currentLevel) return
 
+      if (this.squadX && this.squadNextX) {
+        if (this.squadNextX < this.squadX - 1) {
+          this.squadX -= 2
+        } else if (this.squadNextX > this.squadX + 1) {
+          this.squadX += 2
+        }
+      } else {
+        this.squadX = Math.round(x + (this.width / this.levelCount) * index + 36)
+      }
+
       // small squad
       this.scene.mainCanvas.drawThing({
-        x: x + (this.width / this.levelCount) * index + 36, y: 43, width: 48, height: 20, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
+        x: this.squadX,
+        y: 43,
+        width: 48,
+        height: 20,
+        frameWidth: 24,
+        frameHeight: 10,
+        frame: 0,
+        spriteName: 'squad',
       })
     })
   }

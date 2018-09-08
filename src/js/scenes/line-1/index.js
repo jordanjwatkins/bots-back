@@ -17,7 +17,7 @@ import LevelSelect from './entities/level-select'
 
 class Line1Scene {
   constructor() {
-    this.debug = true
+    this.debug = false
 
     this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
 
@@ -279,6 +279,8 @@ class Line1Scene {
 
   startNextLevel() {
     this.currentLevel = this.nextLevel
+
+    this.levelSelect.updateSquadNextX(this.currentLevel)
 
     this.freshStart()
   }
