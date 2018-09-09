@@ -7,9 +7,9 @@ export default (scene) => {
   const birdSize = 20
   const lineHeight = 5
 
-  const lineTop = 350
-  const line2Top = 150
-  const line3Top = 250
+  const lineTop = 370
+  const line2Top = 170
+  const line3Top = 270
 
   const line1 = new Line({
     y: lineTop,
@@ -30,99 +30,6 @@ export default (scene) => {
   })
 
   const levels = {
-    fiveMixedAbsorber({ absorber = false } = {}) {
-      const entities = [
-        line1,
-        line2,
-
-        new Bird({
-          x: 300,
-          y: lineTop - birdSize,
-          absorber,
-        }),
-
-        new Bird({
-          x: 400,
-          y: line2Top - birdSize,
-          absorber: true,
-        }),
-
-        new Bird({
-          x: 600,
-          y: lineTop - birdSize,
-          absorber: true,
-        }),
-
-        new Bird({
-          x: 620,
-          y: line2Top - birdSize,
-          absorber,
-        }),
-
-        new Bird({
-          x: 750,
-          y: lineTop - birdSize,
-          absorber,
-        }),
-      ]
-
-      return {
-        starThresholds: [15, 11, 7],
-        absorberStarThresholds: [19, 14, 9],
-        optimalPulseCount: 7,
-        absorberOptimalPulseCount: 9,
-        birdCount: getBirdCount(entities),
-        entities,
-      }
-    },
-
-    fiveMixedSwitch({ absorber = false } = {}) {
-      const entities = [
-        line1,
-        line2,
-
-        new Bird({
-          x: 300,
-          y: lineTop - birdSize,
-          absorber,
-          verticalSwapper: true,
-        }),
-
-        new Bird({
-          x: 400,
-          y: line2Top - birdSize,
-          absorber: true,
-        }),
-
-        new Bird({
-          x: 580,
-          y: lineTop - birdSize,
-          absorber: true,
-          verticalSwapper: true,
-        }),
-
-        new Bird({
-          x: 620,
-          y: line2Top - birdSize,
-          absorber,
-        }),
-
-        new Bird({
-          x: 750,
-          y: lineTop - birdSize,
-          absorber,
-        }),
-      ]
-
-      return {
-        starThresholds: [14, 10, 7],
-        optimalPulseCount: 7,
-        absorberOptimalPulseCount: 0,
-        birdCount: getBirdCount(entities),
-        entities,
-      }
-    },
-
     oneLineTwoSimple({ absorber = false } = {}) {
       const entities = [
         line1,
@@ -147,6 +54,7 @@ export default (scene) => {
         absorberOptimalPulseCount: 3,
         birdCount: getBirdCount(entities),
         entities,
+        disableAbsorber: true,
       }
     },
 
@@ -177,6 +85,8 @@ export default (scene) => {
         absorberOptimalPulseCount: 2,
         birdCount: getBirdCount(entities),
         entities,
+        disableAbsorber: true,
+        disable: true,
       }
     },
 
@@ -282,9 +192,9 @@ export default (scene) => {
       ]
 
       return {
-        starThresholds: [7, 5, 3],
+        starThresholds: [7, 4, 2],
         absorberStarThresholds: [9, 7, 5],
-        optimalPulseCount: 3,
+        optimalPulseCount: 2,
         absorberOptimalPulseCount: 5,
         birdCount: getBirdCount(entities),
         entities,
@@ -321,9 +231,9 @@ export default (scene) => {
       ]
 
       return {
-        starThresholds: [8, 6, 4],
+        starThresholds: [8, 5, 3],
         absorberStarThresholds: [9, 7, 5],
-        optimalPulseCount: 4,
+        optimalPulseCount: 3,
         absorberOptimalPulseCount: 5,
         birdCount: getBirdCount(entities),
         entities,
@@ -511,10 +421,111 @@ export default (scene) => {
         entities,
       }
     },*/
+
+    fiveMixedAbsorb({ absorber = false } = {}) {
+      const entities = [
+        line1,
+        line2,
+
+        new Bird({
+          x: 300,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 400,
+          y: line2Top - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 600,
+          y: lineTop - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 620,
+          y: line2Top - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 750,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+      ]
+
+      return {
+        starThresholds: [15, 11, 7],
+        absorberStarThresholds: [19, 14, 9],
+        optimalPulseCount: 7,
+        absorberOptimalPulseCount: 9,
+        birdCount: getBirdCount(entities),
+        entities,
+        disableAbsorber: true,
+      }
+    },
+
+    fiveMixedSwitch({ absorber = false } = {}) {
+      const entities = [
+        line1,
+        line2,
+
+        new Bird({
+          x: 300,
+          y: lineTop - birdSize,
+          absorber,
+          verticalSwapper: true,
+        }),
+
+        new Bird({
+          x: 400,
+          y: line2Top - birdSize,
+          absorber: true,
+        }),
+
+        new Bird({
+          x: 580,
+          y: lineTop - birdSize,
+          absorber: true,
+          verticalSwapper: true,
+        }),
+
+        new Bird({
+          x: 620,
+          y: line2Top - birdSize,
+          absorber,
+        }),
+
+        new Bird({
+          x: 750,
+          y: lineTop - birdSize,
+          absorber,
+        }),
+      ]
+
+      return {
+        starThresholds: [14, 10, 7],
+        optimalPulseCount: 7,
+        absorberOptimalPulseCount: 0,
+        birdCount: getBirdCount(entities),
+        entities,
+        disableAbsorber: true,
+      }
+    },
   }
 
   const preppedLevels = Object.entries(levels).reduce((obj, entry) => {
     const [key, value] = entry
+
+    const level = value()
+
+    if (level.disable) {
+      return obj
+    }
 
     obj[key] = value
 
@@ -523,6 +534,12 @@ export default (scene) => {
 
   const preppedAbsorberLevels = Object.entries(levels).reduce((obj, entry) => {
     const [key, value] = entry
+
+    const level = value({ absorber: true })
+
+    if (level.disableAbsorber) {
+      return obj
+    }
 
     obj[`${key}Absorber`] = () => value({ absorber: true })
 
@@ -533,5 +550,5 @@ export default (scene) => {
 }
 
 function getBirdCount(entities) {
-  return entities.filter(entity => entity.constructor.name === 'Bird').length
+  return entities.filter(entity => entity.type === 'bird').length
 }

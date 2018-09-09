@@ -13,10 +13,15 @@ class Line {
     }
 
     this.color = 'black'
+    this.type = 'line'
   }
 
-  update({ mainCanvas }) {
+  update(scene) {
+    const { mainCanvas, showedTitle, showedExposition, exposition } = scene
+
     mainCanvas.drawRect(this)
+
+    if ((!showedTitle || !showedExposition) || exposition) return
 
     mainCanvas.drawRect({
       x: 20,

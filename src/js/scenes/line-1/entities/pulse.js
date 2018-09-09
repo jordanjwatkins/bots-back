@@ -19,7 +19,7 @@ class Pulse {
 
   collisionCheck(entity, scene) {
     if (
-      entity.constructor.name === 'Bird' &&
+      entity.type === 'bird' &&
       entity.flying === false &&
       this.x > entity.x &&
       this.x < entity.x + entity.width &&

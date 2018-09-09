@@ -26,7 +26,7 @@ class WinSplash {
 
     isOpen = true
 
-    this.attachEvents()
+    setTimeout(() => this.attachEvents(), 1000)
   }
 
   destroy() {
@@ -220,6 +220,14 @@ class WinSplash {
     const { context } = mainCanvas
 
     context.save()
+
+    mainCanvas.drawRect({
+      width: mainCanvas.width,
+      height: mainCanvas.height,
+      x: 0,
+      y: 0,
+      color: colorPrimary,
+    })
 
     context.globalAlpha = this.opacity
 

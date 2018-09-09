@@ -1,5 +1,6 @@
 import knote from '../../../libs/knote'
-import brownNoise from './brown-noise'
+
+const { songNote, songNoise } = knote
 
 export function intro() {
   songNoise(13, 2)
@@ -40,25 +41,6 @@ export function intro() {
   songNote('D5', 33, 1)
   songNote('G5', 34, 4)
   */
-}
-
-function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration) {
-  const eighthNoteTime = 0.20
-  const time = knote.audioContext.currentTime
-  const note = knote.makeNote(noteName)
-  const start = time + eighthNoteTime * (eighthNoteInBar - 1)
-
-  knote.playSequenceNote(note, start, eighthNoteTime * eighthNotesOfDuration)
-}
-
-function songNoise(eighthNoteInBar, eighthNotesOfDuration) {
-  const eighthNoteTime = 0.15
-  const start = eighthNoteTime * (eighthNoteInBar - 1)
-  const duration = (eighthNoteTime * eighthNotesOfDuration) * 1000
-
-  setTimeout(() => {
-    brownNoise(duration)
-  }, start * 1000)
 }
 
 export default intro

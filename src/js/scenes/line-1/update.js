@@ -5,8 +5,29 @@ function update(scene, delta) {
 
   mainCanvas.clear()
 
+  if (!scene.transmitter) {
+    scene.transmitter = {
+      x: 25,
+      y: 283,
+      width: 13 * 26,
+      height: 19 * 27,
+      frameWidth: 13,
+      frameHeight: 19,
+      frame: 0,
+      frameOffset: 36,
+      spriteName: 'spritesheet',
+      update: () => mainCanvas.drawThing(scene.transmitter),
+      z: 2,
+    }
+
+    scene.entities.push(scene.transmitter)
+  }
+
   // background z of 1
   updateEntities(entities, scene, 1, delta)
+
+  // midground z of 2
+  updateEntities(entities, scene, 2, delta)
 
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
@@ -42,7 +63,7 @@ function updateEntities(entities, scene, z, delta) {
   entities.forEach((entity) => {
     if (entity.z === z) entity.update(scene, delta)
 
-    if (entity.constructor.name === 'Bird' && entity.flying) {
+    if (entity.type === 'bird' && entity.flying) {
       scene.flyingBirdCount += 1
     }
   })

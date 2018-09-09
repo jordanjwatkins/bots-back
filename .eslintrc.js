@@ -19,7 +19,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       webpack: {
-        config: 'webpack.config.js',
+        config: 'webpack.config.dev.js',
       },
     },
 
@@ -32,7 +32,7 @@ module.exports = {
 
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: [
-        'webpack.config.js',
+        'uglifyjs-webpack-plugin',
         'webpack.config.*.js',
         'postcss.config.js',
       ],

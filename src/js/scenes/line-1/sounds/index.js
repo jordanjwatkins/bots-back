@@ -1,8 +1,9 @@
 import knote from '../../../libs/knote'
 
-export { thrones } from './thrones'
 export { intro } from './intro'
-export { default as brownNoise } from './brown-noise'
+export { exposition } from './exposition'
+
+const { songNote } = knote
 
 const soundDisabled = false
 
@@ -51,13 +52,3 @@ export function quickEnd() {
   songNote('F6', 2, 1)
   songNote('F5', 3, 1)
 }
-
-function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration, eighthNoteTime = 0.25) {
-  const time = knote.audioContext.currentTime
-
-  const note = knote.makeNote(noteName)
-  const start = time + (eighthNoteTime * (eighthNoteInBar - 1))
-
-  knote.playSequenceNote(note, start, eighthNoteTime * eighthNotesOfDuration)
-}
-

@@ -1,5 +1,3 @@
-
-
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 let audioContext = false;
@@ -22,25 +20,33 @@ function isAudioApiSupported() {
   return !!audioContext;
 }
 
+const globalGainNode = audioContext.createGain();
+const globalCompressor = audioContext.createDynamicsCompressor();
+
+globalGainNode.connect(globalCompressor);
+globalCompressor.connect(audioContext.destination);
+
 function playNote(note, options) {
   if (!isAudioApiSupported()) return;
 
   const config = options || {};
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
-  const compressor = audioContext.createDynamicsCompressor();
+  //const compressor = audioContext.createDynamicsCompressor();
 
   const gain = (typeof config.gain === 'number') ? config.gain : 0.2;
   const waveType = config.waveType || 'sine';
 
   const duration = config.duration || 0.25;
-  const startTime = config.startTime || audioContext.currentTime;
+  const startTime = (config.startTime && config.startTime > 0) ? config.startTime : audioContext.currentTime;
   const stopTime = startTime + duration;
   const truncate = config.truncate || 0;
 
   oscillator.connect(gainNode);
-  gainNode.connect(compressor);
-  compressor.connect(audioContext.destination);
+  //gainNode.connect(compressor);
+  ////compressor.connect(audioContext.destination);
+
+  gainNode.connect(globalGainNode)
 
   gainNode.gain.value = 0;
 
@@ -194,6 +200,54 @@ function playSequenceNote(note, startTime, duration, gain) {
   playNote(note, { startTime, duration, gain })
 }
 
+function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration, gain = 0.2) {
+  const eighthNoteTime = 0.20
+  const time = audioContext.currentTime
+  const note = makeNote(noteName)
+  const start = time + eighthNoteTime * (eighthNoteInBar - 1)
+
+  playSequenceNote(note, start, eighthNoteTime * eighthNotesOfDuration, gain)
+}
+
+function songNoise(eighthNoteInBar, eighthNotesOfDuration) {
+  const eighthNoteTime = 0.15
+  const start = eighthNoteTime * (eighthNoteInBar - 1)
+  const duration = (eighthNoteTime * eighthNotesOfDuration) * 1000
+
+  setTimeout(() => {
+    brownNoise(duration)
+  }, start * 1000)
+}
+
+const brownNoiseNode = (() => {
+  const bufferSize = 4096
+
+  let lastOut = 0.0
+  const node = audioContext.createScriptProcessor(bufferSize, 1, 1)
+
+  node.onaudioprocess = (e) => {
+    const output = e.outputBuffer.getChannelData(0)
+
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1
+
+      output[i] = (lastOut + (0.02 * white)) / 1.02
+      lastOut = output[i]
+      output[i] *= 3.5 // (roughly) compensate for gain
+    }
+  }
+
+  return node
+})()
+
+function brownNoise(duration) {
+  brownNoiseNode.connect(audioContext.destination)
+
+  setTimeout(() => {
+    brownNoiseNode.disconnect()
+  }, duration)
+}
+
 export default {
   audioContext,
   playNote,
@@ -202,5 +256,7 @@ export default {
   makeNote,
   nextNote,
   prevNote,
-  playSequenceNote
+  playSequenceNote,
+  songNote,
+  songNoise,
 };

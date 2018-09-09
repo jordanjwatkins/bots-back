@@ -11,6 +11,7 @@ import WinSplash from './entities/win-splash'
 import levels from './entities/levels'
 import Storage from './storage'
 import AmericaOfflineTitle from './entities/america-offline-title'
+import Exposition from './entities/exposition'
 
 import * as sounds from './sounds'
 import LevelSelect from './entities/level-select'
@@ -21,11 +22,12 @@ class Line1Scene {
 
     this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
 
-    this.storage = new Storage('OfflineDevLine1')
-
     this.levels = levels(this)
 
+    this.storage = new Storage('OfflineDevLine3')
+
     this.showedTitle = true
+    this.showedExposition = true
 
     this.initializeDom()
 
@@ -46,9 +48,10 @@ class Line1Scene {
     return this.storage.state.currentLevel
   }
 
-  set currentLevel(currentLevel) {
-    this.storage.state.currentLevel = currentLevel
-    this.storage.state.levels[currentLevel] = this.storage.state.levels[currentLevel] || {}
+  set currentLevel(newLevel) {
+    this.storage.state.currentLevel = newLevel
+    this.storage.state.levels[newLevel] = this.storage.state.levels[newLevel] || {}
+    this.storage.state.levels[newLevel].starScore = this.storage.state.levels[newLevel].starScore || 0
     this.storage.save()
 
     this.findNextLevel()
@@ -68,11 +71,13 @@ class Line1Scene {
       this.level.absorberStarThresholds :
       this.level.starThresholds
 
-    const score = starThresholds.filter(
-      threshold => (this.pulser.pulsesFiredCount <= threshold)
-    ).length
+    const score = starThresholds.filter(threshold => this.pulser.pulsesFiredCount <= threshold).length
 
-    this.storage.state.levels[this.currentLevel].starScore = score
+    const currentStarScore = this.storage.state.levels[this.currentLevel].starScore
+
+    if (!currentStarScore || currentStarScore < score) {
+      this.storage.state.levels[this.currentLevel].starScore = score
+    }
 
     return score
   }
@@ -82,7 +87,9 @@ class Line1Scene {
       this.storage.state.levels[levelName] :
       this.storage.state.levels[this.currentLevel]
 
-    return level.bestScore || 0
+    return (level && level.bestScore) ?
+      level.bestScore :
+      0
   }
 
   getBestStarScoreForLevel = (levelName) => {
@@ -98,8 +105,7 @@ class Line1Scene {
 
     levelKeys.some((levelName, index) => {
       if (this.currentLevel === levelName) {
-
-        this.nextLevel = (index + 1 >= levelKeys.length - 1) ?
+        this.nextLevel = (index + 1 > levelKeys.length - 1) ?
           levelKeys[0] :
           levelKeys[index + 1]
 
@@ -142,7 +148,7 @@ class Line1Scene {
   cleanupEntities() {
     if (this.entities) {
       this.entities.forEach((entity) => {
-        if (entity.destroy && entity.constructor.name !== 'LevelSelect') entity.destroy(this)
+        if (entity.destroy && entity.type !== 'levelSelect') entity.destroy(this)
       })
     }
   }
@@ -159,7 +165,7 @@ class Line1Scene {
 
   isLineClick(event, entity) {
     return (
-      entity.constructor.name === 'Line' &&
+      entity.type === 'line' &&
       event.pageY < entity.y + 50 + entity.height &&
       event.pageY > entity.y - 50
     )
@@ -254,12 +260,18 @@ class Line1Scene {
     this.pulser = new Pulser({ x: 100, y: 500 })
     this.level.entities.unshift(this.pulser)
 
-    this.lines = this.lines || this.entities.filter(entity => entity.constructor.name === 'Line')
+    this.lines = this.entities.filter(entity => entity.type === 'line')
 
     if (!this.titleScreen && !this.showedTitle) {
       this.showedTitle = true
       this.titleScreen = new AmericaOfflineTitle(this)
       this.level.entities.push(this.titleScreen)
+    }
+
+    if (!this.exposition && !this.showedExposition) {
+      this.showedExposition = true
+      this.exposition = new Exposition(this)
+      this.level.entities.push(this.exposition)
     }
 
     this.levelSelect = this.levelSelect || new LevelSelect(this)

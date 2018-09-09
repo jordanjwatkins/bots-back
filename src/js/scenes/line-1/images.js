@@ -1,9 +1,9 @@
 import loadImages from '../../libs/loadImages'
 
-import squad from './src/images/bird-removal-squad.png'
+import spritesheet from './src/images/spritesheet.png'
 
 const imagesToLoad = {
-  squad,
-};
+  spritesheet,
+}
 
 export default loadImages(imagesToLoad)

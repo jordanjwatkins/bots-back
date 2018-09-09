@@ -12,8 +12,11 @@ function init() {
   }, 0)
 }
 
-module.hot.accept('./scenes/line-1', () => {
-  document.body.innerHTML = ''
+if (module.hot) {
+  module.hot.accept('./scenes/line-1', () => {
+    document.body.innerHTML = ''
 
-  scenes.activeScene = new Line1Scene(scenes)
-})
+    scenes.activeScene = new Line1Scene(scenes)
+  })
+}
+

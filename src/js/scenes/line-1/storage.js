@@ -15,16 +15,21 @@ class Storage {
     // else save initial state
     if (!this.state) {
       this.state = initialState()
+
       this.save()
     }
   }
 
   save() {
-    localStorage.setItem(this.namespace, JSON.stringify(this.state))
+    try {
+      window.localStorage.setItem(this.namespace, JSON.stringify(this.state))
+    } catch (e) {}
   }
 
   load() {
-    this.state = JSON.parse(localStorage.getItem(this.namespace))
+    try {
+      this.state = JSON.parse(window.localStorage.getItem(this.namespace))
+    } catch (e) {}
   }
 }
 

@@ -25,6 +25,8 @@ class LevelSelect {
 
     this.levelCount = Object.keys(this.levels).length + 0.5
 
+    this.type = 'levelSelect'
+
     this.attachEvents()
   }
 
@@ -47,13 +49,21 @@ class LevelSelect {
   }
 
   onClick = (event) => {
-    Object.keys(this.clickBoxes).forEach((levelName, index) => {
+    Object.keys(this.clickBoxes).forEach((levelName) => {
       if (this.scene.mainCanvas.isClickHit(event, this.clickBoxes[levelName])) {
-        this.scene.currentLevel = levelName
+        const { scene } = this
+        const levelState = scene.storage.state.levels[levelName]
 
-        this.updateSquadNextX(levelName)
+        if (
+          scene.currentLevel === levelName ||
+          (levelState && levelState.starScore > -1)
+        ) {
+          scene.currentLevel = levelName
 
-        this.scene.freshStart()
+          this.updateSquadNextX(levelName)
+
+          scene.freshStart()
+        }
       }
     })
   }
@@ -66,9 +76,9 @@ class LevelSelect {
 
   getLevelIndexByName(name) {
     return Object.keys(this.levels).reverse().reduce((acc, levelName, index) => {
-      return levelName === name ?
-        index :
-        acc
+      if (levelName === name) return index
+
+      return acc
     }, 0)
   }
 
@@ -96,8 +106,6 @@ class LevelSelect {
   }
 
   drawClouds(delta) {
-    const scene = this.scene
-
     this.clouds = this.clouds || [
 
       new Cloud({
@@ -134,12 +142,16 @@ class LevelSelect {
     const x = 25
 
     // transmitter
-    this.scene.mainCanvas.drawRect({
-      x: 4,
-      y: roadY - 35,
-      width: 20,
-      height: 40,
-      color: '#444',
+    this.scene.mainCanvas.drawThing({
+      x: 14,
+      y: roadY - 16,
+      width: 13 * 2,
+      height: 18 * 2,
+      frameWidth: 13,
+      frameHeight: 18,
+      frame: 0,
+      frameOffset: 36,
+      spriteName: 'spritesheet',
     })
 
     // road
@@ -221,7 +233,8 @@ class LevelSelect {
         frameWidth: 24,
         frameHeight: 10,
         frame: 0,
-        spriteName: 'squad',
+        frameOffset: 1,
+        spriteName: 'spritesheet',
       })
     })
   }
@@ -321,7 +334,15 @@ class LevelSelect {
 
     // big squad
     this.scene.mainCanvas.drawThing({
-      x: 325, y: 513, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, spriteName: 'squad',
+      x: 325,
+      y: 513,
+      width: 48 * 4,
+      height: 20 * 4,
+      frameWidth: 24,
+      frameHeight: 10,
+      frame: 0,
+      frameOffset: 1,
+      spriteName: 'spritesheet',
     })
   }
 }

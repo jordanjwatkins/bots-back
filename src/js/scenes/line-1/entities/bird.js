@@ -23,6 +23,7 @@ class Bird {
       direction: 0,
       absorber: false,
       absorbed: 0,
+      type: 'bird',
     }
 
     Object.assign(this, defaults, props)
@@ -88,7 +89,7 @@ class Bird {
   update({ mainCanvas, allFlying, entities }) {
     if (!this.y) return
 
-    this.lines = this.lines || entities.filter(entity => entity.constructor.name === 'Line')
+    this.lines = this.lines || entities.filter(entity => entity.type === 'line')
 
     if (!this.currentLine) {
       this.lines.some((line, index) => {
@@ -189,7 +190,7 @@ class Bird {
     })
 
     // wings
-    if (this.flying && Math.sin(this.y / 5) > 0) {
+    if (this.flying && Math.sin(this.y / 6) > 0) {
       mainCanvas.drawRect({
         x: this.x - 8,
         y: this.y + 5,

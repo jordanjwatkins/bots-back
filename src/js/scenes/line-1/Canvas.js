@@ -80,7 +80,7 @@ class MainCanvas {
       thing.sprite,
 
       // sprite frame box
-      frame * thing.frameWidth, 0, thing.frameWidth, thing.frameHeight,
+      frame * thing.frameWidth + thing.frameOffset, 0, thing.frameWidth, thing.frameHeight,
 
       // position in world
       spriteX, spriteY,

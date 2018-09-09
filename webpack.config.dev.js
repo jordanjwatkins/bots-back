@@ -1,11 +1,14 @@
 const path = require('path')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 
 const projectTitle = require('./package.json').displayName
 
 module.exports = {
+  mode: 'development',
+
   devServer: {
     hot: true,
     inline: true,
@@ -55,12 +58,12 @@ module.exports = {
 
       {
         test: /styles.*$/,
-        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-          use: [
-            'css-loader?importLoaders=1&url=false&sourceMap=true',
-            'postcss-loader?sourceMap=true',
-          ],
-        })),
+        use: [
+          'css-hot-loader',
+          MiniCssExtractPlugin.loader,
+          'css-loader?importLoaders=1&url=false&sourceMap=true',
+          'postcss-loader?sourceMap=true',
+        ],
       },
 
       {
@@ -78,12 +81,14 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('[name].css'),
+    new MiniCssExtractPlugin('[name]-[hash].min.css'),
+
     new HtmlWebpackPlugin({
       title: projectTitle,
       favicon: './favicon.ico',
       template: 'index.html',
     }),
+
     new webpack.HotModuleReplacementPlugin(),
   ],
 }
