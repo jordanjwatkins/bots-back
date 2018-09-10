@@ -41,26 +41,24 @@ class AmericaOfflineTitle {
 
     this.textGroup = 1
 
-
     /* eslint-disable max-len */
     this.text1 = [
       'Hello, fellow citizens. As you all know, we are facing a serious crisis.',
       "As your duly and entirely legitimately elected mayor, I'd like to reassure you all and put your minds at ease...",
-      "... well ...  we have a plan. Plans are a key ingredient in dealing with... things. So, we have one and it's pretty good.",
+      "So... we have a plan. I think it's pretty good.",
     ]
 
     this.text2 = [
-      "A young, lady scientist... er, sorry... notes... a yo-- ... a 'just scientist' has come up with a device",
-      'that should let us... um... handle our fowl invasion,',
-      'while, naturally, staying carefully within the strictly enforced guidelines for proper animal treatment',
-      'as laid out by the illustrious founders of our beloved tow nwithin the hallowed text of our most honored town charter.',
+      "A young, lady scientist... er, sorry... notes... a yo-- ... a 'just scientist' has come up with a device.",
+      'The device should let us, gently, deal with this fowl invasion.',
+      "It goes without saying, we'll stay carefully within our beloved (and strictly enforced animal rights laws).",
     ]
 
     this.text3 = [
-      "I won't go into too many details now, but essentially we have a crack team.",
-      "They'll be using the device to 'tickle' clear the lines leading to a local radio tower.",
+      "I won't go into too many details now, but, to boil it down, we've put together a top notch team.",
+      "They'll be using the device to 'tickle' the birds off the lines leading to a local radio tower.",
       "Ultimately, this will allow us to broadcast a powerful, but gentle, 'tickle' over a wide area.",
-      'That should, ideally, restore our beloved internet and reconnect us with the outside world.',
+      "That 'Mass Tickle' should, ideally, restore our beloved internet and reconnect us with the outside world.",
     ]
   }
 

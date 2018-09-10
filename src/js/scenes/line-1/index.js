@@ -27,7 +27,7 @@ class Line1Scene {
     this.storage = new Storage('OfflineDevLine3')
 
     this.showedTitle = true
-    this.showedExposition = true
+    this.showedExposition = false
 
     this.initializeDom()
 

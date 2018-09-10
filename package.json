@@ -5,8 +5,9 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
-    "prod": "rm -rf build && webpack --config webpack.config.min.js",
-    "eslint": "eslint src/**/*.js"
+    "prod": "rm -rf build && rm -f build.zip && webpack --config webpack.config.min.js && npm run zip",
+    "eslint": "eslint src/**/*.js",
+    "zip": "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\""
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -26,6 +27,7 @@
     "google-closure-compiler-js": "^20180610.0.0",
     "html-webpack-exclude-assets-plugin": "0.0.7",
     "html-webpack-plugin": "^3.2.0",
+    "ignore-emit-webpack-plugin": "^1.0.2",
     "mini-css-extract-plugin": "^0.4.2",
     "postcss-easy-import": "^2.0.0",
     "postcss-loader": "^3.0.0",
