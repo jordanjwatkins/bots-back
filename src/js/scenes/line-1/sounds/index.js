@@ -13,7 +13,7 @@ let note1 = 0
 export function pulse(offset = 0) {
   if (soundDisabled) return
 
-  const octave = 5 + offset
+  const octave = 4 + offset
 
   if (note === 3) {
     songNote(`C${octave}`, 1, 1)

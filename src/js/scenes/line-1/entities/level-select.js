@@ -143,15 +143,30 @@ class LevelSelect {
 
     // transmitter
     this.scene.mainCanvas.drawThing({
-      x: 14,
-      y: roadY - 16,
+      x: 15,
+      y: roadY - 20,
       width: 13 * 2,
-      height: 18 * 2,
+      height: 18 * 2.8,
       frameWidth: 13,
       frameHeight: 18,
       frame: 0,
       frameOffset: 36,
       spriteName: 'spritesheet',
+    })
+
+    let blinkerColor = '#650000'
+
+    if (this.scene.gameWon) {
+      blinkerColor = (Math.sin(new Date() / 100)) > 0 ? '#650000' : 'red'
+    }
+
+    // red light
+    this.scene.mainCanvas.drawRect({
+      x: 14,
+      y: roadY - 42,
+      width: 2,
+      height: 6,
+      color: blinkerColor,
     })
 
     // road
@@ -281,10 +296,10 @@ class LevelSelect {
   }
 
   drawStars(xIn, levelName) {
-    const { mainCanvas, getBestStarScoreForLevel } = this.scene
+    const { mainCanvas, getBestStarScoreForLevel, getBestScoreForLevel } = this.scene
     const { context } = mainCanvas
 
-    if (!this.scene.getBestScoreForLevel(levelName)) {
+    if (getBestStarScoreForLevel(levelName) < 0 && getBestScoreForLevel(levelName) < 0) {
       return
     }
 

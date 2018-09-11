@@ -1,33 +1,35 @@
 import dom from '../../libs/dom'
 import GameLoop from '../../libs/GameLoop'
+
 import MainCanvas from './Canvas'
 import update from './update'
+import Storage from './storage'
 
 import Cloud from './entities/cloud'
 import Ground from './entities/ground'
 import Pulser from './entities/pulser'
 import WinSplash from './entities/win-splash'
-
-import levels from './entities/levels'
-import Storage from './storage'
+import LevelSelect from './entities/level-select'
 import AmericaOfflineTitle from './entities/america-offline-title'
 import Exposition from './entities/exposition'
+import levels from './entities/levels'
 
-import * as sounds from './sounds'
-import LevelSelect from './entities/level-select'
+import Dev from './dev'
 
 class Line1Scene {
   constructor() {
+    this.dev = new Dev(this)
+
     this.debug = false
 
     this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
 
     this.levels = levels(this)
 
-    this.storage = new Storage('OfflineDevLine3')
+    this.storage = new Storage('OfflineDevLine5')
 
     this.showedTitle = true
-    this.showedExposition = false
+    this.showedExposition = true
 
     this.initializeDom()
 
@@ -40,7 +42,9 @@ class Line1Scene {
 
     // start game loop last
     this.gameLoop = new GameLoop((delta) => {
+
       update(this, delta)
+      this.dev.birdParticles()
     })
   }
 
@@ -51,7 +55,7 @@ class Line1Scene {
   set currentLevel(newLevel) {
     this.storage.state.currentLevel = newLevel
     this.storage.state.levels[newLevel] = this.storage.state.levels[newLevel] || {}
-    this.storage.state.levels[newLevel].starScore = this.storage.state.levels[newLevel].starScore || 0
+    this.storage.state.levels[newLevel].starScore = this.storage.state.levels[newLevel].starScore || -1
     this.storage.save()
 
     this.findNextLevel()
@@ -77,19 +81,20 @@ class Line1Scene {
 
     if (!currentStarScore || currentStarScore < score) {
       this.storage.state.levels[this.currentLevel].starScore = score
+      this.storage.save()
     }
 
     return score
   }
 
-  getBestScoreForLevel(levelName) {
+  getBestScoreForLevel = (levelName) => {
     const level = (levelName) ?
       this.storage.state.levels[levelName] :
       this.storage.state.levels[this.currentLevel]
 
     return (level && level.bestScore) ?
       level.bestScore :
-      0
+      -1
   }
 
   getBestStarScoreForLevel = (levelName) => {
@@ -97,7 +102,9 @@ class Line1Scene {
       this.storage.state.levels[levelName] :
       this.storage.state.levels[this.currentLevel]
 
-    return level.starScore || 0
+    return (level && level.starScore) ?
+      level.starScore :
+      -1
   }
 
   findNextLevel() {
@@ -105,7 +112,11 @@ class Line1Scene {
 
     levelKeys.some((levelName, index) => {
       if (this.currentLevel === levelName) {
-        this.nextLevel = (index + 1 > levelKeys.length - 1) ?
+        const isLastLevel = (index + 1 > levelKeys.length - 1)
+
+        this.isLastLevel = isLastLevel
+
+        this.nextLevel = isLastLevel ?
           levelKeys[0] :
           levelKeys[index + 1]
 
@@ -178,53 +189,9 @@ class Line1Scene {
     this.sceneContainer = dom.make('<div class="scene-container"></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
-    this.initLevelSelect()
+    if (this.dev) this.dev.levelSelect()
 
     document.body.appendChild(this.sceneContainer)
-
-    setTimeout(() => {
-      document.body.classList.add('show-scene')
-    }, 300)
-  }
-
-  initLevelSelect() {
-    this.levelSelectContainer = dom.make('<div class="level-select-container"></div>')
-    this.sceneContainer.appendChild(this.levelSelectContainer)
-
-    Object.keys(this.levels).forEach((levelName) => {
-      const friendlyLevelName = levelName.split('').map((c, i) => {
-        if (i === 0) c = c.toUpperCase()
-
-        return (c.match(/[A-Z]/)) ? ` ${c}` : c
-      }).join('')
-
-      const levelSelectButton = dom.make(`<button class="level-select-button">${friendlyLevelName}</button>`)
-
-      this.levelSelectContainer.appendChild(levelSelectButton)
-
-      levelSelectButton.addEventListener('click', () => {
-        this.currentLevel = levelName
-
-        this.freshStart()
-      })
-    })
-
-    this.initSoundSelect()
-  }
-
-  initSoundSelect() {
-    this.soundSelectContainer = dom.make('<div class="sound-select-container"></div>')
-    this.sceneContainer.appendChild(this.soundSelectContainer)
-
-    Object.keys(sounds).forEach((soundName) => {
-      const soundSelectButton = dom.make(`<button class="level-select-button">${soundName}</button>`)
-
-      this.soundSelectContainer.appendChild(soundSelectButton)
-
-      soundSelectButton.addEventListener('click', () => {
-        sounds[soundName]()
-      })
-    })
   }
 
   initEntities() {
@@ -290,6 +257,17 @@ class Line1Scene {
   }
 
   startNextLevel() {
+    this.gameWon = true
+
+    if (this.isLastLevel) {
+      this.gameWon = true
+      console.log('win game')
+
+      this.winSplash.destroy()
+
+      return
+    }
+
     this.currentLevel = this.nextLevel
 
     this.levelSelect.updateSquadNextX(this.currentLevel)
@@ -297,8 +275,10 @@ class Line1Scene {
     this.freshStart()
   }
 
-  winSplash() {
-    this.entities.push(new WinSplash(this))
+  openWinSplash() {
+    this.winSplash = new WinSplash(this)
+
+    this.entities.push(this.winSplash)
   }
 
   end() {

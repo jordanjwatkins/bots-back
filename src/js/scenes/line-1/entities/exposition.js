@@ -51,7 +51,7 @@ class AmericaOfflineTitle {
     this.text2 = [
       "A young, lady scientist... er, sorry... notes... a yo-- ... a 'just scientist' has come up with a device.",
       'The device should let us, gently, deal with this fowl invasion.',
-      "It goes without saying, we'll stay carefully within our beloved (and strictly enforced animal rights laws).",
+      "It goes without saying, we'll stay carefully within our beloved (and strictly enforced) animals rights laws.",
     ]
 
     this.text3 = [
@@ -140,7 +140,7 @@ class AmericaOfflineTitle {
 
         clearTimeout(this.textTimeout)
         this.textTimeout = null
-      }, 800)
+      }, 3100)
     }
 
     if (this.textGroup === 3) {

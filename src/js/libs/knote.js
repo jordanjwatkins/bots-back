@@ -32,7 +32,6 @@ function playNote(note, options) {
   const config = options || {};
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
-  //const compressor = audioContext.createDynamicsCompressor();
 
   const gain = (typeof config.gain === 'number') ? config.gain : 0.2;
   const waveType = config.waveType || 'sine';
@@ -43,10 +42,7 @@ function playNote(note, options) {
   const truncate = config.truncate || 0;
 
   oscillator.connect(gainNode);
-  //gainNode.connect(compressor);
-  ////compressor.connect(audioContext.destination);
-
-  gainNode.connect(globalGainNode)
+  gainNode.connect(globalGainNode);
 
   gainNode.gain.value = 0;
 

@@ -221,6 +221,8 @@ class WinSplash {
 
     context.save()
 
+    context.globalAlpha = 0.3
+
     mainCanvas.drawRect({
       width: mainCanvas.width,
       height: mainCanvas.height,
@@ -316,9 +318,6 @@ class WinSplash {
 
     if (this.restartDebugRect) this.restartDebugRect()
     if (this.nextLevelDebugRect) this.nextLevelDebugRect()
-
-    // fade far background
-    context.globalAlpha = 0.7
   }
 }
 

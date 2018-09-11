@@ -5,24 +5,6 @@ function update(scene, delta) {
 
   mainCanvas.clear()
 
-  if (!scene.transmitter) {
-    scene.transmitter = {
-      x: 25,
-      y: 283,
-      width: 13 * 26,
-      height: 19 * 27,
-      frameWidth: 13,
-      frameHeight: 19,
-      frame: 0,
-      frameOffset: 36,
-      spriteName: 'spritesheet',
-      update: () => mainCanvas.drawThing(scene.transmitter),
-      z: 2,
-    }
-
-    scene.entities.push(scene.transmitter)
-  }
-
   // background z of 1
   updateEntities(entities, scene, 1, delta)
 
@@ -43,9 +25,9 @@ function update(scene, delta) {
 
     const fired = scene.pulser.pulsesFiredCount
 
-    if (scene.bestScoreForLevel === 0 || fired < scene.bestScoreForLevel) scene.bestScoreForLevel = fired
+    if (scene.bestScoreForLevel < 1 || fired < scene.bestScoreForLevel) scene.bestScoreForLevel = fired
 
-    scene.winSplash()
+    scene.openWinSplash()
 
     scene.allFlying = true
 
