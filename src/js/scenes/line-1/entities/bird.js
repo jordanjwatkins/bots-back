@@ -190,7 +190,7 @@ class Bird {
     })
 
     // wings
-    if (this.flying && Math.sin(this.y / 6) > 0) {
+    if (this.flying && Math.sin(Date.now() / 26) > 0) {
       mainCanvas.drawRect({
         x: this.x - 8,
         y: this.y + 5,

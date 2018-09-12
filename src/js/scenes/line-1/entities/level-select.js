@@ -109,7 +109,7 @@ class LevelSelect {
     this.clouds = this.clouds || [
 
       new Cloud({
-        x: Math.round(700 + ((this.width / 5) * Math.random())),
+        x: Math.round(600 + ((this.width / 5) * Math.random())),
         y: Math.round(5 + (20 * Math.random())),
         width: 20,
         height: 5,

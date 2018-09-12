@@ -26,7 +26,6 @@ class Cloud {
 
     if (this.x > mainCanvas.width) {
       this.x = -(this.width * 2) - (this.width * Math.random())
-      this.y = this.y - this.height + Math.round(this.height * 2 * Math.random())
     }
 
     if (this.moving) {
