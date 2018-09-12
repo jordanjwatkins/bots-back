@@ -1,6 +1,6 @@
 import * as sounds from './sounds'
 
-function update(scene, delta) {
+function update(scene, delta, extras) {
   const { mainCanvas, entities } = scene
 
   mainCanvas.clear()
@@ -16,6 +16,8 @@ function update(scene, delta) {
 
   // draw overlay at z of 4
   updateEntities(entities, scene, 4, delta)
+
+  if (extras) extras()
 
   mainCanvas.drawScanlines()
 

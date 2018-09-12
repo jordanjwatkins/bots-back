@@ -7,9 +7,9 @@ export default (scene) => {
   const birdSize = 20
   const lineHeight = 5
 
-  const lineTop = 370
-  const line2Top = 170
-  const line3Top = 270
+  const lineTop = 390
+  const line2Top = 190
+  const line3Top = 290
 
   const line1 = new Line({
     y: lineTop,
@@ -239,7 +239,8 @@ export default (scene) => {
         entities,
       }
     },
-/*
+
+    /*
     switchFourClose({ absorber = false } = {}) {
       const entities = [
         line1,
@@ -327,20 +328,21 @@ export default (scene) => {
         entities,
       }
     },
+  */
 
     oneLineTwoSimpleOneHeavy({ absorber = false } = {}) {
       const entities = [
-        line1,
+        line3,
 
         new Bird({
-          x: 300,
-          y: lineTop - birdSize,
+          x: 200,
+          y: line3Top - birdSize,
           absorber,
         }),
 
         new Bird({
           x: 450,
-          y: lineTop - birdSize * 2,
+          y: line3Top - birdSize * 2,
           width: birdSize * 2,
           height: birdSize * 2,
           absorber,
@@ -348,8 +350,8 @@ export default (scene) => {
         }),
 
         new Bird({
-          x: 600,
-          y: lineTop - birdSize,
+          x: 700,
+          y: line3Top - birdSize,
           absorber,
         }),
       ]
@@ -415,12 +417,12 @@ export default (scene) => {
       return {
         starThresholds: [20, 16, 12],
         absorberStarThresholds: [34, 28, 24],
-        optimalPulseCount: 12,
+        optimalPulseCount: 11,
         absorberOptimalPulseCount: 24,
         birdCount: getBirdCount(entities),
         entities,
       }
-    },*/
+    },
 
     fiveMixedAbsorb({ absorber = false } = {}) {
       const entities = [
@@ -469,6 +471,7 @@ export default (scene) => {
       }
     },
 
+  /*
     fiveMixedSwitch({ absorber = false } = {}) {
       const entities = [
         line1,
@@ -516,42 +519,54 @@ export default (scene) => {
         disableAbsorber: true,
       }
     },
+  */
   }
 
-  const preppedLevels = Object.entries(levels).reduce((obj, entry) => {
-    const [key, value] = entry
+  /*
+    const preppedLevels = Object.entries(levels).reduce((obj, entry) => {
+      const [key, value] = entry
 
-    const level = value()
+      const level = value()
 
-    if (level.disable) {
+      if (level.disable) {
+        return obj
+      }
+
+      obj[key] = value
+
       return obj
-    }
+    }, {})
 
-    obj[key] = value
+    const preppedAbsorberLevels = Object.entries(levels).reduce((obj, entry) => {
+      const [key, value] = entry
 
-    return obj
-  }, {})
+      const level = value({ absorber: true })
 
-  const preppedAbsorberLevels = Object.entries(levels).reduce((obj, entry) => {
-    const [key, value] = entry
+      if (level.disableAbsorber) {
+        return obj
+      }
 
-    const level = value({ absorber: true })
+      obj[`${key}Absorber`] = () => value({ absorber: true })
 
-    if (level.disableAbsorber) {
       return obj
-    }
+    }, {})
+  */
 
-    obj[`${key}Absorber`] = () => value({ absorber: true })
+  // return Object.assign({}, preppedLevels, preppedAbsorberLevels)
 
-    return obj
-  }, {})
-
-
-  const selectedLevels = {
-
+  return {
+    oneLineTwoSimple: levels.oneLineTwoSimple,
+    switchTwoSpread: levels.switchTwoSpread,
+    switchThreeClose: levels.switchThreeClose,
+    oneLineTwoSimpleOneHeavy: levels.oneLineTwoSimpleOneHeavy,
+    oneSwitcher: levels.oneSwitcher,
+    switchThreeSpreadThreeLine: levels.switchThreeSpreadThreeLine,
+    oneSwitcherAbsorber: () => levels.oneSwitcher({ absorber: true }),
+    switchThreeCloseAbsorber: () => levels.switchThreeClose({ absorber: true }),
+    twoHeavyDefended: levels.twoHeavyDefended,
+    fiveMixedAbsorb: levels.fiveMixedAbsorb,
+    twoHeavyDefendedAbsorber: () => levels.twoHeavyDefended({ absorber: true }),
   }
-
-  return Object.assign({}, preppedLevels, preppedAbsorberLevels)
 }
 
 function getBirdCount(entities) {

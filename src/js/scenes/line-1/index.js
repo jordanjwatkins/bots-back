@@ -29,7 +29,9 @@ class Line1Scene {
     this.storage = new Storage('OfflineDevLine5')
 
     this.showedTitle = true
-    this.showedExposition = true
+    this.showedExposition = false
+
+    this.mainCanvas.canvas.style.letterSpacing = '-1px'
 
     this.initializeDom()
 
@@ -42,9 +44,30 @@ class Line1Scene {
 
     // start game loop last
     this.gameLoop = new GameLoop((delta) => {
-      update(this, delta)
+      update(this, delta, () => {
+        if (this.gameWon) {
+          if (!this.ended) {
+            this.ended = true
 
-      this.dev.birdParticles()
+            setTimeout(() => {
+              this.wipe = true
+            }, 2000)
+
+            setTimeout(() => {
+              this.wipe = false
+              this.exposition = new Exposition(this, true)
+            }, 5000)
+          }
+
+          this.dev.birdParticles()
+
+          if (this.wipe) {
+            this.dev.portholeWipe()
+          }
+
+          if (this.ended && this.exposition) this.exposition.update(this.mainCanvas)
+        }
+      })
     })
   }
 
@@ -189,7 +212,7 @@ class Line1Scene {
     this.sceneContainer = dom.make('<div class="scene-container"></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
-    if (this.dev) this.dev.levelSelect()
+    if (this.dev.levelSelect) this.dev.levelSelect()
 
     document.body.appendChild(this.sceneContainer)
   }
@@ -257,8 +280,6 @@ class Line1Scene {
   }
 
   startNextLevel() {
-    this.gameWon = true
-
     if (this.isLastLevel) {
       this.gameWon = true
       console.log('win game')

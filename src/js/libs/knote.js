@@ -57,6 +57,8 @@ function playNote(note, options) {
 
   oscillator.start(startTime);
   oscillator.stop(stopTime);
+
+  return oscillator;
 }
 
 function makeNote(noteName) {
@@ -95,7 +97,7 @@ function calculateNoteFrequency(note) {
 function frequencyByOffset(baseFrequency, semitoneOffset) {
   return baseFrequency * Math.pow(2, (semitoneOffset / 12));
 }
-
+/*
 function noteRange(firstNote, count, accidentals) {
   const notes = [];
   let note = makeNote(firstNote);
@@ -186,7 +188,7 @@ function prevNote(note, accidentals) {
 
     return (noteLetters[index]) ? noteLetters[index] : noteLetters[noteLetters.length - 1];
   }
-}
+}*/
 
 function toInt(value) {
   return parseInt(value, 10);
@@ -247,11 +249,11 @@ function brownNoise(duration) {
 export default {
   audioContext,
   playNote,
-  noteRange,
-  noteNameRange,
+  //noteRange,
+  //noteNameRange,
   makeNote,
-  nextNote,
-  prevNote,
+  //nextNote,
+  //prevNote,
   playSequenceNote,
   songNote,
   songNoise,

@@ -1,7 +1,8 @@
 import * as sounds from '../sounds'
+import Pulser from './pulser'
 
-class AmericaOfflineTitle {
-  constructor(scene) {
+class Exposition {
+  constructor(scene, endTitle = false) {
     const { mainCanvas } = scene
 
     this.width = mainCanvas.width
@@ -18,14 +19,22 @@ class AmericaOfflineTitle {
 
     this.scene = scene
 
+    this.endTitle = endTitle
+
+    this.textGroup = (endTitle) ?
+      5 :
+      1
+
     this.init()
 
     this.attachEvents()
   }
 
   init() {
+    const mX = (this.endTitle) ? 350 : 180
+
     this.mayor = {
-      x: 110,
+      x: mX,
       y: 200,
       frameWidth: 7,
       frameHeight: 10,
@@ -39,26 +48,39 @@ class AmericaOfflineTitle {
       this.mayorShowing = true
     }, 1000)
 
-    this.textGroup = 1
+    // this.textGroup = 1
 
     /* eslint-disable max-len */
     this.text1 = [
       'Hello, fellow citizens. As you all know, we are facing a serious crisis.',
-      "As your duly and entirely legitimately elected mayor, I'd like to reassure you all and put your minds at ease...",
+      'As your duly, and entirely legitimately, elected mayor,',
+      "I'd like to reassure you all and put your minds at ease...",
       "So... we have a plan. I think it's pretty good.",
     ]
 
     this.text2 = [
-      "A young, lady scientist... er, sorry... notes... a yo-- ... a 'just scientist' has come up with a device.",
+      "A young, lady scientist... sorry, a 'just scientist' has come up with a device.",
       'The device should let us, gently, deal with this fowl invasion.',
-      "It goes without saying, we'll stay carefully within our beloved (and strictly enforced) animals rights laws.",
+      "Naturally, we'll stay carefully within our beloved...",
+      "... and strictly enforced, animals' rights laws.",
     ]
 
     this.text3 = [
-      "I won't go into too many details now, but, to boil it down, we've put together a top notch team.",
-      "They'll be using the device to 'tickle' the birds off the lines leading to a local radio tower.",
-      "Ultimately, this will allow us to broadcast a powerful, but gentle, 'tickle' over a wide area.",
-      "That 'Mass Tickle' should, ideally, restore our beloved internet and reconnect us with the outside world.",
+      "Without going too deep into detail, we've put together a top notch team.",
+      "They'll use the device to 'tickle' the birds,",
+      'off of the lines leading to a local radio tower,',
+      'which will allow us to broadcast a powerful,',
+      "but also gentle, 'tickle' over a wide area.",
+      "That 'Mass Tickle' should, ideally, restore our beloved internet",
+      'and reconnect us with the outside world.',
+    ]
+
+    this.text5 = [
+      'Congratulations! You got the GOOD ending.',
+      'Things might be OK now?',
+      'Jordan J Watkins created this game for js13k 2018.',
+      "I think it's pretty good.",
+      'Fin',
     ]
   }
 
@@ -92,7 +114,7 @@ class AmericaOfflineTitle {
 
     context.textAlign = 'left'
     context.fillStyle = '#ffffff'
-    context.font = '16px fantasy'
+    context.font = '16px monospace'
 
     context.fillText(text, x, y)
 
@@ -133,29 +155,52 @@ class AmericaOfflineTitle {
 
         if (this.textLines < this[`text${this.textGroup}`].length) {
           this.textLines += 1
-        } else {
+        } else if (!this.endTitle) {
           this.textLines = 1
           this.textGroup += 1
         }
 
         clearTimeout(this.textTimeout)
         this.textTimeout = null
-      }, 3100)
+      }, 2100)
+    }
+
+    if (this.textGroup === 2) {
+      if (!this.drawPulser) setTimeout(() => {
+        this.drawPulser = true
+      }, 1200)
+
+      if (this.drawPulser) {
+        this.pulser = this.pulser || new Pulser({ x: 825, y: 200, chargeCount: 0, chargeSpeed: 2 })
+
+        this.pulser.update(this.scene)
+      }
     }
 
     if (this.textGroup === 3) {
-      this.scene.mainCanvas.drawThing({
-        x: 325, y: 513, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
+      // squad
+      if (!this.drawSquad) setTimeout(() => {
+        this.drawSquad = true
+      }, 1200)
+
+      if (!this.drawTower) setTimeout(() => {
+        this.drawTower = true
+      }, 5600)
+
+      if (this.drawSquad) this.scene.mainCanvas.drawThing({
+        x: 825, y: 240, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
       })
 
       // tower
-      this.scene.mainCanvas.drawThing({
-        x: 625, y: 453, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
+      if (this.drawTower) this.scene.mainCanvas.drawThing({
+        x: 855, y: 430, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
       })
     }
 
+    const tX = (this.endTitle) ? 450 : 280
+
     for (let i = 0; i < this.textLines; i++) {
-      this.drawText(this[`text${this.textGroup}`][i], 210, 160 + (i * 40))
+      this.drawText(this[`text${this.textGroup}`][i], tX, 160 + (i * 40))
     }
   }
 
@@ -175,7 +220,7 @@ class AmericaOfflineTitle {
     if (!this.playedSound) {
       this.playedSound = true
 
-      sounds.exposition()
+      sounds.exposition(this.endTitle)
     }
 
     this.drawBackground()
@@ -183,4 +228,4 @@ class AmericaOfflineTitle {
   }
 }
 
-export default AmericaOfflineTitle
+export default Exposition

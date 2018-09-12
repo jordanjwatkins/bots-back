@@ -183,9 +183,9 @@ class LevelSelect {
     // level markers
     Object.keys(this.levels).reverse().forEach((level, index) => {
       this.clickBoxes[level] = this.clickBoxes[level] || {
-        x: x + (this.width / this.levelCount) * index,
+        x: x + (this.width / this.levelCount) * index - 10,
         y: roadY - 55,
-        height: 70,
+        height: 80,
         width: 70,
       }
 

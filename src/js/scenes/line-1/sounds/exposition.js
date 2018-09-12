@@ -2,7 +2,7 @@ import knote from '../../../libs/knote'
 
 const { songNote, songNoise } = knote
 
-export function exposition() {
+export function exposition(endTitle = false) {
   const beat = setInterval(() => {
     songNote('Eb4', 1, 1)
   }, 488)
@@ -23,8 +23,14 @@ export function exposition() {
       setTimeout(() => {
         bar()
         songNote('Db4', 12, 3, 1)
+
+        if (endTitle) {
+          setTimeout(() => clearInterval(beat), 3000)
+        }
       }, 0.20 * 19.6 * 1000)
     }, 0.20 * 19.6 * 1000 * 2)
+
+    if (endTitle) return
 
     setTimeout(() => {
       bar()

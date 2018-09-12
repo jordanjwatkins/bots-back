@@ -2,7 +2,7 @@ import * as sounds from '../sounds'
 import Pulse from './pulse'
 
 class Pulser {
-  constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0 }) {
+  constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 3, chargeSpeed = 4 }) {
     this.x = x
     this.y = y
     this.z = 3
@@ -20,9 +20,9 @@ class Pulser {
     }
 
     this.chargeProgress = 0
-    this.chargeSpeed = 4
+    this.chargeSpeed = chargeSpeed
     this.maxChargeCount = 3
-    this.chargeCount = this.maxChargeCount
+    this.chargeCount = chargeCount
     this.pulsesFiredCount = 0
   }
 
@@ -75,13 +75,15 @@ class Pulser {
     const chunkWidth = Math.round((fullBarWidth - gutterWidth * (progressIndicatorCount - 1)) / progressIndicatorCount)
     const chunkCount = Math.floor(this.chargeProgress / progressIndicatorCount)
 
-    for (let i = 0; i < chunkCount; i++) {
+    for (let i = 0; i < progressIndicatorCount - 1; i++) {
+      const color = (i >= chunkCount) ? '#111' : 'yellow'
+
       mainCanvas.drawRect({
-        x: this.x + 3 + chunkWidth * i + gutterWidth * i,
+        x: this.x + 6 + chunkWidth * i + gutterWidth * i,
         y: this.y + this.height - chunkWidth - 4,
         width: chunkWidth,
         height: chunkWidth,
-        color: 'yellow',
+        color,
       })
     }
   }
@@ -91,13 +93,15 @@ class Pulser {
     const fullBarWidth = this.width - 6
     const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount - 1)) / this.maxChargeCount
 
-    for (let i = 0; i < this.chargeCount; i++) {
+    for (let i = 0; i < this.maxChargeCount; i++) {
+      const color = (i >= this.chargeCount) ? '#111' : 'yellow'
+
       mainCanvas.drawRect({
         x: this.x + 3 + chunkWidth * i + gutterWidth * i,
         y: this.y + 4,
         width: chunkWidth,
         height: chunkWidth / 2,
-        color: 'yellow',
+        color,
       })
     }
   }
