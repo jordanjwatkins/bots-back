@@ -546,6 +546,11 @@ export default (scene) => {
     return obj
   }, {})
 
+
+  const selectedLevels = {
+
+  }
+
   return Object.assign({}, preppedLevels, preppedAbsorberLevels)
 }
 

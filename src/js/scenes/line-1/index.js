@@ -42,8 +42,8 @@ class Line1Scene {
 
     // start game loop last
     this.gameLoop = new GameLoop((delta) => {
-
       update(this, delta)
+
       this.dev.birdParticles()
     })
   }

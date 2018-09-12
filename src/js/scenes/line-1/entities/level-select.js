@@ -56,7 +56,7 @@ class LevelSelect {
 
         if (
           scene.currentLevel === levelName ||
-          (levelState && levelState.starScore > -1)
+          levelState
         ) {
           scene.currentLevel = levelName
 

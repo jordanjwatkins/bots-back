@@ -50,7 +50,12 @@ class WinSplash {
   }
 
   onClick = (event) => {
-    if (this.isRestartClick(event)) this.scene.freshStart()
+    if (this.isRestartClick(event)) {
+      this.scene.storage.initLevel(this.scene.nextLevel)
+
+      this.scene.freshStart()
+    }
+
     if (this.isNextLevelClick(event)) this.scene.startNextLevel()
   }
 

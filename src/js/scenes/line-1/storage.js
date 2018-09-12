@@ -20,6 +20,12 @@ class Storage {
     }
   }
 
+  initLevel(levelName) {
+    this.state.levels[levelName] = this.state.levels[levelName] || {}
+
+    this.save()
+  }
+
   save() {
     try {
       window.localStorage.setItem(this.namespace, JSON.stringify(this.state))
