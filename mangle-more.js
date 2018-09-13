@@ -2,10 +2,10 @@ const fs = require('fs')
 
 const path = 'build/app-1.min.js'
 
-const line1 = ['getBestScoreForLevel', 'getBestStarScoreForLevel', 'onClick', 'dev', 'debug', 'mainCanvas', 'storage', 'showedTitle', 'showedExposition', 'canvasContainer', 'sceneContainer', 'isLastLevel', 'nextLevel', 'entities', 'birdCount', 'pulser', 'lines', 'exposition', 'levelSelect', 'allFlying', 'gameOver', 'fadingOut', 'flyingBirdCount', 'gameLoop']
+const line1 = ["findNextLevel", "attachEvents", "removeEvents", "initLevel", "cleanupEntities", "isLineClick", "initializeDom", "initEntities", "freshStart", "startNextLevel", "openWinSplash", "birdParticles", "portholeWipe", "currentLevel", "bestScoreForLevel", "starScore", "getBestScoreForLevel", "getBestStarScoreForLevel", "onClick", "debug", "mainCanvas", "storage", "showedTitle", "showedExposition", "canvasContainer", "sceneContainer", "isLastLevel", "nextLevel", "entities", "birdCount", "pulser", "lines", "exposition", "levelSelect", "allFlying", "gameOver", "fadingOut", "flyingBirdCount", "gameLoop"]
 const mainCanvas = ['constructor', 'clearCanvas', 'testRect', 'transform', 'flipX', 'rotateThing', 'drawRect', 'drawThing', 'isClickHit', 'clickAreaDebug', 'makeScanlines', 'drawScanlines', /* 'width', 'height', */ 'boundingRect', 'opacity']
 const mainCanvasKeys = ['clickCoords', 'canvas', 'context', 'scanlines']
-const exposition = ['constructor', /* "init" */, 'destroy', 'attachEvents', 'detachEvents', 'drawText', 'drawBackground', 'drawMayor', 'flicker']
+const exposition = ['constructor', 'destroy', 'attachEvents', 'detachEvents', 'drawText', 'drawBackground', 'drawMayor', 'flicker']
 const expositionKeys = ['onClick', 'color', 'opacity', 'scene', 'endTitle', 'textGroup', 'mayor', 'playedSound', 'textLines', 'textTimeout']
 const level = ['starThresholds', 'absorberStarThresholds', 'optimalPulseCount', 'absorberOptimalPulseCount', 'birdCount', 'entities']
 const pulser = ['constructor', 'destroy', 'canPulse', 'firePulse', 'updateChargeProgress', 'drawChargeProgress', 'drawCharges', 'moving', 'color', 'speed', 'chargeProgress', 'chargeSpeed', 'maxChargeCount', 'chargeCount', 'pulsesFiredCount']

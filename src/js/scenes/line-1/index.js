@@ -59,10 +59,10 @@ class Line1 {
             }, 5000)
           }
 
-          this.dev.birdParticles()
+          this.birdParticles()
 
           if (this.wipe) {
-            this.dev.portholeWipe()
+            this.portholeWipe()
           }
 
           if (this.ended && this.exposition) this.exposition.update(this.mainCanvas)
@@ -212,7 +212,7 @@ class Line1 {
     this.sceneContainer = dom.make('<div class="scene-container"></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
-    if (this.dev.levelSelect) this.dev.levelSelect()
+    if (this.dev && this.dev.levelSelect) this.dev.levelSelect()
 
     document.body.appendChild(this.sceneContainer)
   }
