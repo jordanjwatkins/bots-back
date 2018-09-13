@@ -30,7 +30,13 @@ export function exposition(endTitle = false) {
       }, 0.20 * 19.6 * 1000)
     }, 0.20 * 19.6 * 1000 * 2)
 
-    if (endTitle) return
+    if (endTitle) return () => {
+      let id = setTimeout(() => {}, 0)
+
+      while (id--) {
+        window.clearTimeout(id)
+      }
+    }
 
     setTimeout(() => {
       bar()
@@ -57,6 +63,14 @@ export function exposition(endTitle = false) {
       }, 0.20 * 19.6 * 1000 * 2)
     }, 0.20 * 19.6 * 1000 * 4.1)
   }, 2280)
+
+  return () => {
+    let id = setTimeout(() => {}, 0)
+
+    while (id--) {
+      clearTimeout(id)
+    }
+  }
 }
 
 function bar() {

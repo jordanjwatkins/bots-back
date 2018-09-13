@@ -28,10 +28,10 @@ class Line1 {
 
     this.levels = levels(this)
 
-    this.storage = new Storage('OfflineDevLine5')
+    this.storage = new Storage('OfflineDevLine6')
 
-    this.showedTitle = true
-    this.showedExposition = false
+    //this.showedTitle = true
+    //this.showedExposition = true
 
     this.mainCanvas.canvas.style.letterSpacing = '-1px'
 
@@ -44,21 +44,33 @@ class Line1 {
 
     this.attachEvents()
 
+    //this.gameWon = true
+
     // start game loop last
     this.gameLoop = new GameLoop((delta) => {
       update(this, delta, () => {
+        if (!this.clickedFirstLine && !this.exposition) {
+          this.mainCanvas.context.save()
+          this.mainCanvas.context.globalAlpha = (Math.sin(Date.now() / 130) > 0) ? 1 : 0.4
+          this.mainCanvas.context.fillStyle = '#fff'
+          this.mainCanvas.context.font = '22px monospace'
+          this.mainCanvas.context.fillText('Tap line to send pulse', 40, 325)
+          this.mainCanvas.context.fillText('Retry unlocked levels', 745, 105)
+          this.mainCanvas.context.restore()
+        }
+
         if (this.gameWon) {
           if (!this.ended) {
             this.ended = true
 
             setTimeout(() => {
               this.wipe = true
-            }, 2000)
+            }, 3000)
 
             setTimeout(() => {
               this.wipe = false
               this.exposition = new Exposition(this, true)
-            }, 5000)
+            }, 6800)
           }
 
           this.birdParticles()
@@ -132,6 +144,10 @@ class Line1 {
       -1
   }
 
+  onFirstLevel() {
+    return Object.keys(this.levels)[0] === this.currentLevel
+  }
+
   findNextLevel() {
     const levelKeys = Object.keys(this.levels)
 
@@ -194,19 +210,23 @@ class Line1 {
 
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
+        this.clickedFirstLine = true
+
         this.pulser.firePulse(this, entity)
       }
     })
   }
 
   isLineClick(event, entity) {
+    const scale = this.mainCanvas.scaleInDom
+
     return (
       entity.type === 'line' &&
       this.mainCanvas.isClickHit(event, {
         x: 0,
-        y: entity.y - 50,
-        height: entity.height + 100,
-        width: this.mainCanvas.width,
+        y: entity.y * scale - 50 * scale,
+        height: entity.height * scale + 100 * scale,
+        width: this.mainCanvas.width * scale,
       })
     )
   }
@@ -311,15 +331,15 @@ class Line1 {
     this.bird = this.bird || new Bird({ flying: true })
 
     if (!this.birds) {
-      this.birds = Array(100).fill(0).map(() => ({
-        x: -1000 * Math.random(),
-        y: 1700 - 1700 * Math.random(),
+      this.birds = Array(50).fill(0).map(() => ({
+        x: -40 - 500 * Math.random(),
+        y: 1000 - 1000 * Math.random(),
         vX: 2 + 5 * Math.random(),
         vY: -0.1 * Math.random(),
       }))
     }
 
-    this.scene.mainCanvas.context.save()
+    this.mainCanvas.context.save()
 
     this.birds.forEach((bird) => {
       bird.x += bird.vX
@@ -328,14 +348,14 @@ class Line1 {
       this.bird.x = bird.x
       this.bird.y = bird.y
 
-      this.bird.draw(this.scene.mainCanvas)
+      this.bird.draw(this.mainCanvas)
     })
 
-    this.scene.mainCanvas.context.restore()
+    this.mainCanvas.context.restore()
   }
 
   portholeWipe() {
-    this.birdIn = this.birdIn || new Bird({ x: 415 - 250, y: 415 + 70, speed: { x: 5, y: 2 }, flying: true })
+    this.birdIn = this.birdIn || new Bird({ x: 250, y: 480, speed: { x: 5, y: 3 }, flying: true })
 
     if (!this.note) {
       this.note = knote.makeNote('A5')
@@ -349,8 +369,8 @@ class Line1 {
 
       this.holeCanvas.context = this.holeCanvas.getContext('2d')
 
-      this.holeCanvas.width = this.scene.mainCanvas.width
-      this.holeCanvas.height = this.scene.mainCanvas.height
+      this.holeCanvas.width = this.mainCanvas.width
+      this.holeCanvas.height = this.mainCanvas.height
     }
 
     const canvas = this.holeCanvas
@@ -380,7 +400,7 @@ class Line1 {
 
     context.restore()
 
-    this.scene.mainCanvas.context.drawImage(canvas, 0, 0)
+    this.mainCanvas.context.drawImage(canvas, 0, 0)
 
     this.updateBird = true
 
@@ -388,7 +408,7 @@ class Line1 {
       this.birdIn.x += this.birdIn.speed.x
       this.birdIn.y -= this.birdIn.speed.y
 
-      this.birdIn.draw(this.scene.mainCanvas)
+      this.birdIn.draw(this.mainCanvas)
     }
   }
 }

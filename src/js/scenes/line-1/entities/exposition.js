@@ -26,12 +26,32 @@ class Exposition {
       1
 
     this.init()
-
-    this.attachEvents()
   }
 
   init() {
-    const mX = (this.endTitle) ? 350 : 130
+    const { storage } = this.scene
+
+    const mX = (this.endTitle) ? 250 : 130
+
+    if (this.endTitle) {
+      this.totalStarsEarned = Object.values(storage.state.levels).reduce((starScore, level) => (
+        starScore + level.starScore
+      ), 0)
+
+      if (this.totalStarsEarned < 1) {
+        this.endingRating = 'WORST OF ALL'
+      } else if (this.totalStarsEarned >= 1 && this.totalStarsEarned < 11) {
+        this.endingRating = 'TERRIBLE'
+      } else if (this.totalStarsEarned >= 11 && this.totalStarsEarned < 22) {
+        this.endingRating = 'DECENT'
+      } else if (this.totalStarsEarned >= 22 && this.totalStarsEarned < 29) {
+        this.endingRating = 'GOOD'
+      } else if (this.totalStarsEarned >= 29 && this.totalStarsEarned < 33) {
+        this.endingRating = 'AWESOME'
+      } else {
+        this.endingRating = 'ULTIMATE'
+      }
+    }
 
     this.mayor = {
       x: mX,
@@ -77,7 +97,7 @@ class Exposition {
     ]
 
     this.text5 = [
-      'Congratulations! You got the GOOD ending.',
+      `Congratulations! You got the ${this.endingRating} ending.`,
       'Things might be OK now?',
       'Jordan J Watkins created this game for js13k 2018.',
       "I think it's pretty good.",
@@ -88,6 +108,8 @@ class Exposition {
   destroy() {
     this.detachEvents()
 
+    this.expositionCanceler()
+
     this.scene.exposition = null
 
     this.scene.entities = this.scene.entities.filter(entity => entity !== this)
@@ -95,6 +117,8 @@ class Exposition {
 
   attachEvents() {
     const { canvas } = this.scene.mainCanvas
+
+    this.eventsAttached = true
 
     canvas.addEventListener('click', this.onClick)
   }
@@ -106,12 +130,16 @@ class Exposition {
   }
 
   onClick = () => {
-
+    if (!this.scene.titleScreen){
+      this.destroy()
+    }
   }
 
   drawText(text, x, y) {
     const { mainCanvas } = this.scene
     const { context } = mainCanvas
+
+    context.save()
 
     context.textAlign = 'left'
     context.fillStyle = '#ffffff'
@@ -167,9 +195,11 @@ class Exposition {
     }
 
     if (this.textGroup === 2) {
-      if (!this.drawPulser) setTimeout(() => {
-        this.drawPulser = true
-      }, 1200)
+      if (!this.drawPulser) {
+        setTimeout(() => {
+          this.drawPulser = true
+        }, 1200)
+      }
 
       if (this.drawPulser) {
         this.pulser = this.pulser || new Pulser({ x: 825, y: 200, chargeCount: 0, chargeSpeed: 1 })
@@ -180,52 +210,70 @@ class Exposition {
 
     if (this.textGroup === 3) {
       // squad
-      if (!this.drawSquad) setTimeout(() => {
-        this.drawSquad = true
-      }, 2600)
+      if (!this.drawSquad) {
+        setTimeout(() => {
+          this.drawSquad = true
+        }, 2600)
+      }
 
-      if (!this.drawTower) setTimeout(() => {
-        this.drawTower = true
-      }, 6600)
+      if (!this.drawTower) {
+        setTimeout(() => {
+          this.drawTower = true
+        }, 6600)
+      }
 
-      if (this.drawSquad) this.scene.mainCanvas.drawThing({
-        x: 820, y: 200, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
-      })
+      if (this.drawSquad) {
+        this.scene.mainCanvas.drawThing({
+          x: 820, y: 200, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
+        })
+      }
 
       // tower
-      if (this.drawTower) this.scene.mainCanvas.drawThing({
-        x: 865, y: 380, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
-      })
+      if (this.drawTower) {
+        this.scene.mainCanvas.drawThing({
+          x: 865, y: 380, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
+        })
+      }
     }
 
-    const tX = (this.endTitle) ? 450 : 210
+    const tX = (this.endTitle) ? 350 : 210
 
     for (let i = 0; i < this.textLines; i++) {
       this.drawText(this[`text${this.textGroup}`][i], tX, 160 + (i * 40))
     }
   }
 
-  flicker(offOpacity, onOpacity, toggleRate = 1) {
-    const { context } = this.scene.mainCanvas
+  drawTotalStarScore() {
+    const { mainCanvas, levels } = this.scene
 
-    if (Math.sin(new Date() / (100 * toggleRate)) > 0) {
-      context.globalAlpha = offOpacity
-    } else {
-      context.globalAlpha = onOpacity
-    }
+    const levelCount = Object.keys(levels).length
+
+    mainCanvas.context.fillStyle = '#fff'
+    mainCanvas.context.textAlign = 'left'
+    mainCanvas.context.font = '20px monospace'
+
+    mainCanvas.context.fillText(`${this.totalStarsEarned} / ${levelCount * 3}`, mainCanvas.width / 2 - 30, 70)
+
+    mainCanvas.drawStar(mainCanvas.width / 2 - 55, 65, '#fff', 8)
   }
 
   update() {
     if (this.scene.titleScreen) return
 
+    if (!this.eventsAttached) this.attachEvents()
+
     if (!this.playedSound) {
       this.playedSound = true
 
-      sounds.exposition(this.endTitle)
+      this.expositionCanceler = sounds.exposition(this.endTitle)
     }
 
     this.drawBackground()
     this.drawMayor()
+
+    if (this.endTitle) {
+      this.drawTotalStarScore()
+    }
   }
 }
 

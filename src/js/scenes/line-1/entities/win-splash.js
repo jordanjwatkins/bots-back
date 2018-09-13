@@ -62,11 +62,13 @@ class WinSplash {
   isRestartClick(event) {
     const { mainCanvas, debug } = this.scene
 
+    const scale = mainCanvas.scaleInDom
+
     const clickRect = {
-      y: 300,
-      x: 265,
-      height: 120,
-      width: 120,
+      y: 300 * scale,
+      x: 265 * scale,
+      height: 120 * scale,
+      width: 120 * scale,
     }
 
     if (debug && !this.restartDebugRect) {
@@ -79,11 +81,13 @@ class WinSplash {
   isNextLevelClick(event) {
     const { mainCanvas, debug } = this.scene
 
+    const scale = mainCanvas.scaleInDom
+
     const clickRect = {
-      y: 300,
-      x: 610,
-      height: 120,
-      width: 120,
+      y: 300 * scale,
+      x: 610 * scale,
+      height: 120 * scale,
+      width: 120 * scale,
     }
 
     if (debug && !this.nextLevelDebugRect) {
@@ -91,47 +95,6 @@ class WinSplash {
     }
 
     return mainCanvas.isClickHit(event, clickRect)
-  }
-
-  drawStar(context, x, y) {
-    context.save()
-
-    const length = 20
-
-    context.translate(x, y)
-
-    // initial offset rotation so our star is straight
-    context.rotate((Math.PI * 1 / 10))
-
-    context.beginPath()
-
-    // make a point, 5 times
-    for (let i = 5; i--;) {
-      // draw line up
-      context.lineTo(0, length)
-      // move origin to current same location as pen
-      context.translate(0, length)
-      // rotate the drawing board
-      context.rotate((Math.PI * 2 / 10))
-      // draw line down
-      context.lineTo(0, -length)
-      // again, move origin to pen...
-      context.translate(0, -length)
-      // ...and rotate, ready for next arm
-      context.rotate(-(Math.PI * 6 / 10))
-    }
-
-    // last line to connect things up
-    context.lineTo(0, length)
-    context.closePath()
-
-    context.fillStyle = colorPrimary
-
-    // stroke the path, you could also .fill()
-    // context.stroke()
-    context.fill()
-
-    context.restore()
   }
 
   drawStars() {
@@ -157,7 +120,7 @@ class WinSplash {
       sounds.hop()
     }
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, colorPrimary, 20)
 
     context.globalAlpha = (starScore > 1 && this.starDelay < -20) ?
       alpha :
@@ -170,7 +133,7 @@ class WinSplash {
 
     x += 120
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, colorPrimary, 20)
 
     context.globalAlpha = (starScore > 2 && this.starDelay < -40) ?
       alpha :
@@ -191,7 +154,7 @@ class WinSplash {
 
     x += 120
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, colorPrimary, 20)
 
     context.restore()
   }

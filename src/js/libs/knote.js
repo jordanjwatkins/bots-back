@@ -1,9 +1,9 @@
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext
 
-let audioContext = false;
+let audioContext = false
 
 if (window.AudioContext) {
-  audioContext = new window.AudioContext();
+  audioContext = new window.AudioContext()
 }
 
 const semitoneMap = {
@@ -14,95 +14,95 @@ const semitoneMap = {
   G: 10,
   A: 12,
   B: 14,
-};
-
-function isAudioApiSupported() {
-  return !!audioContext;
 }
 
-let globalGainNode;
-let globalCompressor;
+function isAudioApiSupported() {
+  return !!audioContext
+}
+
+let globalGainNode
+let globalCompressor
 
 if (isAudioApiSupported()) {
-  globalGainNode = audioContext.createGain();
-  globalCompressor = audioContext.createDynamicsCompressor();
+  globalGainNode = audioContext.createGain()
+  globalCompressor = audioContext.createDynamicsCompressor()
 
-  globalGainNode.connect(globalCompressor);
-  globalCompressor.connect(audioContext.destination);
+  globalGainNode.connect(globalCompressor)
+  globalCompressor.connect(audioContext.destination)
 }
 
 function playNote(note, options) {
-  if (!isAudioApiSupported()) return;
+  if (!isAudioApiSupported()) return
 
-  const config = options || {};
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
+  const config = options || {}
+  const oscillator = audioContext.createOscillator()
+  const gainNode = audioContext.createGain()
 
-  const gain = (typeof config.gain === 'number') ? config.gain : 0.2;
-  const waveType = config.waveType || 'sine';
+  const gain = (typeof config.gain === 'number') ? config.gain : 0.2
+  const waveType = config.waveType || 'sine'
 
-  const duration = config.duration || 0.25;
-  const startTime = (config.startTime && config.startTime > 0) ? config.startTime : audioContext.currentTime;
-  const stopTime = startTime + duration;
-  const truncate = config.truncate || 0;
+  const duration = config.duration || 0.25
+  const startTime = (config.startTime && config.startTime > 0) ? config.startTime : audioContext.currentTime
+  const stopTime = startTime + duration
+  const truncate = config.truncate || 0
 
-  oscillator.connect(gainNode);
-  gainNode.connect(globalGainNode);
+  oscillator.connect(gainNode)
+  gainNode.connect(globalGainNode)
 
-  gainNode.gain.value = 0;
+  gainNode.gain.value = 0
 
   // fade in just after start time to prevent pops
-  gainNode.gain.setTargetAtTime(gain, startTime + 0.01, 0.01);
+  gainNode.gain.setTargetAtTime(gain, startTime + 0.01, 0.01)
 
   // fade just before stop time to prevent pops
-  gainNode.gain.setTargetAtTime(0, (stopTime - 0.06) - truncate, 0.01);
+  gainNode.gain.setTargetAtTime(0, (stopTime - 0.06) - truncate, 0.01)
 
-  oscillator.frequency.value = note.frequency;
-  oscillator.type = waveType;
+  oscillator.frequency.value = note.frequency
+  oscillator.type = waveType
 
-  oscillator.start(startTime);
-  oscillator.stop(stopTime);
+  oscillator.start(startTime)
+  oscillator.stop(stopTime)
 
-  return oscillator;
+  return oscillator
 }
 
 function makeNote(noteName) {
-  if (!isAudioApiSupported()) return;
+  if (!isAudioApiSupported()) return
 
-  const note = {};
-  const octaveIndex = (noteName.length === 3) ? 2 : 1;
+  const note = {}
+  const octaveIndex = (noteName.length === 3) ? 2 : 1
 
-  note.letter = noteName[0];
-  note.octave = toInt(noteName[octaveIndex]);
+  note.letter = noteName[0]
+  note.octave = toInt(noteName[octaveIndex])
 
   if (octaveIndex === 2) {
-    note.accidental = noteName[1];
-    note.accidentalOffset = (note.accidental === 'b') ? -1 : 1;
+    note.accidental = noteName[1]
+    note.accidentalOffset = (note.accidental === 'b') ? -1 : 1
   }
 
-  note.frequency = calculateNoteFrequency(note);
+  note.frequency = calculateNoteFrequency(note)
 
-  note.name = noteName;
+  note.name = noteName
 
-  return note;
+  return note
 }
 
 function calculateNoteFrequency(note) {
-  const defaultOctaveSemitones = 5 * 12;
+  const defaultOctaveSemitones = 5 * 12
 
-  let semitoneOffset = semitoneMap[note.letter];
+  let semitoneOffset = semitoneMap[note.letter]
 
-  semitoneOffset += (note.accidentalOffset) ? note.accidentalOffset : 0;
+  semitoneOffset += (note.accidentalOffset) ? note.accidentalOffset : 0
 
-  semitoneOffset += (note.octave * 12) - defaultOctaveSemitones;
+  semitoneOffset += (note.octave * 12) - defaultOctaveSemitones
 
-  const frequency = frequencyByOffset(440, semitoneOffset);
+  const frequency = frequencyByOffset(440, semitoneOffset)
 
-  return (isNaN(frequency)) ? 0 : frequency;
+  return (isNaN(frequency)) ? 0 : frequency
 }
 
 function frequencyByOffset(baseFrequency, semitoneOffset) {
-  return baseFrequency * Math.pow(2, (semitoneOffset / 12));
+  return baseFrequency * Math.pow(2, (semitoneOffset / 12))
 }
 /*
 function noteRange(firstNote, count, accidentals) {
@@ -195,41 +195,41 @@ function prevNote(note, accidentals) {
 
     return (noteLetters[index]) ? noteLetters[index] : noteLetters[noteLetters.length - 1];
   }
-}*/
+} */
 
 function toInt(value) {
-  return parseInt(value, 10);
+  return parseInt(value, 10)
 }
 
 function playSequenceNote(note, startTime, duration, gain) {
-  playNote(note, { startTime, duration, gain })
+  return playNote(note, { startTime, duration, gain })
 }
 
 function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration, gain = 0.2) {
-  if (!isAudioApiSupported()) return;
+  if (!isAudioApiSupported()) return
 
   const eighthNoteTime = 0.20
   const time = audioContext.currentTime
   const note = makeNote(noteName)
   const start = time + eighthNoteTime * (eighthNoteInBar - 1)
 
-  playSequenceNote(note, start, eighthNoteTime * eighthNotesOfDuration, gain)
+  const oscillator = playSequenceNote(note, start, eighthNoteTime * eighthNotesOfDuration, gain)
+
+  return () => oscillator.stop()
 }
 
 function songNoise(eighthNoteInBar, eighthNotesOfDuration) {
-  if (!isAudioApiSupported()) return;
+  if (!isAudioApiSupported()) return
 
   const eighthNoteTime = 0.15
   const start = eighthNoteTime * (eighthNoteInBar - 1)
   const duration = (eighthNoteTime * eighthNotesOfDuration) * 1000
 
-  setTimeout(() => {
-    brownNoise(duration)
-  }, start * 1000)
+  return brownNoise(start, duration)
 }
 
 const brownNoiseNode = (() => {
-  if (!isAudioApiSupported()) return;
+  if (!isAudioApiSupported()) return
 
   const bufferSize = 4096
 
@@ -251,25 +251,35 @@ const brownNoiseNode = (() => {
   return node
 })()
 
-function brownNoise(duration) {
-  if (!isAudioApiSupported()) return;
+function brownNoise(delay, duration) {
+  if (!isAudioApiSupported()) return
 
-  brownNoiseNode.connect(audioContext.destination)
+  let st2;
 
-  setTimeout(() => {
+  const st1 = setTimeout(() => {
+    brownNoiseNode.connect(audioContext.destination)
+
+    st2 = setTimeout(() => {
+      brownNoiseNode.disconnect()
+    }, duration)
+  }, delay * 1000)
+
+  return () => {
     brownNoiseNode.disconnect()
-  }, duration)
+    clearTimeout(st1)
+    clearTimeout(st2)
+  }
 }
 
 export default {
   audioContext,
   playNote,
-  //noteRange,
-  //noteNameRange,
+  // noteRange,
+  // noteNameRange,
   makeNote,
-  //nextNote,
-  //prevNote,
+  // nextNote,
+  // prevNote,
   playSequenceNote,
   songNote,
   songNoise,
-};
+}

@@ -32,17 +32,17 @@ export default (scene) => {
   const levels = {
     oneLineTwoSimple({ absorber = false } = {}) {
       const entities = [
-        line1,
+        line3,
 
         new Bird({
           x: 300,
-          y: lineTop - birdSize,
+          y: line3Top - birdSize,
           absorber,
         }),
 
         new Bird({
           x: 600,
-          y: lineTop - birdSize,
+          y: line3Top - birdSize,
           absorber,
         }),
       ]
@@ -79,7 +79,7 @@ export default (scene) => {
       ]
 
       return {
-        starThresholds: [4, 3, 2],
+        starThresholds: [5, 3, 2],
         absorberStarThresholds: [4, 3, 2],
         optimalPulseCount: 2,
         absorberOptimalPulseCount: 2,

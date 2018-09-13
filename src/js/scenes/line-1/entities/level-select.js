@@ -180,13 +180,15 @@ class LevelSelect {
 
     this.clickBoxes = this.clickBoxes || {}
 
+    const scale = this.scene.mainCanvas.scaleInDom
+
     // level markers
     Object.keys(this.levels).reverse().forEach((level, index) => {
       this.clickBoxes[level] = this.clickBoxes[level] || {
-        x: x + (this.width / this.levelCount) * index - 10,
-        y: roadY - 55,
-        height: 80,
-        width: 70,
+        x: x * scale + (this.width * scale / this.levelCount) * index - 10 * scale,
+        y: roadY * scale - 55 * scale,
+        height: 80 * scale,
+        width: 70 * scale,
       }
 
       this.scene.mainCanvas.drawRect({
@@ -254,47 +256,6 @@ class LevelSelect {
     })
   }
 
-  drawStar(context, x, y) {
-    context.save()
-
-    const length = 4
-
-    context.translate(x, y)
-
-    // initial offset rotation so our star is straight
-    context.rotate((Math.PI * 1 / 10))
-
-    context.beginPath()
-
-    // make a point, 5 times
-    for (let i = 5; i--;) {
-      // draw line up
-      context.lineTo(0, length)
-      // move origin to current same location as pen
-      context.translate(0, length)
-      // rotate the drawing board
-      context.rotate((Math.PI * 2 / 10))
-      // draw line down
-      context.lineTo(0, -length)
-      // again, move origin to pen...
-      context.translate(0, -length)
-      // ...and rotate, ready for next arm
-      context.rotate(-(Math.PI * 6 / 10))
-    }
-
-    // last line to connect things up
-    context.lineTo(0, length)
-    context.closePath()
-
-    context.fillStyle = 'yellow'
-
-    // stroke the path, you could also .fill()
-    // context.stroke()
-    context.fill()
-
-    context.restore()
-  }
-
   drawStars(xIn, levelName) {
     const { mainCanvas, getBestStarScoreForLevel, getBestScoreForLevel } = this.scene
     const { context } = mainCanvas
@@ -319,23 +280,23 @@ class LevelSelect {
       alpha :
       fadedAlpha
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, 'yellow', 4)
 
     context.globalAlpha = (starScore > 1 && this.starDelay < -20) ?
       alpha :
       fadedAlpha
 
-    x += 10
+    x += 15
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, 'yellow', 4)
 
     context.globalAlpha = (starScore > 2 && this.starDelay < -40) ?
       alpha :
       fadedAlpha
 
-    x += 10
+    x += 15
 
-    this.drawStar(context, x, y)
+    mainCanvas.drawStar(x, y, 'yellow', 4)
 
     context.restore()
   }

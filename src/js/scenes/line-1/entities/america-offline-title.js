@@ -83,7 +83,7 @@ class AmericaOfflineTitle {
     }, 5000)
 
     setTimeout(() => {
-      sounds.intro()
+      this.cancelIntro = sounds.intro()
     }, 500)
 
     this.birds = [
@@ -94,7 +94,10 @@ class AmericaOfflineTitle {
   }
 
   destroy() {
+    this.cancelIntro()
     this.detachEvents()
+
+    this.scene.mainCanvas.opacity = 1
 
     this.scene.titleScreen = null
     this.scene.entities = this.scene.entities.filter(entity => entity !== this)
@@ -113,7 +116,7 @@ class AmericaOfflineTitle {
   }
 
   onClick = () => {
-
+    this.destroy()
   }
 
   drawText() {

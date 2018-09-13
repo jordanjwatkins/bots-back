@@ -14,6 +14,10 @@ class MainCanvas {
     this.context.imageSmoothingEnabled = false
   }
 
+  get scaleInDom() {
+    return this.canvas.clientWidth / this.canvas.width
+  }
+
   get width() {
     return this.canvas.width
   }
@@ -171,6 +175,50 @@ class MainCanvas {
 
       context.stroke()
     })
+
+    context.restore()
+  }
+
+  drawStar(x, y, color, size) {
+    const { context } = this
+
+    context.save()
+
+    const length = size
+
+    context.translate(x, y)
+
+    // initial offset rotation so our star is straight
+    context.rotate((Math.PI * 1 / 10))
+
+    context.beginPath()
+
+    // make a point, 5 times
+    for (let i = 5; i--;) {
+      // draw line up
+      context.lineTo(0, length)
+      // move origin to current same location as pen
+      context.translate(0, length)
+      // rotate the drawing board
+      context.rotate((Math.PI * 2 / 10))
+      // draw line down
+      context.lineTo(0, -length)
+      // again, move origin to pen...
+      context.translate(0, -length)
+      // ...and rotate, ready for next arm
+      context.rotate(-(Math.PI * 6 / 10))
+    }
+
+    // last line to connect things up
+    context.lineTo(0, length)
+    context.closePath()
+
+    context.fillStyle = color
+    context.strokeStyle = color
+
+    // stroke the path, you could also .fill()
+    context.stroke()
+    context.fill()
 
     context.restore()
   }
