@@ -31,7 +31,7 @@ class Exposition {
   }
 
   init() {
-    const mX = (this.endTitle) ? 350 : 180
+    const mX = (this.endTitle) ? 350 : 130
 
     this.mayor = {
       x: mX,
@@ -55,23 +55,24 @@ class Exposition {
       'Hello, fellow citizens. As you all know, we are facing a serious crisis.',
       'As your duly, and entirely legitimately, elected mayor,',
       "I'd like to reassure you all and put your minds at ease...",
-      "So... we have a plan. I think it's pretty good.",
+      "So... we have a plan, and I think it's a pretty good one.",
     ]
 
     this.text2 = [
-      "A young, lady scientist... sorry, a 'just scientist' has come up with a device.",
+      "A young, lady scientist... sorry, a 'just scientist', has come up with a device.",
       'The device should let us, gently, deal with this fowl invasion.',
       "Naturally, we'll stay carefully within our beloved...",
-      "... and strictly enforced, animals' rights laws.",
+      "...and strictly enforced, animals' rights laws.",
     ]
 
     this.text3 = [
-      "Without going too deep into detail, we've put together a top notch team.",
+      "Without going too deep into detail, here's the plan:",
+      "We've put together a top notch team.",
       "They'll use the device to 'tickle' the birds,",
       'off of the lines leading to a local radio tower,',
       'which will allow us to broadcast a powerful,',
       "but also gentle, 'tickle' over a wide area.",
-      "That 'Mass Tickle' should, ideally, restore our beloved internet",
+      "The 'Mass Tickle' will, ideally, restore our beloved internet",
       'and reconnect us with the outside world.',
     ]
 
@@ -114,7 +115,7 @@ class Exposition {
 
     context.textAlign = 'left'
     context.fillStyle = '#ffffff'
-    context.font = '16px monospace'
+    context.font = '18px monospace'
 
     context.fillText(text, x, y)
 
@@ -162,7 +163,7 @@ class Exposition {
 
         clearTimeout(this.textTimeout)
         this.textTimeout = null
-      }, 2100)
+      }, 2000)
     }
 
     if (this.textGroup === 2) {
@@ -181,23 +182,23 @@ class Exposition {
       // squad
       if (!this.drawSquad) setTimeout(() => {
         this.drawSquad = true
-      }, 1200)
+      }, 2600)
 
       if (!this.drawTower) setTimeout(() => {
         this.drawTower = true
-      }, 5600)
+      }, 6600)
 
       if (this.drawSquad) this.scene.mainCanvas.drawThing({
-        x: 825, y: 240, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
+        x: 820, y: 200, width: 48 * 4, height: 20 * 4, frameWidth: 24, frameHeight: 10, frame: 0, frameOffset: 1, spriteName: 'spritesheet',
       })
 
       // tower
       if (this.drawTower) this.scene.mainCanvas.drawThing({
-        x: 855, y: 430, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
+        x: 865, y: 380, width: 13 * 11, height: 18 * 11, frameWidth: 13, frameHeight: 18, frame: 0, frameOffset: 36, spriteName: 'spritesheet',
       })
     }
 
-    const tX = (this.endTitle) ? 450 : 280
+    const tX = (this.endTitle) ? 450 : 210
 
     for (let i = 0; i < this.textLines; i++) {
       this.drawText(this[`text${this.textGroup}`][i], tX, 160 + (i * 40))

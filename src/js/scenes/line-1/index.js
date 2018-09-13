@@ -8,17 +8,19 @@ import Storage from './storage'
 import Cloud from './entities/cloud'
 import Ground from './entities/ground'
 import Pulser from './entities/pulser'
+import Bird from './entities/bird'
+import knote from '../../libs/knote'
 import WinSplash from './entities/win-splash'
 import LevelSelect from './entities/level-select'
 import AmericaOfflineTitle from './entities/america-offline-title'
 import Exposition from './entities/exposition'
 import levels from './entities/levels'
 
-//import Dev from './dev'
+// import Dev from './dev'
 
 class Line1 {
   constructor() {
-    //this.dev = new Dev(this)
+    // this.dev = new Dev(this)
 
     this.debug = false
 
@@ -200,8 +202,12 @@ class Line1 {
   isLineClick(event, entity) {
     return (
       entity.type === 'line' &&
-      event.pageY < entity.y + 50 + entity.height &&
-      event.pageY > entity.y - 50
+      this.mainCanvas.isClickHit(event, {
+        x: 0,
+        y: entity.y - 50,
+        height: entity.height + 100,
+        width: this.mainCanvas.width,
+      })
     )
   }
 
@@ -209,7 +215,7 @@ class Line1 {
     this.canvasContainer = dom.make('<div class="canvas-container"></div>')
     this.canvasContainer.appendChild(this.mainCanvas.canvas)
 
-    this.sceneContainer = dom.make('<div class="scene-container"></div>')
+    this.sceneContainer = dom.make('<div class="scene-container"><div></div></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
     if (this.dev && this.dev.levelSelect) this.dev.levelSelect()

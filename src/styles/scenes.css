@@ -1,3 +1,20 @@
+.scene-container {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+
+    > div:first-child {
+        display: block;
+        height: 0;
+        width: 100%;
+    }
+}
+
+canvas {
+    width: 100vw;
+    transform: translateY(-1%);
+}
+
 /*.level-select-container {
     user-select: none;
 }

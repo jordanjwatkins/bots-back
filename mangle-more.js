@@ -2,9 +2,19 @@ const fs = require('fs')
 
 const path = 'build/app-1.min.js'
 
-const line1 = ["findNextLevel", "attachEvents", "removeEvents", "initLevel", "cleanupEntities", "isLineClick", "initializeDom", "initEntities", "freshStart", "startNextLevel", "openWinSplash", "birdParticles", "portholeWipe", "currentLevel", "bestScoreForLevel", "starScore", "getBestScoreForLevel", "getBestStarScoreForLevel", "onClick", "debug", "mainCanvas", "storage", "showedTitle", "showedExposition", "canvasContainer", "sceneContainer", "isLastLevel", "nextLevel", "entities", "birdCount", "pulser", "lines", "exposition", "levelSelect", "allFlying", "gameOver", "fadingOut", "flyingBirdCount", "gameLoop"]
-const mainCanvas = ['constructor', 'clearCanvas', 'testRect', 'transform', 'flipX', 'rotateThing', 'drawRect', 'drawThing', 'isClickHit', 'clickAreaDebug', 'makeScanlines', 'drawScanlines', /* 'width', 'height', */ 'boundingRect', 'opacity']
-const mainCanvasKeys = ['clickCoords', 'canvas', 'context', 'scanlines']
+/*
+  Example of logging out possible properties to try mangling for a given object
+
+  console.log([
+    ...Object.getOwnPropertyNames(Object.getPrototypeOf(someObject)),
+    ...Object.getOwnPropertyNames(someObject)
+  ])
+
+  Update or remove property from mangle list if it is part of other property names (ex. init, update, draw)
+  or conflicts with built-ins (width, height), etc.
+*/
+const line1 = ['findNextLevel', 'attachEvents', 'removeEvents', 'initLevel', 'cleanupEntities', 'isLineClick', 'initializeDom', 'initEntities', 'freshStart', 'startNextLevel', 'openWinSplash', 'birdParticles', 'portholeWipe', 'currentLevel', 'bestScoreForLevel', 'starScore', 'getBestScoreForLevel', 'getBestStarScoreForLevel', 'onClick', 'debug', 'mainCanvas', 'storage', 'showedTitle', 'showedExposition', 'canvasContainer', 'sceneContainer', 'isLastLevel', 'nextLevel', 'entities', 'birdCount', 'pulser', 'lines', 'exposition', 'levelSelect', 'allFlying', 'gameOver', 'fadingOut', 'flyingBirdCount', 'gameLoop']
+const mainCanvas = ['constructor', 'clickCoords', 'canvas', 'context', 'scanlines', 'clearCanvas', 'testRect', 'transform', 'flipX', 'rotateThing', 'drawRect', 'drawThing', 'isClickHit', 'clickAreaDebug', 'makeScanlines', 'drawScanlines', 'boundingRect', 'opacity']
 const exposition = ['constructor', 'destroy', 'attachEvents', 'detachEvents', 'drawText', 'drawBackground', 'drawMayor', 'flicker']
 const expositionKeys = ['onClick', 'color', 'opacity', 'scene', 'endTitle', 'textGroup', 'mayor', 'playedSound', 'textLines', 'textTimeout']
 const level = ['starThresholds', 'absorberStarThresholds', 'optimalPulseCount', 'absorberOptimalPulseCount', 'birdCount', 'entities']
@@ -19,7 +29,6 @@ let src = fs.readFileSync(path, 'UTF-8')
 const namesToReplace = Array.from(new Set([
   ...line1,
   ...mainCanvas,
-  ...mainCanvasKeys,
   ...exposition,
   ...expositionKeys,
   ...level,
@@ -40,17 +49,14 @@ namesToReplace.forEach((name, index) => {
   src = src.replace(regex3, replacer3)
 
   function replacer(match, p1, p2) {
-    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
     return `${p1}z${index}${p2}`
   }
 
   function replacer2(match, p1) {
-    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
     return `${p1}z${index}`
   }
 
   function replacer3(match, p1) {
-    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
     return `z${index}${p1}`
   }
 })

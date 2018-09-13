@@ -9,8 +9,6 @@ class MainCanvas {
 
     this.context = this.canvas.getContext('2d')
 
-    // this.canvas.style.backgroundColor = '#c6c6ff'
-    // this.canvas.style.backgroundColor = '#5fcde4'
     this.canvas.style.backgroundColor = '#639bff'
 
     this.context.imageSmoothingEnabled = false

@@ -1,9 +1,6 @@
 //import dom from '../../libs/dom'
 //import * as sounds from './sounds'
 
-import Bird from './entities/bird'
-import knote from '../../libs/knote'
-
 class Dev {
   constructor(scene) {
     this.scene = scene
