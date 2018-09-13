@@ -254,10 +254,15 @@ const brownNoiseNode = (() => {
 function brownNoise(delay, duration) {
   if (!isAudioApiSupported()) return
 
-  let st2;
+  const gainNode = audioContext.createGain()
+
+  gainNode.gain.value = 0.2
+
+  let st2
 
   const st1 = setTimeout(() => {
-    brownNoiseNode.connect(audioContext.destination)
+    brownNoiseNode.connect(gainNode)
+    gainNode.connect(globalGainNode)
 
     st2 = setTimeout(() => {
       brownNoiseNode.disconnect()

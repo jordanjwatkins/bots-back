@@ -130,7 +130,7 @@ class Exposition {
   }
 
   onClick = () => {
-    if (!this.scene.titleScreen){
+    if (!this.scene.titleScreen) {
       this.destroy()
     }
   }

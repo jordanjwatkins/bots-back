@@ -30,11 +30,13 @@ export function exposition(endTitle = false) {
       }, 0.20 * 19.6 * 1000)
     }, 0.20 * 19.6 * 1000 * 2)
 
-    if (endTitle) return () => {
-      let id = setTimeout(() => {}, 0)
+    if (endTitle) {
+      return () => {
+        let id = setTimeout(() => {}, 0)
 
-      while (id--) {
-        window.clearTimeout(id)
+        while (id--) {
+          window.clearTimeout(id)
+        }
       }
     }
 
@@ -56,7 +58,7 @@ export function exposition(endTitle = false) {
           songNote('Db4', 12, 3, 1)
 
           setTimeout(() => {
-            songNoise(0, 4)
+            if (this) this.staticCancel = songNoise(0, 4)
             clearInterval(beat)
           }, 3700)
         }, 0.20 * 19.6 * 1000)
@@ -70,6 +72,8 @@ export function exposition(endTitle = false) {
     while (id--) {
       clearTimeout(id)
     }
+
+    if (this && this.staticCancel) this.staticCancel()
   }
 }
 

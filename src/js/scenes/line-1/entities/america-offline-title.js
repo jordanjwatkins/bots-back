@@ -136,7 +136,7 @@ class AmericaOfflineTitle {
       this.opacity - 0.8
 
     context.font = `148px ${fontFamily}`
-    context.fillText('America', this.x + (this.width / 2), this.y + 270)
+    context.fillText('America', this.x + (this.width / 2), this.y + 310)
 
     context.fillStyle = colorOffline
 
@@ -149,7 +149,7 @@ class AmericaOfflineTitle {
     }
 
     context.font = `148px ${fontFamily}`
-    context.fillText('Offline', this.x + (this.width / 2), this.y + 430)
+    context.fillText('Offline', this.x + (this.width / 2), this.y + 470)
 
     context.restore()
   }
