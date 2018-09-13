@@ -171,7 +171,7 @@ class Exposition {
       }, 1200)
 
       if (this.drawPulser) {
-        this.pulser = this.pulser || new Pulser({ x: 825, y: 200, chargeCount: 0, chargeSpeed: 2 })
+        this.pulser = this.pulser || new Pulser({ x: 825, y: 200, chargeCount: 0, chargeSpeed: 1 })
 
         this.pulser.update(this.scene)
       }

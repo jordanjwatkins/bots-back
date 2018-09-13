@@ -14,11 +14,11 @@ import AmericaOfflineTitle from './entities/america-offline-title'
 import Exposition from './entities/exposition'
 import levels from './entities/levels'
 
-import Dev from './dev'
+//import Dev from './dev'
 
-class Line1Scene {
+class Line1 {
   constructor() {
-    this.dev = new Dev(this)
+    //this.dev = new Dev(this)
 
     this.debug = false
 
@@ -188,7 +188,7 @@ class Line1Scene {
   }
 
   onClick = (event) => {
-    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
+    // if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
 
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
@@ -282,7 +282,6 @@ class Line1Scene {
   startNextLevel() {
     if (this.isLastLevel) {
       this.gameWon = true
-      console.log('win game')
 
       this.winSplash.destroy()
 
@@ -302,15 +301,90 @@ class Line1Scene {
     this.entities.push(this.winSplash)
   }
 
-  end() {
-    this.gameLoop.stop()
+  birdParticles() {
+    this.bird = this.bird || new Bird({ flying: true })
 
-    document.body.classList.remove('show-scene')
+    if (!this.birds) {
+      this.birds = Array(100).fill(0).map(() => ({
+        x: -1000 * Math.random(),
+        y: 1700 - 1700 * Math.random(),
+        vX: 2 + 5 * Math.random(),
+        vY: -0.1 * Math.random(),
+      }))
+    }
 
-    setTimeout(() => {
-      document.body.classList.add('end-title')
-    }, 1200)
+    this.scene.mainCanvas.context.save()
+
+    this.birds.forEach((bird) => {
+      bird.x += bird.vX
+      bird.y += bird.vY
+
+      this.bird.x = bird.x
+      this.bird.y = bird.y
+
+      this.bird.draw(this.scene.mainCanvas)
+    })
+
+    this.scene.mainCanvas.context.restore()
+  }
+
+  portholeWipe() {
+    this.birdIn = this.birdIn || new Bird({ x: 415 - 250, y: 415 + 70, speed: { x: 5, y: 2 }, flying: true })
+
+    if (!this.note) {
+      this.note = knote.makeNote('A5')
+
+      this.oscillator = knote.playNote(this.note, { duration: 1 })
+    }
+    this.note = this.note || knote.makeNote('A5')
+
+    if (!this.holeCanvas) {
+      this.holeCanvas = document.createElement('canvas')
+
+      this.holeCanvas.context = this.holeCanvas.getContext('2d')
+
+      this.holeCanvas.width = this.scene.mainCanvas.width
+      this.holeCanvas.height = this.scene.mainCanvas.height
+    }
+
+    const canvas = this.holeCanvas
+    const { context } = this.holeCanvas
+
+    if (this.radius === undefined) {
+      this.radius = 780
+    }
+
+    if (this.radius - 14 >= 0) {
+      this.radius -= 14
+      this.oscillator.frequency.value -= 10
+    } else {
+      this.radius = 0
+    }
+
+
+    context.save()
+
+    context.fillRect(0, 0, canvas.width, canvas.height)
+
+    context.globalCompositeOperation = 'destination-out'
+
+    context.beginPath()
+    context.arc(415, 415, this.radius, 0, 2 * Math.PI)
+    context.fill()
+
+    context.restore()
+
+    this.scene.mainCanvas.context.drawImage(canvas, 0, 0)
+
+    this.updateBird = true
+
+    if (this.updateBird) {
+      this.birdIn.x += this.birdIn.speed.x
+      this.birdIn.y -= this.birdIn.speed.y
+
+      this.birdIn.draw(this.scene.mainCanvas)
+    }
   }
 }
 
-export default Line1Scene
+export default Line1

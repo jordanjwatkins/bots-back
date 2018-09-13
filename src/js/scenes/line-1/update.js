@@ -3,7 +3,7 @@ import * as sounds from './sounds'
 function update(scene, delta, extras) {
   const { mainCanvas, entities } = scene
 
-  mainCanvas.clear()
+  mainCanvas.clearCanvas()
 
   // background z of 1
   updateEntities(entities, scene, 1, delta)

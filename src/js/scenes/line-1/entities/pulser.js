@@ -34,8 +34,8 @@ class Pulser {
     return (this.chargeCount > 0)
   }
 
-  firePulse({ lines, entities, allFlying, titleScreen }, lineToPulse) {
-    if (!this.canPulse() || allFlying || titleScreen) return
+  firePulse({ lines, entities, allFlying, titleScreen, exposition }, lineToPulse) {
+    if (!this.canPulse() || allFlying || titleScreen || exposition) return
 
     this.chargeCount -= 1
 

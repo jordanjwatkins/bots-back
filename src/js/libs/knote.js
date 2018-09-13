@@ -20,11 +20,16 @@ function isAudioApiSupported() {
   return !!audioContext;
 }
 
-const globalGainNode = audioContext.createGain();
-const globalCompressor = audioContext.createDynamicsCompressor();
+let globalGainNode;
+let globalCompressor;
 
-globalGainNode.connect(globalCompressor);
-globalCompressor.connect(audioContext.destination);
+if (isAudioApiSupported()) {
+  globalGainNode = audioContext.createGain();
+  globalCompressor = audioContext.createDynamicsCompressor();
+
+  globalGainNode.connect(globalCompressor);
+  globalCompressor.connect(audioContext.destination);
+}
 
 function playNote(note, options) {
   if (!isAudioApiSupported()) return;
@@ -62,6 +67,8 @@ function playNote(note, options) {
 }
 
 function makeNote(noteName) {
+  if (!isAudioApiSupported()) return;
+
   const note = {};
   const octaveIndex = (noteName.length === 3) ? 2 : 1;
 
@@ -199,6 +206,8 @@ function playSequenceNote(note, startTime, duration, gain) {
 }
 
 function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration, gain = 0.2) {
+  if (!isAudioApiSupported()) return;
+
   const eighthNoteTime = 0.20
   const time = audioContext.currentTime
   const note = makeNote(noteName)
@@ -208,6 +217,8 @@ function songNote(noteName, eighthNoteInBar, eighthNotesOfDuration, gain = 0.2) 
 }
 
 function songNoise(eighthNoteInBar, eighthNotesOfDuration) {
+  if (!isAudioApiSupported()) return;
+
   const eighthNoteTime = 0.15
   const start = eighthNoteTime * (eighthNoteInBar - 1)
   const duration = (eighthNoteTime * eighthNotesOfDuration) * 1000
@@ -218,6 +229,8 @@ function songNoise(eighthNoteInBar, eighthNotesOfDuration) {
 }
 
 const brownNoiseNode = (() => {
+  if (!isAudioApiSupported()) return;
+
   const bufferSize = 4096
 
   let lastOut = 0.0
@@ -239,6 +252,8 @@ const brownNoiseNode = (() => {
 })()
 
 function brownNoise(duration) {
+  if (!isAudioApiSupported()) return;
+
   brownNoiseNode.connect(audioContext.destination)
 
   setTimeout(() => {

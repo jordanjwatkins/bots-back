@@ -1,4 +1,4 @@
-function domReady(init) {
+/*function domReady(init) {
   document.addEventListener('DOMContentLoaded', init)
 }
 
@@ -84,7 +84,7 @@ function fragment(htmlString) {
   }
 
   return aFragment
-}
+}*/
 
 function make(htmlString) {
   const div = document.createElement('div')
@@ -96,16 +96,16 @@ function make(htmlString) {
   return div.childNodes[0]
 }
 
-function css(els, styles) {
+/*function css(els, styles) {
   each(els, (el) => {
     Object.keys(styles).forEach((property) => {
       el.style[property] = styles[property]
     })
   })
-}
+}*/
 
 export default {
-  ready: domReady,
+  /*ready: domReady,
   find,
   findOne,
   findId,
@@ -115,7 +115,7 @@ export default {
   inArray,
   onTap,
   offTap,
-  fragment,
+  fragment,*/
   make,
-  css,
+  //css,
 }

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
-    "prod": "rm -rf build && rm -f build.zip && webpack --config webpack.config.min.js && npm run zip",
+    "prod": "rm -rf build && rm -f build.zip && webpack --config webpack.config.min.js && npm run mangle && npm run zip",
+    "mangle": "node mangle-more.js",
     "eslint": "eslint src/**/*.js",
     "zip": "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\""
   },

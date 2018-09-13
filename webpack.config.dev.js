@@ -10,7 +10,7 @@ module.exports = {
   mode: 'development',
 
   devServer: {
-    hot: true,
+    hot: false,
     inline: true,
   },
 

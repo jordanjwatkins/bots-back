@@ -35,7 +35,7 @@ class MainCanvas {
     this.context.globalAlpha = value
   }
 
-  clear() {
+  clearCanvas() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
@@ -49,7 +49,7 @@ class MainCanvas {
     this.context.translate(thing.x, thing.y + (thing.height / 2))
 
     if (thing.scaleX) this.flipX(thing)
-    if (thing.rotation) this.rotate(thing)
+    if (thing.rotation) this.rotateThing(thing)
 
     this.context.translate(-thing.x, -thing.y - (thing.height / 2))
   }
@@ -58,8 +58,8 @@ class MainCanvas {
     this.context.scale(thing.scaleX, 1)
   }
 
-  rotate(thing) {
-    this.context.rotate(thing.rotation * (Math.PI / 180))
+  rotateThing(thing) {
+    this.context.rotateThing(thing.rotation * (Math.PI / 180))
   }
 
   drawRect({ x, y, color, width = 30, height = 60 }) {
