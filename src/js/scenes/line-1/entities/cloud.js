@@ -29,8 +29,8 @@ class Cloud {
     }
 
     if (this.moving) {
-      this.x += this.speed.x / 16 * delta
-      this.y += this.speed.y / 16 * delta
+      this.x += (this.speed.x / 16) * delta
+      this.y += (this.speed.y / 16) * delta
     }
 
     mainCanvas.drawRect(this)

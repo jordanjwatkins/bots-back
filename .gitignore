@@ -3,3 +3,4 @@ npm-debug.log
 build
 build.zip
 .vscode
+*.code-workspace
