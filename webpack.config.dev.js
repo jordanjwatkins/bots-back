@@ -57,7 +57,7 @@ module.exports = {
       },
 
       {
-        test: /styles.*$/,
+        test: /\.css$/,
         use: [
           'css-hot-loader',
           MiniCssExtractPlugin.loader,
