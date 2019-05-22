@@ -15,8 +15,10 @@ module.exports = {
   },
 
   entry: {
-    app: './src/js/index.js',
-    styles: './src/styles/app.css',
+    app: [
+      './src/js/index.js',
+      './src/styles/app.css',
+    ],
   },
 
   output: {

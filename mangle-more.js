@@ -1,6 +1,8 @@
 const fs = require('fs')
 
-const path = 'build/app-1.min.js'
+const manifest = JSON.parse(fs.readFileSync('./build/manifest.json'))
+
+const path = `./build/${manifest['app.js']}`
 
 /*
   Example of logging out possible properties to try mangling for a given object
@@ -61,4 +63,4 @@ namesToReplace.forEach((name, index) => {
   }
 })
 
-fs.writeFileSync('build/app-1.min.js', src, 'UTF-8')
+fs.writeFileSync(path, src, 'UTF-8')
