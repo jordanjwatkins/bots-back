@@ -13,14 +13,14 @@ const path = 'build/app-1.min.js'
   Update or remove property from mangle list if it is part of other property names (ex. init, update, draw)
   or conflicts with built-ins (width, height), etc.
 */
-const line1 = ['findNextLevel', 'attachEvents', 'removeEvents', 'initLevel', 'cleanupEntities', 'isLineClick', 'initializeDom', 'initEntities', 'freshStart', 'startNextLevel', 'openWinSplash', 'birdParticles', 'portholeWipe', 'bestScoreForLevel', 'starScore', 'getBestScoreForLevel', 'getBestStarScoreForLevel', 'onClick', 'debug', 'mainCanvas', 'storage', 'showedTitle', 'showedExposition', 'canvasContainer', 'sceneContainer', 'isLastLevel', 'nextLevel', 'birdCount', 'pulser', 'lines', 'exposition', 'levelSelect', 'allFlying', 'gameOver', 'fadingOut', 'flyingBirdCount', 'gameLoop']
+const line1 = ['findNextLevel', 'attachEvents', 'removeEvents', 'initLevel', 'cleanupEntities', 'isLineClick', 'initializeDom', 'initEntities', 'freshStart', 'startNextLevel', 'openWinSplash', 'birdParticles', 'portholeWipe', 'bestScoreForLevel', 'starScore', 'getBestScoreForLevel', 'getBestStarScoreForLevel', 'onClick', 'debug', 'mainCanvas', 'storage', 'showedTitle', 'showedExposition', 'canvasContainer', 'sceneContainer', 'isLastLevel', 'nextLevel', 'birdCount', 'pulser', 'lines', 'levelSelect', 'allFlying', 'gameOver', 'fadingOut', 'flyingBirdCount', 'gameLoop']
 const mainCanvas = ['constructor', 'clickCoords', 'canvas', 'context', 'scanlines', 'clearCanvas', 'testRect', 'transform', 'flipX', 'rotateThing', 'drawRect', 'drawThing', 'isClickHit', 'clickAreaDebug', 'makeScanlines', 'drawScanlines', 'boundingRect', 'opacity']
 const exposition = ['constructor', 'destroy', 'attachEvents', 'detachEvents', 'drawText', 'drawBackground', 'drawMayor', 'flicker']
 const expositionKeys = ['onClick', 'color', 'opacity', 'scene', 'endTitle', 'textGroup', 'mayor', 'playedSound', 'textLines', 'textTimeout']
 const level = ['starThresholds', 'absorberStarThresholds', 'optimalPulseCount', 'absorberOptimalPulseCount', 'birdCount', 'entities']
-const pulser = ['constructor', 'destroy', 'canPulse', 'firePulse', 'updateChargeProgress', 'drawChargeProgress', 'drawCharges', 'moving', 'color', 'speed', 'chargeProgress', 'chargeSpeed', 'maxChargeCount', 'chargeCount', 'pulsesFiredCount']
+const pulser = ['constructor', 'destroy', 'canPulse', 'firePulse', 'updateChargeProgress', 'drawChargeProgress', 'drawCharges', 'moving', 'color', 'chargeProgress', 'chargeSpeed', 'maxChargeCount', 'chargeCount', 'pulsesFiredCount']
 const levelSelect = ['attachEvents', 'detachEvents', 'updateSquadNextX', 'getLevelIndexByName', 'drawBackground', 'drawGround', 'drawClouds', 'drawRoad', 'drawStars', 'drawStar', 'levelCount', 'type', 'ground', 'clouds', 'clickBoxes', 'starDelay', 'squadX']
-const bird = ['pulseHit', 'swapLines', 'moveToNextLine', 'isOnLowestLine', 'isOnHighestLine', 'color', 'speed', 'maxSpeed', 'flying', 'direction', 'absorber', 'absorbed', 'type', 'verticalSwapper', 'startLine', 'initialY', 'lines', 'currentLine', 'currentLineIndex']
+const bird = ['pulseHit', 'swapLines', 'moveToNextLine', 'isOnLowestLine', 'isOnHighestLine', 'color', 'maxSpeed', 'flying', 'direction', 'absorber', 'absorbed', 'type', 'verticalSwapper', 'startLine', 'initialY', 'lines', 'currentLine', 'currentLineIndex']
 const gameLoop = ['updateLoop', 'pause', 'lastTimestamp', 'delta', 'updateFn', 'updateLoop', 'deltaSeconds', 'requestId']
 const knote = ['audioContext', 'playNote', 'makeNote', 'playSequenceNote', 'songNote', 'songNoise']
 
