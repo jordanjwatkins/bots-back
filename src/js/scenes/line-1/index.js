@@ -24,7 +24,9 @@ class Line1 {
 
     this.debug = false
 
-    this.mainCanvas = new MainCanvas({ width: 1000, height: 600 })
+    this.gameDimensions = { width: 1000, height: 600 }
+
+    this.mainCanvas = new MainCanvas(this.gameDimensions)
 
     this.levels = levels(this)
 
@@ -34,6 +36,8 @@ class Line1 {
     //this.showedExposition = true
 
     this.mainCanvas.canvas.style.letterSpacing = '-1px'
+
+    this.fitViewport()
 
     this.initializeDom()
 
@@ -83,6 +87,18 @@ class Line1 {
         }
       })
     })
+  }
+
+  fitViewport() {
+    const aspectRatio = this.gameDimensions.width / this.gameDimensions.height
+
+    if (document.body.clientWidth < document.body.clientHeight * aspectRatio) {
+      this.mainCanvas.canvas.style.width = '100%'
+      this.mainCanvas.canvas.style.height = 'auto'
+    } else {
+      this.mainCanvas.canvas.style.height = '100%'
+      this.mainCanvas.canvas.style.width = 'auto'
+    }
   }
 
   get currentLevel() {
@@ -170,6 +186,14 @@ class Line1 {
 
   attachEvents() {
     this.mainCanvas.canvas.addEventListener('click', this.onClick)
+
+    window.addEventListener('resize', () => {
+      this.fitViewport()
+
+      setTimeout(() => {
+        this.fitViewport()
+      }, 300);
+    })
   }
 
   removeEvents() {
@@ -210,6 +234,8 @@ class Line1 {
 
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
+        if (this.exposition) return
+
         this.clickedFirstLine = true
 
         this.pulser.firePulse(this, entity)
