@@ -1,6 +1,6 @@
 {
-  "name": "america-offline-dev",
-  "displayName": "America Offline Dev",
+  "name": "america-offline",
+  "displayName": "America Offline",
   "version": "1.0.0",
   "scripts": {
     "start": "npm run dev",
