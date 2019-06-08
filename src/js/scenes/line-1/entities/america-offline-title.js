@@ -94,7 +94,7 @@ class AmericaOfflineTitle {
   }
 
   destroy() {
-    this.cancelIntro()
+    if (this.cancelIntro) this.cancelIntro()
     this.detachEvents()
 
     this.scene.mainCanvas.opacity = 1
