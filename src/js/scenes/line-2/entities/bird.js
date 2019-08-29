@@ -42,16 +42,46 @@ class Bird {
   detachEvents(mainCanvas) {
     const { canvas } = mainCanvas
 
+    this.eventsAttached = false
+
     canvas.removeEventListener('click', this.onClick)
   }
 
   onClick = (event) => {
-    console.log('click')
-
     if (this.isBirdClick(event, this.mainCanvas)) {
-      console.log('bird click')
+      this.absorbed += 1
+      this.selected = !this.selected
+    } else {
+      this.selected = false
+    }
+
+    if (this.selected) {
+      this.mainCanvas.selected = this
+
       this.speed.x = -1
       this.flying = true
+
+      if (!this.backOccupied && this.allies[0].x < this.x) {
+        console.log('moving to back');
+
+        this.movingToBack = true
+      }
+
+      if (this.onBack) {
+        console.log('moving to ground')
+
+        this.movingToBack = false
+        this.onBack = false
+        this.movingToGround = true
+
+        this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
+      }
+
+      if (this.z === 3) this.z = 4
+    } else {
+      this.speed.x = 0
+      this.flying = false
+      if (this.z === 4) this.z = 3
     }
   }
 
@@ -123,29 +153,68 @@ class Bird {
     return (this.y + this.height - 10 <= highestLine.y)
   }
 
-  update({ mainCanvas, allFlying, entities }) {
+  update({ mainCanvas, allFlying, entities, level }) {
     this.mainCanvas = mainCanvas
+    this.level = level
 
-    //if (this.debugRect) this.debugRect()
     if (!this.eventsAttached) this.attachEvents(mainCanvas)
-
-    //mainCanvas.clickAreaDebug(this, 5)()
 
     if (!this.y) return
 
-    this.lines = this.lines || entities.filter(entity => entity.type === 'line')
+    this.allies = entities.filter(entity => entity.type === 'bird' && entity !== this)
 
-    if (!this.currentLine) {
-      this.lines.some((line, index) => {
-        if (line.y === this.y + this.height) {
-          this.currentLine = line
-          this.currentLineIndex = index
+    if (this.movingToBack) {
+      const target = this.allies[0]
 
-          return true
-        }
+      let dx = (target.x + target.width / 2 - this.x - (this.width / 2)) / 100
+      let dy = (target.y - (this.y + this.height)) / 100
 
-        return false
-      })
+      dx = Math.floor(dx)
+      dy = Math.floor(dy)
+
+      if (dx === 0 && dy === 0) {
+        this.movingToBack = false
+        this.flying = false
+
+        this.onBack = true
+        this.host = target
+        target.backOccupied = true
+      }
+
+      this.speed.x = dx
+      this.speed.y = dy
+
+      this.z = 5
+    }
+
+    if (this.onBack) {
+      this.speed.x = this.host.speed.x
+
+      this.x += this.speed.x
+      this.y += this.speed.y
+    }
+
+    if (this.movingToGround) {
+      this.flying = true
+
+
+      let dx = (this.target.x - this.x - (this.width / 2)) / 100
+      let dy = (this.target.y - (this.y + this.height))
+
+      dx = Math.floor(dx)
+
+      if (dx === 0 && dy === 0) {
+        this.movingToGround = false
+        this.flying = false
+        this.speed.x = 0
+        this.speed.y = 0
+      }
+
+      if (this.flying) {
+        this.speed.x = dx
+        this.speed.y = Math.ceil(dy / 100)
+      }
+
     }
 
     if (allFlying) {
@@ -158,8 +227,6 @@ class Bird {
     }
 
     this.draw(mainCanvas)
-
-    mainCanvas.drawSelectedRect(this, 10)
   }
 
   fly() {

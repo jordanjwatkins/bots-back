@@ -29,17 +29,17 @@ class ImageFx {
   }
 
   drawSelectedRect(srcRect, offset = 2) {
-    if (!this.offCanvases.selectedRect1) {
+    const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
+
+    if (!this.offCanvases[cacheKey]) {
       const lineWidth = 1
 
       const rect = {
-        x: srcRect.x - offset - lineWidth,
-        y: srcRect.y - offset - lineWidth,
         width: srcRect.width + (offset * 2) + (lineWidth * 2),
         height: srcRect.height + (offset * 2) + (lineWidth * 2),
       }
 
-      const { canvas, context } = this.initOffCanvas({ key: 'selectedRect1', width: rect.width, height: rect.height })
+      const { canvas, context } = this.initOffCanvas({ key: cacheKey, width: rect.width, height: rect.height })
 
       const m = context.moveTo.bind(context)
       const l = context.lineTo.bind(context)
@@ -60,7 +60,7 @@ class ImageFx {
       cp()
     }
 
-    const { canvas, context } = this.offCanvases.selectedRect1
+    const { canvas, context } = this.offCanvases[cacheKey]
 
     context.clearRect(0, 0, canvas.width, canvas.height)
     context.stroke()

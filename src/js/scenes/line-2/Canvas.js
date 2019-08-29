@@ -147,6 +147,9 @@ class MainCanvas {
   clickCoords = (event) => {
     const canvasRect = this.boundingRect
 
+    console.log((event.pageX - canvasRect.x) / this.scaleInDom, (event.pageY - canvasRect.y) / this.scaleInDom)
+
+
     return {
       x: event.pageX - canvasRect.x,
       y: event.pageY - canvasRect.y,

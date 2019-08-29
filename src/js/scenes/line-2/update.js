@@ -14,8 +14,16 @@ function update(scene, delta, extras) {
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
 
-  // draw overlay at z of 4
+  // draw foreground 2 at z of 4
   updateEntities(entities, scene, 4, delta)
+
+  // draw foreground 3 at z of 5
+  updateEntities(entities, scene, 5, delta)
+
+  // draw overlay at z of 6
+  updateEntities(entities, scene, 6, delta)
+
+  if (mainCanvas.selected && mainCanvas.selected.selected) mainCanvas.drawSelectedRect(mainCanvas.selected, 10)
 
   if (extras) extras()
 

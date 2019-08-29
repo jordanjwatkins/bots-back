@@ -6,9 +6,13 @@ export default (scene) => {
 
   const levels = {
     oneLineTwoSimple: () => {
+      const groundY = 550
+
       return {
+        groundY,
         entities: [
-          new Bird({ x: 900, y: 526 }),
+          new Bird({ x: 960, y: groundY - 20 }),
+          new Bird({ x: 900, y: groundY - 50, heavy: true, width: 50, height: 50 }),
         ],
       }
     },

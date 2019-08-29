@@ -17,7 +17,7 @@ class Line2 {
   constructor() {
     // this.dev = new Dev(this)
 
-    this.debug = false
+    this.debug = true
 
     this.gameDimensions = { width: 1000, height: 600 }
 
@@ -135,7 +135,7 @@ class Line2 {
   }
 
   onClick = (event) => {
-    // if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
+    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
 
     this.entities.forEach((entity) => {
       if (this.isLineClick(event, entity)) {
