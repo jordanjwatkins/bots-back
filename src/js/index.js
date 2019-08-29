@@ -1,9 +1,9 @@
 import audioUnlock from '@aneutralgiraffe/audio-unlock-splash'
 import knote from './libs/knote'
-import Line1 from './scenes/line-1'
+import Line2 from './scenes/line-2'
 
 const scenes = {
-  Line1,
+  Line2,
 }
 
 audioUnlock(knote.audioContext, () => {
@@ -12,6 +12,6 @@ audioUnlock(knote.audioContext, () => {
 
 function init() {
   setTimeout(() => {
-    scenes.activeScene = new Line1(scenes)
+    scenes.activeScene = new Line2(scenes)
   }, 0)
 }
