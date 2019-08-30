@@ -72,9 +72,9 @@ class ImageFx {
 
   noise(offsetX, offsetY) {
     if (!this.offCanvases.c1) {
-      const { canvas, context } = this.initOffCanvas({ key: 'c1', bgColor: '#FFF' })
-      const { canvas: canvas2, context: context2 } = this.initOffCanvas({ key: 'c2', bgColor: '#000' })
-      //const { canvas: canvas3, context: context3 } = this.initOffCanvas({ key: 'c3', bgColor: '#000' })
+      // the noise canvases are a bit larger than the destination canvas so they can be offset randomly and still fill the destination canvas
+      const { canvas, context } = this.initOffCanvas({ key: 'c1', bgColor: '#FFF', width: this.canvas.width + 50, height: this.canvas.height + 50 })
+      const { canvas: canvas2, context: context2 } = this.initOffCanvas({ key: 'c2', bgColor: '#000', width: this.canvas.width + 50, height: this.canvas.height + 50 })
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
@@ -87,6 +87,7 @@ class ImageFx {
 
       context2.putImageData(filtered2, 0, 0)
 
+      //const { canvas: canvas3, context: context3 } = this.initOffCanvas({ key: 'c3', bgColor: '#000' })
       //const imageData3 = this.context.getImageData(0, 0, canvas.width, canvas.height)
       //const filtered3 = this.hueShift(imageData3)
 
@@ -118,13 +119,11 @@ class ImageFx {
     if (!this.offCanvases.v1) {
       const { canvas, context } = this.initOffCanvas({ key: 'v1' })
 
-      let gradient
-
       // Transform to facilitate ellipse
       //context.setTransform(1, 0, 0, 0.6153846153846154, 0, 0)
 
       // Create gradient
-      gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0.000, canvas.width / 2, canvas.height / 2, canvas.width / 2)
+      const gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0.000, canvas.width / 2, canvas.height / 2, canvas.width / 2)
 
       // Add colors
       gradient.addColorStop(0.860, 'rgba(0, 0, 0, 0.000)')
@@ -135,7 +134,7 @@ class ImageFx {
       context.fillRect(0, 0, canvas.width, canvas.height)
     }
 
-    const { canvas, context } = this.offCanvases.v1
+    const { canvas } = this.offCanvases.v1
 
     this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, -80, 0, this.canvas.width + 160, this.canvas.height)
   }

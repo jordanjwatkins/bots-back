@@ -15,10 +15,6 @@ class MainCanvas {
     this.context.imageSmoothingEnabled = false
 
     this.imageFx = new ImageFx(this.canvas, this.context)
-    /*this.imageFx2 = new ImageFx(this.canvas, this.context)
-    this.imageFx3 = new ImageFx(this.canvas, this.context)
-    this.imageFx4 = new ImageFx(this.canvas, this.context)
-    this.imageFx5 = new ImageFx(this.canvas, this.context)*/
   }
 
   get scaleInDom() {
@@ -105,8 +101,11 @@ class MainCanvas {
 
   drawNoise() {
     this.noiseCount = this.noiseCount || 1
+    this.noiseSpeed = 5 // # of renders per noise update
 
-    if (this.noiseCount > 5) {
+    // don't update the noise every frame
+    if (this.noiseCount > this.noiseSpeed) {
+      // randomize render offset to make one frame of noise seem like several
       this.noiseOffsetX = Math.round(Math.random() * 30)
       this.noiseOffsetY = Math.round(Math.random() * 30)
 
@@ -115,45 +114,40 @@ class MainCanvas {
 
     this.imageFx.noise(this.noiseOffsetX, this.noiseOffsetY)
 
-
-
-    /*if (this.noiseCount < 5) {
-      this.imageFx.noise()
-    } else if (this.noiseCount < 10) {
-      this.imageFx2.noise()
-    } else if (this.noiseCount < 15) {
-      this.imageFx4.noise()
-    } else if (this.noiseCount < 20) {
-      this.imageFx5.noise()
-    } else {
-      this.imageFx3.noise()
-      this.noiseCount = 0
-    }*/
-
     this.noiseCount += 1
   }
 
-  isClickHit(event, clickRect) {
+  isClickHit(event, clickRect, scale = 1) {
     const canvasRect = this.boundingRect
 
+    //console.log('lick hit y1', event.pageY, canvasRect.y + clickRect.y + clickRect.height, event.pageY < canvasRect.y + clickRect.y + clickRect.height);
+    //console.log('lick hit y2', event.pageY, canvasRect.y + clickRect.y, event.pageY > canvasRect.y + clickRect.y);
+
+
     return (
-      event.pageY < canvasRect.y + clickRect.y + clickRect.height &&
-      event.pageY > canvasRect.y + clickRect.y &&
-      event.pageX < canvasRect.x + clickRect.x + clickRect.width &&
-      event.pageX > canvasRect.x + clickRect.x
+      event.pageY < canvasRect.y + clickRect.y * scale + clickRect.height * scale &&
+      event.pageY > canvasRect.y + clickRect.y * scale &&
+      event.pageX < canvasRect.x + clickRect.x * scale + clickRect.width * scale &&
+      event.pageX > canvasRect.x + clickRect.x * scale
     )
   }
 
   clickCoords = (event) => {
     const canvasRect = this.boundingRect
 
-    console.log((event.pageX - canvasRect.x) / this.scaleInDom, (event.pageY - canvasRect.y) / this.scaleInDom)
-
-
-    return {
-      x: event.pageX - canvasRect.x,
-      y: event.pageY - canvasRect.y,
-    }
+    return (this.debug) ?
+      {
+        x: Math.round(event.pageX - canvasRect.x),
+        y: Math.round(event.pageY - canvasRect.y),
+        unscaledX: Math.round((event.pageX - canvasRect.x) / this.scaleInDom),
+        unscaledY: Math.round((event.pageY - canvasRect.y) / this.scaleInDom),
+      } :
+      {
+        x: event.pageX - canvasRect.x,
+        y: event.pageY - canvasRect.y,
+        unscaledX: (event.pageX - canvasRect.x) / this.scaleInDom,
+        unscaledY: (event.pageY - canvasRect.y) / this.scaleInDom,
+      }
   }
 
   clickAreaDebug(clickRect, offset = 2) {
@@ -173,34 +167,6 @@ class MainCanvas {
   }
 
   drawSelectedRect(srcRect, offset = 2) {
-    /*const { context } = this
-
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-    const cp = context.closePath.bind(context)
-
-    context.lineWidth = '1'
-    context.strokeStyle = '#000'
-    context.setLineDash([5, 3])
-    context.lineDashOffset += 0.1
-
-    const rect = {
-      x: srcRect.x - offset - context.lineWidth,
-      y: srcRect.y - offset - context.lineWidth,
-      width: srcRect.width + offset * 2 + context.lineWidth * 2,
-      height: srcRect.height + offset * 2 + context.lineWidth * 2,
-    }
-
-    bp()
-    m(rect.x, rect.y)
-    l(rect.x + rect.width, rect.y)
-    l(rect.x + rect.width, rect.y + rect.height)
-    l(rect.x, rect.y + rect.height)
-    l(rect.x, rect.y)
-    cp()
-
-    context.stroke()*/
     this.imageFx.drawSelectedRect(srcRect, offset)
   }
 

@@ -23,6 +23,8 @@ class Line2 {
 
     this.mainCanvas = new MainCanvas(this.gameDimensions)
 
+    this.mainCanvas.debug = this.debug
+
     this.levels = levels(this)
 
     this.storage = new Storage('OfflineDevLine7')

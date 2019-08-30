@@ -1,4 +1,4 @@
-import * as sounds from '../sounds'
+import BirdMenu from './bird-menu'
 
 class Bird {
   constructor(props) {
@@ -37,6 +37,8 @@ class Bird {
     const { canvas } = mainCanvas
 
     canvas.addEventListener('click', this.onClick)
+
+    this.menu = new BirdMenu(this)
   }
 
   detachEvents(mainCanvas) {
@@ -48,21 +50,25 @@ class Bird {
   }
 
   onClick = (event) => {
-    if (this.isBirdClick(event, this.mainCanvas)) {
+    const isMenuClick = this.menu.isMenuClick(event)
+
+    if (this.isBirdClick(event, this.mainCanvas) ) {
       this.absorbed += 1
+
+      if (this.absorbed > 3) this.absorbed = 0
+
       this.selected = !this.selected
-    } else {
+
+      if (this.selected) {
+        this.menu.openMenu()
+      }
+    } else if (!isMenuClick) {
       this.selected = false
-    }
 
-    if (this.selected) {
-      this.mainCanvas.selected = this
-
-      this.speed.x = -1
-      this.flying = true
-
-      if (!this.backOccupied && this.allies[0].x < this.x) {
-        console.log('moving to back');
+      this.menu.closeMenu()
+    } else {
+      if (!this.backOccupied && this.allies[0].x < this.x && this.x - this.allies[0].x < 100) {
+        console.log('moving to back')
 
         this.movingToBack = true
       }
@@ -73,14 +79,21 @@ class Bird {
         this.movingToBack = false
         this.onBack = false
         this.movingToGround = true
+        this.flying = true
 
         this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
       }
+    }
+
+    if (this.selected) {
+      this.mainCanvas.selected = this
 
       if (this.z === 3) this.z = 4
     } else {
-      this.speed.x = 0
-      this.flying = false
+      this.menu.closeMenu()
+
+      // this.speed.x = 0
+      // this.flying = false
       if (this.z === 4) this.z = 3
     }
   }
@@ -98,60 +111,6 @@ class Bird {
     return mainCanvas.isClickHit(event, clickRect)
   }
 
-  pulseHit(mute = false) {
-    if (this.heavy && this.absorbed < 3) {
-      this.absorbed += 1
-
-      return
-    }
-
-    if (!mute) sounds.hop()
-
-    this.flying = true
-    this.speed.y = -this.maxSpeed.y
-
-    if (this.verticalSwapper) {
-      this.swapLines()
-
-      return
-    }
-
-    // return to starting place after short hover
-    setTimeout(() => {
-      this.speed.y = this.maxSpeed.y
-      this.direction = 0
-    }, 400)
-  }
-
-  swapLines() {
-    if (this.isOnLowestLine()) {
-      this.direction = -1
-    } else if (this.isOnHighestLine()) {
-      this.direction = 1
-    } else {
-      this.direction = this.direction || 1
-    }
-
-    this.moveToNextLine()
-  }
-
-  moveToNextLine() {
-    this.speed.y = this.direction * this.maxSpeed.y
-    this.currentLineIndex -= this.direction
-    this.currentLine = this.lines[this.currentLineIndex]
-  }
-
-  isOnLowestLine() {
-    const [lowestLine] = this.lines
-
-    return (this.y + this.height + 1 >= lowestLine.y)
-  }
-
-  isOnHighestLine() {
-    const highestLine = this.lines[this.lines.length - 1]
-
-    return (this.y + this.height - 10 <= highestLine.y)
-  }
 
   update({ mainCanvas, allFlying, entities, level }) {
     this.mainCanvas = mainCanvas
@@ -166,6 +125,8 @@ class Bird {
     if (this.movingToBack) {
       const target = this.allies[0]
 
+      this.menu.menuFields[this.menu.menuItems[0]].disabled = true
+
       let dx = (target.x + target.width / 2 - this.x - (this.width / 2)) / 100
       let dy = (target.y - (this.y + this.height)) / 100
 
@@ -179,6 +140,9 @@ class Bird {
         this.onBack = true
         this.host = target
         target.backOccupied = true
+
+        this.menu.menuFields[this.menu.menuItems[0]].disabled = false
+        this.menu.menuFields[this.menu.menuItems[0]].value = 'go'
       }
 
       this.speed.x = dx
@@ -199,7 +163,7 @@ class Bird {
 
 
       let dx = (this.target.x - this.x - (this.width / 2)) / 100
-      let dy = (this.target.y - (this.y + this.height))
+      const dy = (this.target.y - (this.y + this.height))
 
       dx = Math.floor(dx)
 
@@ -214,7 +178,6 @@ class Bird {
         this.speed.x = dx
         this.speed.y = Math.ceil(dy / 100)
       }
-
     }
 
     if (allFlying) {
@@ -226,7 +189,22 @@ class Bird {
       this.fly()
     }
 
+    if (this.menu.menuItems && this.menu.menuFields[this.menu.menuItems[0]].value === 'stop') {
+      this.speed.x = -1
+      this.flying = true
+    } else {
+      this.speed.x = 0
+      this.flying = false
+    }
+
     this.draw(mainCanvas)
+
+    if (this.menu && this.menu.isMenuOpen) this.menu.drawMenu()
+
+    if (this.menu && this.menu.debugRectFn) {
+      // this.mainCanvas.context.setTransform(1, 0, 0, 1, 0, 0)
+      this.menu.debugRectFn()
+    }
   }
 
   fly() {
