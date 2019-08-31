@@ -8,14 +8,22 @@ class BirdMenu {
     this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: 100, bgColor: '#000' })
 
     this.menuFields = {
-      'go-stop': { values: ['go', 'stop'], value: 'go' },
+      'stop-go': { values: ['stop', 'go'], value: 'stop', rect: this.getTextRect(0) },
+      'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: this.getTextRect(1) },
     }
 
     this.menuItems = [
-      'go-stop',
+      'stop-go',
+      'slow-fast',
     ]
 
     this.addMenuFieldOnClick()
+  }
+
+  getField(fieldKey) {
+    if (!this.menuFields[fieldKey]) return
+
+    return this.menuFields[fieldKey]
   }
 
   addMenuFieldOnClick() {
@@ -139,7 +147,7 @@ class BirdMenu {
   drawMenuItem(index, fieldKey, field) {
     const { values, value } = field
 
-    field.rect = this.drawMenuText(0, index, value, field)
+    field.rect = this.drawMenuText(0, index, values, field)
   }
 
   drawMenuText(x, y, text, field) {
@@ -150,15 +158,30 @@ class BirdMenu {
 
     context.fillStyle = (field.disabled) ? '#333' : '#FFF'
     context.font = `${fontSize}px monospace`
-    context.fillText(text, padding, padding + fontSize / 2 + (fontSize * y))
 
-    return this.getTextRect(y)
+    this.totalWidth = 0
+
+    if (Array.isArray(text)) {
+      const textParts = text.join('// / //').split('//')
+
+      textParts.forEach((textPart, index) => {
+        context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
+        context.fillText(textPart, padding + this.totalWidth, (padding * y) + padding + fontSize / 2 + (fontSize * y))
+
+        this.totalWidth += context.measureText(textPart).width
+      })
+    } else {
+      context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
+    }
+
+    return this.getTextRect(y, padding)
   }
 
   getTextRect(y) {
     const fontSize = 18
+    const padding = 10
 
-    return { x: 0, y: 0 + fontSize / 2 + (fontSize * y), width: 200, height: 20 }
+    return { x: 0, y: (padding * y * 2) + fontSize / 2 + (fontSize * y), width: 200, height: 20 }
   }
 }
 

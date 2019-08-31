@@ -4,3 +4,4 @@ build
 build.zip
 .vscode
 *.code-workspace
+*.md

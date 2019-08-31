@@ -5,10 +5,13 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
-    "prod": "rm -rf build && rm -f build.zip && webpack --config webpack.config.min.js && npm run mangle && npm run zip",
+    "prod": "npm run prod-tiny",
+    "prod-base": "rm -rf build && webpack --config webpack.config.min.js",
+    "prod-tiny": "npm run prod-base && npm run mangle && rm -rf build/manifest.json && rm -rf build/favicon.ico && npm run zip",
     "mangle": "node mangle-more.js",
     "eslint": "eslint src/**/*.js",
-    "zip": "powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\""
+    "zip": "rm -rf build.zip && powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\"",
+    "analyze-prod": "webpack --config webpack.config.min.js --analyze"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -19,6 +22,7 @@
     "babel-loader": "^8.0.0",
     "css-hot-loader": "^1.4.2",
     "css-loader": "^1.0.0",
+    "cssnano": "^4.1.10",
     "eslint": "^4.11.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-import-resolver-webpack": "^0.8.4",
@@ -37,6 +41,7 @@
     "terser-webpack-plugin": "^1.2.4",
     "webpack": "^4.17.2",
     "webpack-assets-manifest": "^3.1.1",
+    "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.8"
   },

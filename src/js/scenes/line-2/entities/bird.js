@@ -67,11 +67,7 @@ class Bird {
 
       this.menu.closeMenu()
     } else {
-      if (!this.backOccupied && this.allies[0].x < this.x && this.x - this.allies[0].x < 100) {
-        console.log('moving to back')
 
-        this.movingToBack = true
-      }
 
       if (this.onBack) {
         console.log('moving to ground')
@@ -92,8 +88,6 @@ class Bird {
     } else {
       this.menu.closeMenu()
 
-      // this.speed.x = 0
-      // this.flying = false
       if (this.z === 4) this.z = 3
     }
   }
@@ -111,7 +105,6 @@ class Bird {
     return mainCanvas.isClickHit(event, clickRect)
   }
 
-
   update({ mainCanvas, allFlying, entities, level }) {
     this.mainCanvas = mainCanvas
     this.level = level
@@ -122,10 +115,18 @@ class Bird {
 
     this.allies = entities.filter(entity => entity.type === 'bird' && entity !== this)
 
+    if (this.menu.getField('stop-go').value === 'go' && !this.backOccupied && this.allies[0].x < this.x && this.x - this.allies[0].x < 100) {
+      console.log('moving to back')
+
+      this.movingToBack = true
+    }
+
     if (this.movingToBack) {
       const target = this.allies[0]
 
-      this.menu.menuFields[this.menu.menuItems[0]].disabled = true
+      const goStop = this.menu.getField('stop-go')
+
+      goStop.disabled = true
 
       let dx = (target.x + target.width / 2 - this.x - (this.width / 2)) / 100
       let dy = (target.y - (this.y + this.height)) / 100
@@ -141,8 +142,8 @@ class Bird {
         this.host = target
         target.backOccupied = true
 
-        this.menu.menuFields[this.menu.menuItems[0]].disabled = false
-        this.menu.menuFields[this.menu.menuItems[0]].value = 'go'
+        goStop.disabled = false
+        goStop.value = 'stop'
       }
 
       this.speed.x = dx
@@ -189,8 +190,8 @@ class Bird {
       this.fly()
     }
 
-    if (this.menu.menuItems && this.menu.menuFields[this.menu.menuItems[0]].value === 'stop') {
-      this.speed.x = -1
+    if (this.menu.getField('stop-go').value === 'go') {
+      this.speed.x = (this.menu.getField('slow-fast').value === 'fast') ? -2 : -1
       this.flying = true
     } else {
       this.speed.x = 0
@@ -210,33 +211,6 @@ class Bird {
   fly() {
     this.x += this.speed.x
     this.y += this.speed.y
-
-    if (this.heavy && this.absorbed < 2) return
-
-    if (!this.currentLine) return
-
-    if (this.y + this.height > this.currentLine.y && this.direction === 0) {
-      this.y = this.currentLine.y - this.height
-      this.speed.y = 0
-      this.flying = false
-      this.absorbed = 0
-    }
-
-    if (this.y + this.height < this.currentLine.y && this.direction === -1) {
-      this.y = this.currentLine.y - this.height
-      this.speed.y = 0
-      this.flying = false
-
-      if (!this.verticalSwapper) this.direction = 0
-    }
-
-    if (this.y + this.height > this.currentLine.y && this.direction === 1) {
-      this.y = this.currentLine.y - this.height
-      this.speed.y = 0
-      this.flying = false
-
-      if (!this.verticalSwapper) this.direction = 0
-    }
   }
 
   draw(mainCanvas) {
