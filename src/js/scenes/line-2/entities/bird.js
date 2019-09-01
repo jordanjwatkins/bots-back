@@ -1,6 +1,6 @@
 import { boxesCollide, collisions } from '../../../libs/collisions'
 import BirdMenu from './bird-menu'
-import Particles from './particles';
+import Particles from './particles'
 
 class Bird {
   constructor(props) {
@@ -27,6 +27,9 @@ class Bird {
       absorbed: 0,
       type: 'bird',
       directionX: (props.bad) ? 1 : -1,
+      hp: 100,
+      maxHp: 100,
+      damage: 1,
     }
 
     Object.assign(this, defaults, props)
@@ -119,9 +122,17 @@ class Bird {
     }
 
     if (this.onBack) {
-      console.log(this.onBack, this.host.speed.x);
+      if (this.host) {
+        if (this.host.hp <= 0) {
+          this.speed.x = 0
+          this.y += this.host.height
 
-      this.speed.x = this.host.speed.x
+          this.host = null
+          this.onBack = false
+        } else {
+          this.speed.x = this.host.speed.x
+        }
+      }
     }
 
     if (this.movingToBack) {
@@ -164,7 +175,7 @@ class Bird {
       dx = Math.floor(dx)
 
       if (dx === 0 && dy === 0) {
-        console.log('landed')
+        console.log('ground landed')
 
         this.movingToGround = false
         this.flying = false
@@ -173,6 +184,8 @@ class Bird {
         stopGo.value = 'stop'
 
         this.jumpParticles = null
+
+        this.host.backOccupied = false
       }
 
       if (this.flying) {
@@ -252,18 +265,36 @@ class Bird {
 
     this.updateOnOffBack(stopGo)
 
-    if (this.enemyAhead()) {
+    const nextEnemies = this.enemyAhead()
+    const nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
+
+    if (nextEnemy && nextEnemy.hp > 0) {
       this.speed.x = 0
     }
 
     this.fly()
 
-    this.draw(mainCanvas)
+    if (this.hp > 0) this.draw(mainCanvas)
 
     if (this.jumpParticlesOn) this.drawJumpParticles()
 
-    if (this.enemyAhead()) this.fightParticles.drawFightParticles()
-    //this.fightParticles.drawFightParticles()
+    if (nextEnemy && nextEnemy.hp > 0 && this.hp > 0) {
+      this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
+      this.hp -= 1
+
+      this.jumpParticlesOn = true
+      if (this.hp === 75 || this.hp === 50 || this.hp === 25) this.jumpParticles = null
+    }
+
+    if (this.hp <= 0) {
+      this.selected = null
+      this.menu.closeMenu()
+      this.mainCanvas.selected = null
+
+      return
+    }
+
+    //this.fightParticles.draw()
 
     if (this.menu && this.menu.isMenuOpen) this.menu.drawMenu()
 

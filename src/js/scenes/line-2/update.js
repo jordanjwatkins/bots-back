@@ -3,6 +3,8 @@ import * as sounds from './sounds'
 function update(scene, delta, extras) {
   const { mainCanvas, entities } = scene
 
+  mainCanvas.lateRenders = []
+
   mainCanvas.clearCanvas()
 
   // background z of 1
@@ -23,13 +25,15 @@ function update(scene, delta, extras) {
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
+  mainCanvas.lateRenders.forEach(drawFn => drawFn())
+
   if (mainCanvas.selected && mainCanvas.selected.selected) mainCanvas.drawSelectedRect(mainCanvas.selected, 10)
 
   if (extras) extras()
 
-  //mainCanvas.drawRollingLine()
+  // mainCanvas.drawRollingLine()
   mainCanvas.drawRollingLineReversed()
-  //mainCanvas.drawRollingLine2()
+  // mainCanvas.drawRollingLine2()
 
   mainCanvas.drawScanlines()
 

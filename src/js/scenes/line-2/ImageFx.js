@@ -19,13 +19,34 @@ class ImageFx {
       context.fillRect(0, 0, canvas.width, canvas.height)
     }
 
-
     this.offCanvases[key] = {
       canvas,
       context,
+      drawRect: this.drawRect,
+      centerX: canvas.width / 2,
+      centerY: canvas.width / 2,
+      clear: () => context.clearRect(0, 0, canvas.width, canvas.height),
+      trace: this.trace,
+      strokeRect: this.strokeRect,
     }
 
     return this.offCanvases[key]
+  }
+
+  drawRect({ x, y, color, width = 30, height = 60 }) {
+    this.context.fillStyle = color || '#000'
+
+    this.context.fillRect(x, y, width, height)
+  }
+
+  strokeRect({ x, y, color, width = 30, height = 60 }) {
+    this.context.fillStyle = color || '#000'
+
+    this.context.strokeRect(x, y, width, height)
+  }
+
+  trace() {
+    this.strokeRect({ x: 0, y: 0, color: 'red', width: this.canvas.width, height: this.canvas.height })
   }
 
   drawSelectedRect(srcRect, offset = 2) {

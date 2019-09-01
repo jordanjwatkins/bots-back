@@ -17,6 +17,10 @@ class BirdMenu {
       'slow-fast',
     ]
 
+    if (this.bird.bad) {
+      this.menuFields['stop-go'].value = 'go'
+    }
+
     this.addMenuFieldOnClick()
   }
 
