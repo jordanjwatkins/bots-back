@@ -37,7 +37,7 @@ class BirdMenu {
   }
 
   removeMenuFieldOnClick() {
-    this.mainCanvas.canvas.addEventListener('click', this.onMenuFieldClickHandler)
+    this.mainCanvas.canvas.removeEventListener('click', this.onMenuFieldClickHandler)
   }
 
   onMenuFieldClick(event) {
@@ -46,6 +46,7 @@ class BirdMenu {
       const { rect } = field
 
       if (this.isMenuFieldClick(event, rect) && !field.disabled) {
+        console.log('click menu field', field.value);
         field.value = (field.values[0] === field.value) ? field.values[1] : field.values[0]
       }
     })
@@ -160,7 +161,7 @@ class BirdMenu {
     const fontSize = 18
     const padding = 10
 
-    context.fillStyle = (field.disabled) ? '#333' : '#FFF'
+    context.fillStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
 
     this.totalWidth = 0
@@ -169,7 +170,7 @@ class BirdMenu {
       const textParts = text.join('// / //').split('//')
 
       textParts.forEach((textPart, index) => {
-        context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
+        if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
         context.fillText(textPart, padding + this.totalWidth, (padding * y) + padding + fontSize / 2 + (fontSize * y))
 
         this.totalWidth += context.measureText(textPart).width

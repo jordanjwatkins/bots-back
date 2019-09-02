@@ -19,6 +19,9 @@ export default (scene) => {
           //new Bird({ x: 130, y: groundY - 20, bad: true }),
           new Bird({ x: 150, y: groundY - 20, bad: true }),
         ],
+        spawn(entity) {
+          this.entities.push(entity)
+        },
       }
     },
 

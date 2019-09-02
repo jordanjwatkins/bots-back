@@ -286,7 +286,7 @@ class Bird {
       if (this.hp === 75 || this.hp === 50 || this.hp === 25) this.jumpParticles = null
     }
 
-    if (this.hp <= 0) {
+    if (this.hp <= 0 && this.selected) {
       this.selected = null
       this.menu.closeMenu()
       this.mainCanvas.selected = null

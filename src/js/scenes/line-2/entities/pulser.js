@@ -1,5 +1,6 @@
 import * as sounds from '../sounds'
 import Pulse from './pulse'
+import PulserMenu from './pulser-menu';
 
 class Pulser {
   constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 3, chargeSpeed = 4 }) {
@@ -24,6 +25,8 @@ class Pulser {
     this.maxChargeCount = 3
     this.chargeCount = chargeCount
     this.pulsesFiredCount = 0
+
+
   }
 
   destroy(scene) {
@@ -107,6 +110,19 @@ class Pulser {
   }
 
   update(scene) {
+    this.scene = scene
+    this.mainCanvas = scene.mainCanvas
+
+    if (!this.menu) this.menu = new PulserMenu(this)
+
+    if (this.menu && this.menu.isMenuOpen) {
+      if (this.scene.pulser !== this.scene.mainCanvas.selected) {
+        this.menu.closeMenu()
+      } else {
+        this.menu.drawMenu()
+      }
+    }
+
     scene.mainCanvas.drawRect(this)
 
     this.updateChargeProgress(scene)

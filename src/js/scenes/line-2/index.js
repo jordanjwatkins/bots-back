@@ -139,27 +139,37 @@ class Line2 {
   onClick = (event) => {
     if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
 
-    this.entities.forEach((entity) => {
-      if (this.isLineClick(event, entity)) {
-        if (this.exposition) return
+    if (this.isPulserClick(event)) {
+      console.log('pulser');
+      if (!this.pulser.menu.isMenuOpen) {
+        console.log('open');
 
-        this.clickedFirstLine = true
-
-        this.pulser.firePulse(this, entity)
+        this.mainCanvas.selected = this.pulser
+        this.pulser.menu.openMenu()
       }
-    })
+
+    }
+
+    if (this.pulser && this.pulser.menu && this.pulser.menu.isMenuClick(event)) {
+      console.log('menus click')
+
+    }
+
+    //this.entities.forEach((entity) => {
+
+    //})
   }
 
-  isLineClick(event, entity) {
+  isPulserClick(event) {
     const scale = this.mainCanvas.scaleInDom
+    const entity = this.pulser
 
     return (
-      entity.type === 'line' &&
       this.mainCanvas.isClickHit(event, {
-        x: 0,
-        y: entity.y * scale - 50 * scale,
-        height: entity.height * scale + 100 * scale,
-        width: this.mainCanvas.width * scale,
+        x: entity.x * scale,
+        y: entity.y * scale,
+        height: entity.height * scale,
+        width: entity.width * scale,
       })
     )
   }
@@ -206,7 +216,7 @@ class Line2 {
       speedX: 0.5 - 0.2 * Math.random(),
     }))
 
-    this.pulser = new Pulser({ x: 100, y: 500 })
+    this.pulser = new Pulser({ x: 880, y: 500 })
     this.level.entities.unshift(this.pulser)
 
     this.lines = this.entities.filter(entity => entity.type === 'line')
