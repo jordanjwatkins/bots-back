@@ -78,8 +78,8 @@ export default {
 
 
       //if (dx === 0 && dy === 0) {
-      if (Math.abs(dx * 10) < 5 && Math.abs(dy * 10) < 5) {
-        console.log('ground landed', this.x, this.y)
+      if (Math.abs(dx * 10) < 5) { //  && Math.abs(dy * 10) < 5
+        console.log('platform landed', this.x, this.y)
 
         const stopGo = this.menu.getField('stop-go')
 
@@ -104,13 +104,18 @@ export default {
 
       if (this.flying) {
         this.speed.x = dx - 1
-        this.speed.y = Math.ceil(dy / 10) - 1
+
+        if (dy < -1) {
+          this.speed.y = Math.ceil(dx) - 7
+        } else {
+          this.speed.y = 0
+        }
 
         // this.speed.y = Math.ceil(dy / 40) - 1
       }
     }
 
-    if (this.onPlatform && this.closePlatformExit()) { // || (this.movingToPlatform && this.platform.entry.occupied)
+    if (this.onPlatform && this.closePlatformExit() && !this.movingToBack) { // || (this.movingToPlatform && this.platform.entry.occupied)
       console.log('platform exit')
 
       this.onPlatform = true

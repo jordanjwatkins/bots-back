@@ -24,7 +24,7 @@ class BirdMenu {
 
     this.addMenuFieldOnClick()
 
-    if (!this.bird.bad && this.bird.type === 'bird') {
+    if (!this.bird.bad && this.bird.type === 'bird' && !this.bird.preSpawned) {
       setTimeout(() => {
         this.openMenu()
         this.mainCanvas.selected = this.bird

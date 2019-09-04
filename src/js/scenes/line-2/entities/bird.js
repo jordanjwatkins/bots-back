@@ -4,6 +4,7 @@ import birdJumpParticles from './bird/bird-jump-particles'
 import birdPlatforms from './bird/bird-platforms'
 import birdUpdate from './bird/bird-update'
 import birdDraw from './bird/bird-draw'
+import birdSpawnScan from './bird/bird-spawn-scan'
 
 class Bird {
   constructor(props) {
@@ -46,6 +47,15 @@ class Bird {
   }
 }
 
-Object.assign(Bird.prototype, birdUpdate, birdDraw, birdEvents, birdBacks, birdJumpParticles, birdPlatforms)
+Object.assign(
+  Bird.prototype,
+  birdUpdate,
+  birdDraw,
+  birdEvents,
+  birdBacks,
+  birdJumpParticles,
+  birdPlatforms,
+  birdSpawnScan,
+)
 
 export default Bird

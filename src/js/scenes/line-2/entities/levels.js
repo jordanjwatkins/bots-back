@@ -50,10 +50,14 @@ export default (scene) => {
       return {
         groundY,
         entities: [
-          new Bird({ x: 70, y: groundY - 20, preSpawned: true }),
-          new Bird({ x: 10, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
 
-          new Bird({ x: 900, y: groundY - 20 }),
+          new Bird({ x: 10, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
+          new Bird({ x: 70, y: groundY - 20, preSpawned: true }),
+          new Bird({ x: 100, y: groundY - 20, preSpawned: true }),
+
+          new Bird({ x: 580, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
+
+          new Bird({ x: 900, y: groundY - 20, preSpawned: true }),
           new Bird({ x: 960, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
         ],
 

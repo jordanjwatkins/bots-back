@@ -1,24 +1,24 @@
 export default {
   spawnScan() {
-    if (this.bad) this.offset = this.height + 5
+    if (this.bad || this.preSpawned) this.spawnScanOffset = this.height + 5
 
-    if (this.offset > this.height + 4) return
+    if (this.spawnScanOffset > this.height + 4) return
 
-    this.offset = this.offset || 1
+    this.spawnScanOffset = this.spawnScanOffset || 1
     this.frameCount = this.frameCount || 1
 
     if (this.frameCount < 2) {
       this.frameCount += 1
     } else {
       this.frameCount = 1
-      this.offset += 1
+      this.spawnScanOffset += 1
     }
 
     const x1 = this.x
-    const y1 = this.y + this.offset
+    const y1 = this.y + this.spawnScanOffset
 
     const x2 = this.x + this.width
-    const y2 = this.y + this.offset
+    const y2 = this.y + this.spawnScanOffset
 
     const x3 = 930
     const y3 = 480 - this.pulser.eyeOffset

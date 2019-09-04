@@ -244,6 +244,7 @@ class Line2 {
     this.removeEvents()
 
     this.mainCanvas.context.globalAlpha = 1.0
+    this.mainCanvas.selected = null
 
     this.initLevel()
     this.initEntities()

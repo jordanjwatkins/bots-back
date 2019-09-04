@@ -11,7 +11,7 @@ export default {
 
         ally.x < this.x &&
         this.x - ally.x < 80 &&
-        (this.y + this.height) - ally.y < 30
+        (this.y + this.height) - ally.y < 50
       ) {
         return ally
       }
@@ -20,7 +20,27 @@ export default {
 
   updateOnOffBack(stopGo) {
     if (stopGo.value === 'go') {
-      if (this.onBack) {
+      const filterAllies = this.closeMountableAllies()
+
+      if (
+        filterAllies &&
+        filterAllies[0]
+      ) {
+        console.log('moving to back')
+
+        if (this.host) this.host.backOccupied = false
+
+        //this.host = filterAllies[0]
+
+        this.target = filterAllies[0]
+
+        this.movingToBack = true
+
+        this.jumpParticlesOn = true
+        this.jumpParticles = null
+
+
+      } else if (this.onBack && !this.movingToBack) {
         console.log('moving to ground')
 
         this.movingToBack = false
@@ -30,25 +50,9 @@ export default {
 
         this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
       }
-
-      const filterAllies = this.closeMountableAllies()
-
-      if (
-        filterAllies &&
-        filterAllies[0]
-      ) {
-        console.log('moving to back')
-
-        this.host = filterAllies[0]
-
-        this.movingToBack = true
-
-        this.jumpParticlesOn = true
-        this.jumpParticles = null
-      }
     }
 
-    if (this.movingToBack && this.host.dead) {
+    if (this.movingToBack && this.host && this.host.dead) {
       this.movingToBack = false
       this.movingToGround = true
       this.host = null
@@ -64,8 +68,9 @@ export default {
           this.onBack = false
         } else {
           this.speed.x = this.host.speed.x
-          this.y = this.host.y - this.height
-          this.x = this.host.x + this.host.width / 2 - this.width / 2
+          //wombat
+          //this.y = this.host.y - this.height
+          //this.x = this.host.x + this.host.width / 2 - this.width / 2
         }
       }
     } else if (!this.movingToPlatform && !this.onPlatform && !this.movingOffPlatform && !this.movingToBack && !this.movingToGround && this.y + this.height < this.level.groundY) {
@@ -73,7 +78,9 @@ export default {
     }
 
     if (this.movingToBack) {
-      let target = this.host
+      //let target = this.host
+
+      let target = this.target
 
       while (target.backOccupier) {
         target = target.backOccupier
@@ -81,20 +88,25 @@ export default {
 
       stopGo.disabled = true
 
-      let dx = (target.x + target.width / 2 - this.x - (this.width / 2)) / 10
+      let dx = (target.x + target.width / 2 - (this.x + (this.width / 2))) / 10
       let dy = (target.y - (this.y + this.height)) / 10
 
       dx = Math.floor(dx)
       dy = Math.floor(dy)
 
-      //if (dx === 0 && dy === 0) {
-      if (Math.abs(dx * 10) < 15 && Math.abs(dy * 10) < 15) {
-        console.log('back land')
+      console.log('moving to back', this.x, this.width, target.x, target.width);
+      console.log('move to back', dx, dy, target.x + target.width / 2, this.x + (this.width / 2), target);
 
+
+      //if (dx === 0 && dy === 0) {
+      if (Math.abs(dx * 10) < 1) { //  && Math.abs(dy * 10) < 15
+        console.log('back land')
+        this.onPlatform = false
         this.movingToBack = false
         this.flying = false
 
         this.onBack = true
+
         this.host = target
         target.backOccupied = true
         target.backOccupier = this
