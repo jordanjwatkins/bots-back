@@ -1,4 +1,4 @@
-import ImageFx from '../ImageFx'
+import ImageFx from '../../ImageFx'
 
 class BirdMenu {
   constructor(bird) {
@@ -189,7 +189,7 @@ class BirdMenu {
       const textParts = text.join('// - //').split('//')
 
       textParts.forEach((textPart, index) => {
-        if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
+        if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#999'
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + fontSize + (fontSize * y))
 
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + 15 + (15 * y))
@@ -213,7 +213,7 @@ class BirdMenu {
 
    // return { x: 0, y: (15 + padding * 2) * y + 15 * y - y * 2, width: 220, height: 15 + padding * 2 }
 
-   return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: 220, height: 15 + padding * 2 }
+   return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: this.menuCanvas.canvas.width, height: 15 + padding * 2 }
   }
 }
 

@@ -1,9 +1,10 @@
 import * as sounds from './sounds'
 
 function update(scene, delta, extras) {
-  const { mainCanvas, entities } = scene
+  const { mainCanvas, entities, level } = scene
+  const { groups } = level
 
-  scene.level.update()
+  if (level.update) scene.level.update()
 
   mainCanvas.lateRenders = []
 
@@ -14,6 +15,8 @@ function update(scene, delta, extras) {
 
   // midground z of 2
   updateEntities(entities, scene, 2, delta)
+
+  if (groups) groups.platforms.forEach(entity => entity.update(scene, delta))
 
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
@@ -43,9 +46,9 @@ function update(scene, delta, extras) {
 
   mainCanvas.drawVignette()
 
-  //mainCanvas.drawTriangle2(200, 200, 3, true)
+  // mainCanvas.drawTriangle2(200, 200, 3, true)
 
-  //mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
+  // mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
 
   // win scene
   if (scene.flyingBirdCount === scene.birdCount) {

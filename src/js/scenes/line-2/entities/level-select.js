@@ -7,6 +7,8 @@ class LevelSelect {
   constructor(scene) {
     const { mainCanvas } = scene
 
+    this.debug = true
+
     this.width = mainCanvas.width
     this.height = mainCanvas.height / 8
 
@@ -28,6 +30,10 @@ class LevelSelect {
     this.type = 'levelSelect'
 
     this.attachEvents()
+
+    console.log(this.levels);
+
+
   }
 
   destroy() {
@@ -54,10 +60,15 @@ class LevelSelect {
         const { scene } = this
         const levelState = scene.storage.state.levels[levelName]
 
+        console.log(levelName);
+
         if (
           scene.currentLevel === levelName ||
-          levelState
+          levelState ||
+          this.debug
         ) {
+          console.log(levelName, this.clickBoxes);
+
           scene.currentLevel = levelName
 
           this.updateSquadNextX(levelName)

@@ -1,5 +1,5 @@
 import ImageFx from '../ImageFx'
-import BirdMenu from './bird-menu'
+import BirdMenu from './bird/bird-menu'
 import Bird from './bird'
 
 class PulserMenu extends BirdMenu {
