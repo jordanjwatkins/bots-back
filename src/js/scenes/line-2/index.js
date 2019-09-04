@@ -114,6 +114,13 @@ class Line2 {
 
   removeEvents() {
     this.mainCanvas.canvas.removeEventListener('click', this.onClick)
+
+    if (this.entities) {
+      this.entities.forEach((entity) => {
+        if (entity.removeEvents) entity.destroy()
+
+      })
+    }
   }
 
   initLevel() {
@@ -155,9 +162,17 @@ class Line2 {
 
     }
 
-    //this.entities.forEach((entity) => {
+    this.entities.forEach((entity) => {
+      if (entity.type === 'bird' && !entity.bad) {
+        if (entity.isBirdClick(event, this.mainCanvas)) {
+          console.log('bird click');
+          entity.onClick(event)
+        } else {
+          entity.onAnyClick(event)
+        }
+      }
 
-    //})
+    })
   }
 
   isPulserClick(event) {
@@ -226,6 +241,8 @@ class Line2 {
   }
 
   freshStart() {
+    this.removeEvents()
+
     this.mainCanvas.context.globalAlpha = 1.0
 
     this.initLevel()
@@ -234,6 +251,8 @@ class Line2 {
     this.allFlying = false
     this.gameOver = false
     this.fadingOut = false
+
+    this.attachEvents()
   }
 
   startNextLevel() {

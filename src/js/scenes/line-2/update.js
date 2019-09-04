@@ -3,6 +3,8 @@ import * as sounds from './sounds'
 function update(scene, delta, extras) {
   const { mainCanvas, entities } = scene
 
+  scene.level.update()
+
   mainCanvas.lateRenders = []
 
   mainCanvas.clearCanvas()
@@ -40,6 +42,10 @@ function update(scene, delta, extras) {
   mainCanvas.drawNoise()
 
   mainCanvas.drawVignette()
+
+  //mainCanvas.drawTriangle2(200, 200, 3, true)
+
+  //mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
 
   // win scene
   if (scene.flyingBirdCount === scene.birdCount) {

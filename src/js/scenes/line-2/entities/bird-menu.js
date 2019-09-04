@@ -8,8 +8,9 @@ class BirdMenu {
     this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: 100, bgColor: '#000' })
 
     this.menuFields = {
-      'stop-go': { values: ['stop', 'go'], value: 'stop', rect: this.getTextRect(0) },
-      'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: this.getTextRect(1) },
+      'stop-go': { values: ['stop', 'go'], value: 'stop', rect: {} },
+      'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: {} },
+      'climb-dont': { values: ['climb', 'dont'], value: 'climb ', rect: {} },
     }
 
     this.menuItems = [
@@ -22,6 +23,21 @@ class BirdMenu {
     }
 
     this.addMenuFieldOnClick()
+
+    if (!this.bird.bad && this.bird.type === 'bird') {
+      setTimeout(() => {
+        this.openMenu()
+        this.mainCanvas.selected = this.bird
+        this.bird.selected = true
+      }, 800)
+    }
+
+    this.fontSize = 18
+    this.padding = 7
+  }
+
+  destroy() {
+    this.removeMenuFieldOnClick()
   }
 
   getField(fieldKey) {
@@ -46,7 +62,8 @@ class BirdMenu {
       const { rect } = field
 
       if (this.isMenuFieldClick(event, rect) && !field.disabled) {
-        console.log('click menu field', field.value);
+        console.log('click menu field', field.value)
+
         field.value = (field.values[0] === field.value) ? field.values[1] : field.values[0]
       }
     })
@@ -71,7 +88,7 @@ class BirdMenu {
     const debug2 = false
 
     if (debug2 && this.bird.width === 20) {
-      this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 0)
+      this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 10)
     }
 
 
@@ -86,6 +103,9 @@ class BirdMenu {
     const scale = mainCanvas.scaleInDom
 
     const { x, y } = this.getMenuXy()
+
+    console.log(scale);
+
 
     const clickRect = {
       x: x + srcRect.x / scale,
@@ -158,8 +178,7 @@ class BirdMenu {
   drawMenuText(x, y, text, field) {
     const { context, canvas } = this.menuCanvas
 
-    const fontSize = 18
-    const padding = 10
+    const { fontSize, padding } = this
 
     context.fillStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
@@ -167,26 +186,34 @@ class BirdMenu {
     this.totalWidth = 0
 
     if (Array.isArray(text)) {
-      const textParts = text.join('// / //').split('//')
+      const textParts = text.join('// - //').split('//')
 
       textParts.forEach((textPart, index) => {
         if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
-        context.fillText(textPart, padding + this.totalWidth, (padding * y) + padding + fontSize / 2 + (fontSize * y))
+        //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + fontSize + (fontSize * y))
+
+        //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + 15 + (15 * y))
+
+        context.fillText(textPart, 20 + padding + this.totalWidth, 10 + padding + (padding * 2.2 * y) + 15 + (15 * y))
 
         this.totalWidth += context.measureText(textPart).width
       })
     } else {
-      context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
+      //context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
     }
 
-    return this.getTextRect(y, padding)
+    return this.getTextRect(y)
   }
 
   getTextRect(y) {
-    const fontSize = 18
-    const padding = 10
+    const fontSize = this.fontSize
+    const padding = this.padding
 
-    return { x: 0, y: (padding * y * 2) + fontSize / 2 + (fontSize * y), width: 200, height: 20 }
+    //return { x: 0, y: (padding * 2 * y) + fontSize / 2 + (fontSize * y), width: 200, height: fontSize + padding / 2 }
+
+   // return { x: 0, y: (15 + padding * 2) * y + 15 * y - y * 2, width: 220, height: 15 + padding * 2 }
+
+   return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: 220, height: 15 + padding * 2 }
   }
 }
 

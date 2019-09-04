@@ -394,6 +394,103 @@ class MainCanvas {
 
     context.restore()
   }
+
+  drawTriangle(x, y, scale, flip = false) {
+    const { context } = this
+
+    const colorPrimary = '#000'
+
+    context.save()
+
+    context.globalAlpha = 0.9
+
+    context.translate(x, y)
+
+    if (flip) context.scale(-1, 1)
+
+    context.lineWidth = 3
+    context.strokeStyle = colorPrimary
+    context.fillStyle = colorPrimary
+
+    context.beginPath()
+    context.moveTo(0, 0)
+    context.lineTo(0, 20 * scale)
+    context.lineTo(20 * scale, 10 * scale)
+    context.closePath()
+
+    context.stroke()
+    context.fill()
+
+    context.restore()
+  }
+
+  drawTriangle2(x, y, scale, flip = false) {
+    const { context } = this
+
+    const colorPrimary = '#000'
+
+    context.save()
+
+    context.globalAlpha = 0.9
+
+    context.translate(x, y)
+
+    if (flip) context.scale(1, -1)
+
+    context.lineWidth = 3
+    context.strokeStyle = colorPrimary
+    context.fillStyle = colorPrimary
+
+    context.beginPath()
+    context.moveTo(10 * scale, 0)
+    context.lineTo(0, 20 * scale)
+    context.lineTo(20 * scale, 20 * scale)
+    context.closePath()
+
+    context.stroke()
+    context.fill()
+
+    context.restore()
+  }
+
+  drawTriangleFromPoints(points, scale, flip = false) {
+    const { context } = this
+
+    this.colorPrimary = this.colorPrimary || '#000'
+
+    this.globalAlpha = this.globalAlpha || 0.2
+
+    if (Math.random() > 0.2) this.globalAlpha = '0.2'
+    if (Math.random() > 0.9) this.globalAlpha = '0.25'
+    if (Math.random() > 0.9) this.globalAlpha = '0.3'
+
+
+
+    context.save()
+
+    context.globalAlpha = this.globalAlpha
+
+    const [{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }] = points
+
+    //context.translate(x1, y1)
+
+    if (flip) context.scale(1, -1)
+
+    context.lineWidth = 3
+    context.strokeStyle = this.colorPrimary
+    context.fillStyle = this.colorPrimary
+
+    context.beginPath()
+    context.moveTo(x1, y1)
+    context.lineTo(x2, y2)
+    context.lineTo(x3, y3)
+    context.closePath()
+
+    //context.stroke()
+    context.fill()
+
+    context.restore()
+  }
 }
 
 export default MainCanvas

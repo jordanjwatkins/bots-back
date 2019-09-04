@@ -1,6 +1,6 @@
 import ImageFx from '../ImageFx'
 import BirdMenu from './bird-menu'
-import Bird from './bird';
+import Bird from './bird'
 
 class PulserMenu extends BirdMenu {
   constructor(bird) {
@@ -13,13 +13,21 @@ class PulserMenu extends BirdMenu {
     this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 200, bgColor: '#000' })
 
     this.menuFields = {
-      small: { values: ['small'], value: 'small', rect: this.getTextRect(0) },
-      heavy: { values: ['heavy'], value: 'heavy', rect: this.getTextRect(1) },
+      small: { values: ['small'], value: 'small', rect: {} },
+      heavy: { values: ['heavy'], value: 'heavy', rect: {} },
+      small2: { values: ['small'], value: 'small', rect: {} },
+      heavy2: { values: ['heavy'], value: 'heavy', rect: {} },
+      small3: { values: ['small'], value: 'small', rect: {} },
+      small4: { values: ['small'], value: 'small', rect: {} },
     }
 
     this.menuItems = [
       'small',
       'heavy',
+      //'heavy2',
+      //'small2',
+      //'small3',
+      //'small4',
     ]
   }
 
@@ -37,8 +45,8 @@ class PulserMenu extends BirdMenu {
         console.log('click menu field', value)
         field.disabled = true
 
-        if (value === 'small') level.spawn(new Bird({ x: 900 - 30 * Math.random(), y: level.groundY - 20 }))
-        if (value === 'heavy') level.spawn(new Bird({ x: 900 - 80 * Math.random(), y: level.groundY - 40, width: 40, height: 40, heavy: true }))
+        if (value === 'small') level.spawn(new Bird({ x: 860 - 70 * Math.random(), y: level.groundY - 20 }))
+        if (value === 'heavy') level.spawn(new Bird({ x: 860 - 90 * Math.random(), y: level.groundY - 40, width: 40, height: 40, heavy: true }))
 
         setTimeout(() => {
           field.disabled = false
@@ -50,8 +58,10 @@ class PulserMenu extends BirdMenu {
   drawMenuText(x, y, text, field) {
     const { context, canvas } = this.menuCanvas
 
-    const fontSize = 18
-    const padding = 10
+    const fontSize = this.fontSize
+    const padding = this.padding
+
+    const lineHeight = 15
 
     context.fillStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
@@ -59,20 +69,63 @@ class PulserMenu extends BirdMenu {
 
     this.totalWidth = 0
 
+    const scale = this.mainCanvas.scaleInDom
+
     if (Array.isArray(text)) {
       const textParts = text.join('// / //').split('//')
 
       textParts.forEach((textPart, index) => {
         if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
-        context.fillText(textPart, 50 + this.totalWidth, (padding * y) + padding + fontSize / 2 + (fontSize * y))
+
+        context.fillText(textPart, 50 + this.totalWidth, 10 + padding + (padding * 2.2 * y) + lineHeight + (lineHeight * y))
 
         this.totalWidth += context.measureText(textPart).width
       })
     } else {
-      context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
+      //context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
     }
 
-    return this.getTextRect(y, padding)
+    return this.getTextRect(y)
+  }
+
+  getTextRect(y) {
+    const fontSize = this.fontSize
+    const padding = this.padding
+
+    const scale = this.mainCanvas.scaleInDom
+
+    //return { x: 0, y: (padding * 2 * y) + fontSize / 2 + (fontSize * y), width: 200, height: fontSize + padding / 2 }
+
+    //console.log('y', y, 15 + (15 + padding * 2) * y);
+
+
+    return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: 200, height: 15 + padding * 2 }
+  }
+
+  getMenuXy() {
+    const { width } = this.menuCanvas.canvas
+
+    let x = this.bird.x + this.bird.width / 2 - width / 2
+    const y = this.bird.y - this.menuCanvas.canvas.height - 200
+    const margin = 20
+
+    const paddedRightX = x + width + margin
+
+    if (paddedRightX > this.mainCanvas.canvas.width) {
+      x -= (paddedRightX - this.mainCanvas.canvas.width)
+    }
+
+    if (x - margin < 0) {
+      x = margin
+    }
+
+    return { x, y }
+  }
+
+  closeMenu() {
+    console.log('pulser close');
+    return false
+
   }
 }
 

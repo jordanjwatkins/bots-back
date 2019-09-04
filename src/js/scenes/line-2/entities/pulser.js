@@ -26,11 +26,13 @@ class Pulser {
     this.chargeCount = chargeCount
     this.pulsesFiredCount = 0
 
-
+    this.type = 'pulser'
   }
 
   destroy(scene) {
     scene.entities = scene.entities.filter(entity => entity !== this)
+
+    this.menu.destroy()
   }
 
   canPulse() {
@@ -115,17 +117,112 @@ class Pulser {
 
     if (!this.menu) this.menu = new PulserMenu(this)
 
+    this.menu.isMenuOpen = true
+
     if (this.menu && this.menu.isMenuOpen) {
-      if (this.scene.pulser !== this.scene.mainCanvas.selected) {
-        this.menu.closeMenu()
-      } else {
-        this.menu.drawMenu()
+
+      if (this.menu && this.menu.debugRectFn) {
+        // this.mainCanvas.context.setTransform(1, 0, 0, 1, 0, 0)
+        this.menu.debugRectFn()
+        //this.mainCanvas.lateRenders.push(() => this.menu.debugRectFn())
       }
+      //if (this.scene.pulser !== this.scene.mainCanvas.selected) {
+        //this.menu.closeMenu()
+      //} else {
+        //this.menu.drawMenu()
+      //}
+
+      let savedAlpha = parseInt(scene.mainCanvas.context.globalAlpha)
+
+      //console.log(parseInt(this.mainCanvas.globalAlpha), savedAlpha, savedAlpha + parseInt(scene.mainCanvas.globalAlpha) - 0.1);
+
+      const temp = parseInt(scene.mainCanvas.globalAlpha) - 1
+
+
+      //scene.mainCanvas.context.globalAlpha = temp
+
+      //console.log(scene.mainCanvas.context.globalAlpha );
+
+      this.globalAlpha = this.globalAlpha || 0.2
+
+      if (Math.random() > 0.2) this.globalAlpha = '0.9'
+      if (Math.random() > 0.8) this.globalAlpha = '0.8'
+      if (Math.random() > 0.9) this.globalAlpha = '0.93'
+
+      scene.mainCanvas.context.globalAlpha = this.globalAlpha
+
+      this.menu.drawMenu()
+
+      scene.mainCanvas.context.globalAlpha = savedAlpha
+
+      let { x, y } = this.menu.getMenuXy()
+
+      //x = 100
+      //y = 100
+
+      //console.log(x, y);
+
+
+      const x1 = x
+      const y1 = y + this.menu.menuCanvas.canvas.height
+
+      const x2 = x + this.menu.menuCanvas.canvas.width / 2
+      const y2 = 480 - this.eyeOffset
+
+      const x3 = x + this.menu.menuCanvas.canvas.width
+      const y3 = y1
+
+      //console.log('points:', x1, y1, x2, y2, x3, y3);
+      // 100 300 150 400 200 300
+
+      /*const x1 = x + this.menu.menuCanvas.canvas.width
+      const y1 = y + this.menu.menuCanvas.canvas.height
+
+      const x2 = x + this.menu.menuCanvas.canvas.width / 2
+      const y2 = 510
+
+      const x3 = x + this.menu.menuCanvas.canvas.width
+      const y3 = y1*/
+
+      scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
+      //scene.mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
+
+      //scene.mainCanvas.drawTriangleFromPoints([{ x: 100, y: 300 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 1)
     }
 
     scene.mainCanvas.drawRect(this)
 
     this.updateChargeProgress(scene)
+
+    this.eyeOffset = this.eyeOffset || 1
+
+    this.eyeOffset += 0.1
+
+    if (this.eyeOffset > 100) this.eyeOffset = 100
+
+    scene.mainCanvas.drawRect({
+      x: this.x + this.width / 2 - 2,
+      y: this.y - 20 - Math.round(this.eyeOffset),
+      width: 4,
+      height: 20 + Math.round(this.eyeOffset),
+      color: '#333',
+    })
+
+    scene.mainCanvas.drawRect({
+      x: this.x + this.width / 2 - 15,
+      y: this.y - 20 - Math.round(this.eyeOffset),
+      width: 30,
+      height: 10,
+      color: '#333',
+    })
+
+    scene.mainCanvas.drawRect({
+      x: this.x + this.width / 2 - 15,
+      y: this.y - 17 - Math.round(this.eyeOffset),
+      width: 30,
+      height: 5,
+      color: 'blue',
+    })
   }
 }
 
