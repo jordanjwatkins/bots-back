@@ -21,7 +21,7 @@ export default {
     const y2 = this.y + this.spawnScanOffset
 
     const x3 = 930
-    const y3 = 480 - this.pulser.eyeOffset
+    const y3 = this.pulser.y - 18 - this.pulser.eyeOffset
 
     // this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
 

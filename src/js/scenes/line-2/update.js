@@ -1,5 +1,7 @@
 import * as sounds from './sounds'
 
+let zoom = 2;
+
 function update(scene, delta, extras) {
   const { mainCanvas, entities, level } = scene
   const { groups } = level
@@ -9,6 +11,9 @@ function update(scene, delta, extras) {
   mainCanvas.lateRenders = []
 
   mainCanvas.clearCanvas()
+
+  // draw background color so zoom works
+  mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: mainCanvas.canvas.style.backgroundColor })
 
   // background z of 1
   updateEntities(entities, scene, 1, delta)
@@ -29,6 +34,8 @@ function update(scene, delta, extras) {
 
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
+
+  zoomOut(mainCanvas)
 
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
@@ -66,6 +73,17 @@ function update(scene, delta, extras) {
       sounds.quickEnd()
     }, 500)
   }
+}
+
+function zoomOut(mainCanvas) {
+  // basic zoom out
+  if (zoom > 0) {
+    zoom -= 0.01
+  }
+
+  if (zoom < 1) zoom = 1
+
+  mainCanvas.context.drawImage(mainCanvas.canvas, -((mainCanvas.canvas.width * zoom) / 2) - (zoom - 2) * 500, -((mainCanvas.canvas.height * zoom) / 2) - (zoom - 2) * 300, mainCanvas.canvas.width * zoom, mainCanvas.canvas.height * zoom)
 }
 
 function updateEntities(entities, scene, z, delta) {

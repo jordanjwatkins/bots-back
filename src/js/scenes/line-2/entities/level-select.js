@@ -30,10 +30,6 @@ class LevelSelect {
     this.type = 'levelSelect'
 
     this.attachEvents()
-
-    console.log(this.levels);
-
-
   }
 
   destroy() {

@@ -4,15 +4,15 @@ class Cloud {
     this.y = y
     this.z = 1
 
-    this.width = width
-    this.height = height
+    this.width = width * 20
+    this.height = height * 2
 
     this.moving = true
 
     this.color = 'white'
 
     this.speed = {
-      x: speedX,
+      x: speedX * Math.random(),
       y: speedY,
     }
   }
@@ -38,6 +38,14 @@ class Cloud {
     mainCanvas.drawRect({
       x: this.x + this.width / 2 - this.width / 3.4,
       y: this.y - (this.height - (this.height / 3)),
+      height: this.height - (this.height / 3),
+      width: this.width * 0.7,
+      color: this.color,
+    })
+
+    mainCanvas.drawRect({
+      x: this.x + this.width / 2 - this.width / 3.4 + this.width / 4,
+      y: this.y - (this.height - (this.height / 3)) + this.height / 2,
       height: this.height - (this.height / 3),
       width: this.width * 0.7,
       color: this.color,

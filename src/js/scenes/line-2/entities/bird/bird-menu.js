@@ -5,24 +5,30 @@ class BirdMenu {
     this.mainCanvas = bird.mainCanvas
     this.bird = bird
     this.imageFx = new ImageFx(bird.mainCanvas.canvas, bird.mainCanvas.context)
-    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: 100, bgColor: '#000' })
+
 
     this.menuFields = {
       'stop-go': { values: ['stop', 'go'], value: 'stop', rect: {} },
       'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: {} },
-      'climb-dont': { values: ['climb', 'dont'], value: 'climb ', rect: {} },
+      'dont-climb': { values: ['dont', 'climb'], value: 'dont', rect: {} },
+      'dont-climb2': { values: ['dont', 'climb'], value: 'dont', rect: {} },
     }
 
     this.menuItems = [
       'stop-go',
       'slow-fast',
+      'dont-climb',
     ]
 
-    if (this.bird.bad) {
+    this.menuCanvas = (!this.bird.bad) ?
+      this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: this.menuItems.length * 30 + 25, bgColor: '#000' }) :
+      this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 30, height: 30 })
+
+    if (this.bird.speed.x > 0 || this.bird.speed.y > 0) {
       this.menuFields['stop-go'].value = 'go'
     }
 
-    this.addMenuFieldOnClick()
+    if (!this.bird.bad) this.addMenuFieldOnClick()
 
     if (!this.bird.bad && this.bird.type === 'bird' && !this.bird.preSpawned) {
       setTimeout(() => {
@@ -30,6 +36,12 @@ class BirdMenu {
         this.mainCanvas.selected = this.bird
         this.bird.selected = true
       }, 800)
+    }
+
+    if (this.bird.bad && this.bird.questionable) {
+      this.openMenu()
+      this.mainCanvas.selected = this.bird
+      this.bird.selected = true
     }
 
     this.fontSize = 18
@@ -104,9 +116,6 @@ class BirdMenu {
 
     const { x, y } = this.getMenuXy()
 
-    console.log(scale);
-
-
     const clickRect = {
       x: x + srcRect.x / scale,
       y: y + srcRect.y / scale,
@@ -133,18 +142,30 @@ class BirdMenu {
 
   drawMenu() {
     this.menuCanvas.context.fillStyle = '#000'
+
+    if (this.bird.bad && !this.bird.questionable) this.menuCanvas.context.fillStyle = (Math.sin(Date.now() / 100) > 0.1) ? 'red' : 'black'
+
     this.menuCanvas.context.fillRect(0, 0, this.menuCanvas.canvas.width, this.menuCanvas.canvas.height)
     const { x, y } = this.getMenuXy()
 
     this.drawMenuItems()
 
+    this.mainCanvas.context.save()
+
     this.mainCanvas.context.drawImage(this.menuCanvas.canvas, x, y)
+
+    this.mainCanvas.context.restore()
   }
 
   getMenuXy() {
     const { width } = this.menuCanvas.canvas
 
     let x = this.bird.x + this.bird.width / 2 - width / 2
+
+    if (!this.bird.bad) {
+      x = this.bird.x + this.bird.width + 10
+    }
+
     const y = this.bird.y - this.menuCanvas.canvas.height - 20
     const margin = 20
 
@@ -173,6 +194,15 @@ class BirdMenu {
     const { values, value } = field
 
     field.rect = this.drawMenuText(0, index, values, field)
+
+    const { context, canvas } = this.menuCanvas
+
+    if (field.value !== field.values[0]) {
+      context.fillRect(field.rect.x + 170, field.rect.y / this.mainCanvas.scaleInDom + 8, 20, 20)
+    } else {
+      context.strokeStyle = '#FFF'
+      context.strokeRect(field.rect.x + 170, field.rect.y / this.mainCanvas.scaleInDom + 8, 20, 20)
+    }
   }
 
   drawMenuText(x, y, text, field) {
@@ -181,15 +211,28 @@ class BirdMenu {
     const { fontSize, padding } = this
 
     context.fillStyle = (field.disabled) ? '#999' : '#FFF'
+    context.strokeStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
+    context.globalAlpha = 0.1
 
     this.totalWidth = 0
 
+    if (this.bird.bad) {
+      if (this.bird.questionable) {
+        context.fillText('?', 10, 21)
+      } else {
+        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? ' ' : '!', 10, 21)
+      }
+
+      return this.getTextRect(y)
+    }
+
     if (Array.isArray(text)) {
-      const textParts = text.join('// - //').split('//')
+      const textParts = [text[1].toUpperCase()]//text.join('// - //').split('//')
 
       textParts.forEach((textPart, index) => {
-        if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#999'
+        if (!field.disabled) context.fillStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
+        if (!field.disabled) context.strokeStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + fontSize + (fontSize * y))
 
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + 15 + (15 * y))

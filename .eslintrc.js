@@ -23,7 +23,7 @@ module.exports = {
       },
     },
 
-    "import/parser": "babel-eslint",
+    'import/parser': 'babel-eslint',
   },
 
   rules: {
@@ -58,6 +58,8 @@ module.exports = {
       { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*'},
       { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var']},
     ],
+
+    'prefer-const': ['error', { 'destructuring': 'all' }],
 
     'prefer-destructuring':  ['error', {
       'VariableDeclarator': {

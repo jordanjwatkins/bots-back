@@ -49,6 +49,8 @@ export default {
       color: yellow,
     })
 
+    if (this.sleeping) return
+
     // eyes
     if (this.heavy) {
       // Clear right eye overflow

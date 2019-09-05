@@ -10,7 +10,7 @@ class PulserMenu extends BirdMenu {
     this.scene = bird.scene
     this.bird = bird
     this.imageFx = new ImageFx(bird.mainCanvas.canvas, bird.mainCanvas.context)
-    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 200, bgColor: '#000' })
+    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 100, bgColor: '#000' })
 
     this.menuFields = {
       small: { values: ['small'], value: 'small', rect: {} },
@@ -45,8 +45,8 @@ class PulserMenu extends BirdMenu {
         console.log('click menu field', value)
         field.disabled = true
 
-        if (value === 'small') level.spawn(new Bird({ x: 860 - 70 * Math.random(), y: level.groundY - 20 }))
-        if (value === 'heavy') level.spawn(new Bird({ x: 860 - 90 * Math.random(), y: level.groundY - 40, width: 40, height: 40, heavy: true }))
+        if (value === 'small') level.spawn(new Bird({ x: 860 - 70 * Math.random(), y: level.startY - 20 }))
+        if (value === 'heavy') level.spawn(new Bird({ x: 860 - 90 * Math.random(), y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         setTimeout(() => {
           field.disabled = false

@@ -66,7 +66,7 @@ class Line2 {
   }
 
   get currentLevel() {
-    return this.storage.state.currentLevel
+    return this.storage.state.currentLevel || Object.values(this.levels)[0]
   }
 
   set currentLevel(newLevel) {
@@ -132,6 +132,8 @@ class Line2 {
       this.level = this.levels[savedLevel]()
     } else {
       console.log(`Failed to load level "${savedLevel}`) // eslint-disable-line no-console
+
+      this.level = Object.values(this.levels)[0]()
     }
   }
 
@@ -218,7 +220,7 @@ class Line2 {
 
     this.level.entities.unshift(new Cloud({
       x: Math.round(400 + ((this.mainCanvas.width / 2) * Math.random())),
-      y: Math.round(350 + (150 * Math.random())),
+      y: Math.round(50 + (150 * Math.random())),
       width: cloudSize,
       height: cloudSize * 0.3,
       speedX: 0.5 - 0.2 * Math.random(),
@@ -231,7 +233,23 @@ class Line2 {
       speedX: 0.5 - 0.2 * Math.random(),
     }))
 
-    this.pulser = new Pulser({ x: 880, y: 500 })
+    this.level.entities.unshift(new Cloud({
+      x: Math.round(-500 + ((this.mainCanvas.width / 2) * Math.random())),
+      y: Math.round(50 + (120 * Math.random())),
+      width: cloudSize,
+      height: cloudSize * 0.3,
+      speedX: 0.5 - 0.2 * Math.random(),
+    }))
+
+    this.level.entities.unshift(new Cloud({
+      x: Math.round(-400 + ((this.mainCanvas.width / 2) * Math.random())),
+      y: Math.round(50 + (20 * Math.random())),
+      width: cloudSize,
+      height: cloudSize * 0.3,
+      speedX: 0.5 - 0.2 * Math.random(),
+    }))
+
+    this.pulser = this.level.pulser || new Pulser({ x: 880, y: 500 })
     this.level.entities.unshift(this.pulser)
 
     this.lines = this.entities.filter(entity => entity.type === 'line')

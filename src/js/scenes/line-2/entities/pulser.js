@@ -167,7 +167,7 @@ class Pulser {
       const y1 = y + this.menu.menuCanvas.canvas.height
 
       const x2 = x + this.menu.menuCanvas.canvas.width / 2
-      const y2 = 480 - this.eyeOffset
+      const y2 = this.y - 18 - this.eyeOffset
 
       const x3 = x + this.menu.menuCanvas.canvas.width
       const y3 = y1

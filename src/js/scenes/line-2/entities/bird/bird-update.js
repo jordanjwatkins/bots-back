@@ -3,6 +3,10 @@ import Particles from '../particles'
 import ImageFx from '../../ImageFx'
 
 export default {
+  enemyFarAhead() {
+    return collisions(this, this.enemies, { x: 100 * this.directionX, y: 0 })
+  },
+
   enemyAhead() {
     return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0 })
   },
@@ -18,6 +22,14 @@ export default {
 
   update({ mainCanvas, entities, level, pulser }) {
     if (this.dead) return
+
+    if (this.isFrozen) {
+      this.speed.x = 0
+      this.fly()
+      this.draw(mainCanvas)
+
+      return
+    }
 
     this.mainCanvas = mainCanvas
     this.level = level
@@ -48,12 +60,13 @@ export default {
 
     this.updateOnOffBack(stopGo)
 
+
+
     let nextEnemies = this.enemyAhead()
     let nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
     if (nextEnemy) {
       this.speed.x = 0
-      //nextEnemy.speed.x = 0
     }
 
     if (!nextEnemy) {
@@ -61,6 +74,15 @@ export default {
       nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
       //console.log('!nextEnemy', nextEnemy);
+    }
+
+    if (this.bad && this.sleeping) {
+      let nextEnemies = this.enemyFarAhead()
+      let nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
+
+      if (nextEnemy) {
+        this.speed.x = 1
+      }
     }
 
     //nextEnemies = this.enemyHere()
@@ -117,7 +139,7 @@ export default {
     const y2 = y + ((x + this.menu.menuCanvas.canvas.width < 930) ? this.menu.menuCanvas.canvas.height : 0)
 
     const x3 = 930
-    const y3 = 480 - this.pulser.eyeOffset
+    const y3 = this.pulser.y - 18 - this.pulser.eyeOffset
 
     if (this.menu && this.menu.isMenuOpen) this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
 

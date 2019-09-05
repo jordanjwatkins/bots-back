@@ -1,6 +1,23 @@
 export default {
   closeMountableAllies() {
-    if (this.movingToBack || this.movingToGround || this.backOccupied) return
+    if (this.movingToBack || this.movingToGround || this.backOccupied || this.movingToTarget || this.movingOffPlatform) return
+
+    /*console.log('closemount', this.allies.filter((ally) => {
+
+      if (
+        !ally.movingToBack &&
+        !ally.movingToGround &&
+        !ally.backOccupied &&
+        !ally.dead &&
+        !ally.onPlatform &&
+
+        ally.x < this.x &&
+        Math.abs(this.x - ally.x) < 280 &&
+        Math.abs(Math.abs((this.y + this.height) - ally.y)) < 250
+      ) {
+        return ally
+      }
+    }));*/
 
     return this.allies.filter((ally) => {
       if (
@@ -8,10 +25,11 @@ export default {
         !ally.movingToGround &&
         !ally.backOccupied &&
         !ally.dead &&
+        !ally.onPlatform &&
 
         ally.x < this.x &&
-        this.x - ally.x < 80 &&
-        (this.y + this.height) - ally.y < 50
+        Math.abs(this.x - ally.x) < 280 &&
+        Math.abs(Math.abs((this.y + this.height) - ally.y)) < 250
       ) {
         return ally
       }
@@ -19,12 +37,15 @@ export default {
   },
 
   updateOnOffBack(stopGo) {
+    const climb = this.menu.getField('dont-climb').value === 'climb' || this.bad
+
     if (stopGo.value === 'go') {
       const filterAllies = this.closeMountableAllies()
 
       if (
         filterAllies &&
-        filterAllies[0]
+        filterAllies[0] &&
+        climb
       ) {
         console.log('moving to back')
 
@@ -94,8 +115,8 @@ export default {
       dx = Math.floor(dx)
       dy = Math.floor(dy)
 
-      console.log('moving to back', this.x, this.width, target.x, target.width);
-      console.log('move to back', dx, dy, target.x + target.width / 2, this.x + (this.width / 2), target);
+      //console.log('moving to back', this.x, this.width, target.x, target.width);
+      //console.log('move to back', dx, dy, target.x + target.width / 2, this.x + (this.width / 2), target);
 
 
       //if (dx === 0 && dy === 0) {
