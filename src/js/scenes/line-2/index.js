@@ -17,6 +17,8 @@ class Line2 {
   constructor() {
     // this.dev = new Dev(this)
 
+    this.skipFrames = 1
+
     this.debug = false
 
     this.gameDimensions = { width: 1000, height: 600 }

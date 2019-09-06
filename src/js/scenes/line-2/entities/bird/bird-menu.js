@@ -195,13 +195,15 @@ class BirdMenu {
 
     field.rect = this.drawMenuText(0, index, values, field)
 
-    const { context, canvas } = this.menuCanvas
+    const { context, canvas, scaleInDom } = this.menuCanvas
+
+    const scale = this.mainCanvas.scaleInDom
 
     if (field.value !== field.values[0]) {
-      context.fillRect(field.rect.x + 170, field.rect.y / this.mainCanvas.scaleInDom + 8, 20, 20)
+      context.fillRect(field.rect.x + 170, field.rect.y / scale + 4 - 2 * index, 20, 20)
     } else {
       context.strokeStyle = '#FFF'
-      context.strokeRect(field.rect.x + 170, field.rect.y / this.mainCanvas.scaleInDom + 8, 20, 20)
+      context.strokeRect(field.rect.x + 170, field.rect.y / scale + 4 - 2 * index, 20, 20)
     }
   }
 
@@ -252,11 +254,15 @@ class BirdMenu {
     const fontSize = this.fontSize
     const padding = this.padding
 
+    const scale = this.mainCanvas.scaleInDom
+
     //return { x: 0, y: (padding * 2 * y) + fontSize / 2 + (fontSize * y), width: 200, height: fontSize + padding / 2 }
 
    // return { x: 0, y: (15 + padding * 2) * y + 15 * y - y * 2, width: 220, height: 15 + padding * 2 }
 
-   return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: this.menuCanvas.canvas.width, height: 15 + padding * 2 }
+   //return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: this.menuCanvas.canvas.width, height: 15 + padding * 2 }
+
+   return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale, width: 200, height: 15 + padding * 2 }
   }
 }
 

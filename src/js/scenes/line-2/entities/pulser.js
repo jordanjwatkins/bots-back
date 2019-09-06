@@ -194,6 +194,7 @@ class Pulser {
 
     this.updateChargeProgress(scene)
 
+    // eye
     this.eyeOffset = this.eyeOffset || 1
 
     this.eyeOffset += 0.1
@@ -223,6 +224,25 @@ class Pulser {
       height: 5,
       color: 'blue',
     })
+
+    // pad
+    scene.mainCanvas.drawRect({
+      x: this.x - 60,
+      y: this.y + this.height - 5,
+      width: 40,
+      height: 5,
+      color: '#111',
+    })
+
+    scene.mainCanvas.drawRect({
+      x: this.x - 55,
+      y: this.y + this.height - 3,
+      width: 55,
+      height: 3,
+      color: '#333',
+    })
+
+
   }
 }
 

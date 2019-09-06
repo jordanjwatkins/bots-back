@@ -4,7 +4,7 @@ import ImageFx from '../../ImageFx'
 
 export default {
   enemyFarAhead() {
-    return collisions(this, this.enemies, { x: 100 * this.directionX, y: 0 })
+    return collisions(this, this.enemies, { x: 100 * this.directionX, y: 0, height: 200 })
   },
 
   enemyAhead() {
@@ -50,6 +50,10 @@ export default {
 
     const stopGo = this.menu.getField('stop-go')
 
+    if ((stopGo.value === 'go') && this.y + this.height === level.groundY - 5) {
+      this.y += 5
+    }
+
     if (stopGo.value === 'go') {
       this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 2 : 1) * this.directionX
       this.flying = true
@@ -58,9 +62,7 @@ export default {
       this.flying = false
     }
 
-    this.updateOnOffBack(stopGo)
-
-
+    if (!this.bad) this.updateOnOffBack(stopGo)
 
     let nextEnemies = this.enemyAhead()
     let nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
@@ -81,9 +83,14 @@ export default {
       let nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
       if (nextEnemy) {
-        this.speed.x = 1
+        this.sleeping = false
+
+        this.flying = true
       }
     }
+
+    // don't go below the ground
+    if (this.y + this.height > this.level.groundY) this.y = this.level.groundY - this.height
 
     //nextEnemies = this.enemyHere()
     //nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
@@ -103,7 +110,9 @@ export default {
 
     if (nextEnemy && nextEnemy.hp > 0 && this.hp > 0) {
       this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
-      this.hp -= 1
+
+     // this.hp -= 1
+      this.hp -= nextEnemy.damage
 
       this.jumpParticlesOn = true
       if (this.hp === 75 || this.hp === 50 || this.hp === 25) this.jumpParticles = null

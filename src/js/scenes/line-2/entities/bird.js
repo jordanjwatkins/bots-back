@@ -37,6 +37,11 @@ class Bird {
     Object.assign(this, defaults, props)
 
     this.initialY = this.y
+
+    if (this.bad) {
+      this.damage = 2
+      this.hp = 150
+    }
   }
 
   onClick = event => this.onClickFn(event)

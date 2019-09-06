@@ -1,8 +1,45 @@
 import * as sounds from './sounds'
 
-let zoom = 2;
+let zoom = 1 //4
+let slow = false
+
+let zoomingOut = false
+
+setTimeout(() => {
+  zoomingOut = true
+}, 3000)
+
+/*setTimeout(() => {
+  slow = true
+
+  setTimeout(() => {
+    slow = false
+  }, 2000)
+}, 8000)*/
+
+let skipFrames = 6
+let skippedFrames = 0
 
 function update(scene, delta, extras) {
+  if (slow) {
+    const val = Math.sin(Date.now() / 1)
+
+    if (val < 0) {
+      //return
+    }
+
+    scene.skipFrames = 6
+
+    if (skippedFrames < scene.skipFrames) {
+      skippedFrames += 1
+      return
+    } else {
+      skippedFrames = 1
+    }
+  } else {
+    scene.skipFrames = 1
+  }
+
   const { mainCanvas, entities, level } = scene
   const { groups } = level
 
@@ -77,8 +114,8 @@ function update(scene, delta, extras) {
 
 function zoomOut(mainCanvas) {
   // basic zoom out
-  if (zoom > 0) {
-    zoom -= 0.01
+  if (zoom > 0 && zoomingOut) {
+    zoom -= 0.05
   }
 
   if (zoom < 1) zoom = 1
@@ -92,6 +129,7 @@ function updateEntities(entities, scene, z, delta) {
   scene.flyingBirdCount = 0
 
   entities.forEach((entity) => {
+    //if (entity.isFrozen) slow = true
     if (entity.z === z) entity.update(scene, delta)
 
     if (entity.type === 'bird' && entity.flying) {

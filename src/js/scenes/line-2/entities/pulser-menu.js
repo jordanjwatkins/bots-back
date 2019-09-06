@@ -45,8 +45,8 @@ class PulserMenu extends BirdMenu {
         console.log('click menu field', value)
         field.disabled = true
 
-        if (value === 'small') level.spawn(new Bird({ x: 860 - 70 * Math.random(), y: level.startY - 20 }))
-        if (value === 'heavy') level.spawn(new Bird({ x: 860 - 90 * Math.random(), y: level.startY - 40, width: 40, height: 40, heavy: true }))
+        if (value === 'small') level.spawn(new Bird({ x: 830, y: level.startY - 20 }))
+        if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         setTimeout(() => {
           field.disabled = false
@@ -99,7 +99,7 @@ class PulserMenu extends BirdMenu {
     //console.log('y', y, 15 + (15 + padding * 2) * y);
 
 
-    return { x: -10, y: 10 + (15 + padding * 3 + 7) * y, width: 200, height: 15 + padding * 2 }
+    return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale, width: 200, height: 15 + padding * 2 }
   }
 
   getMenuXy() {

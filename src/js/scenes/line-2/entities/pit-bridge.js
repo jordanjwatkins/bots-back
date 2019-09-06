@@ -26,6 +26,8 @@ class PitBridge {
     this.type = 'platform'
 
     this.bridgeWidth = this.width
+
+    this.lineDashOffset = 0
   }
 
   getUpperRightCorner() {
@@ -35,18 +37,19 @@ class PitBridge {
     }
   }
 
-  drawSelectedRect(srcRect, offset = 2) {
+  drawSelectedRect(srcRect, offset = 0) {
    // const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
 
     //if (!this.offCanvases[cacheKey]) {
-      const lineWidth = 1
+      const lineWidth = 12
+      const { canvas, context } = this.offCanvas
 
       const rect = {
         width: srcRect.width + (offset * 2) + (lineWidth * 2),
         height: srcRect.height + (offset * 2) + (lineWidth * 2),
       }
 
-      const { canvas, context } = this.offCanvas
+      //const { canvas, context } = this.offCanvas
 
       const m = context.moveTo.bind(context)
       const l = context.lineTo.bind(context)
@@ -56,31 +59,95 @@ class PitBridge {
 
       context.lineWidth = lineWidth
       context.strokeStyle = '#000'
-      context.setLineDash([5, 3])
+      //context.setLineDash([5, 3])
 
       bp()
-      m(lineWidth, lineWidth)
-      l(rect.width - lineWidth, lineWidth)
+      m(lineWidth - 13, lineWidth - 5)
+      l(rect.width - 13 - lineWidth, lineWidth - 5)
 
       //cp()
     //}
 
     //const { canvas, context } = this.offCanvas
 
+    context.lineWidth = lineWidth
+    context.strokeStyle = '#555'
+    context.fillStyle = '#333'
+    //context.setLineDash([5, 3])
+
+    context.lineDashOffset = 0
     context.clearRect(0, 0, canvas.width, canvas.height)
+    context.setLineDash([0, 0])
     context.stroke()
+    context.setLineDash([5, 3])
+    context.strokeStyle = '#222'
+    context.stroke()
+    //context.fillRect()
+
+    context.lineWidth = 20
+    context.lineDashOffset = this.lineDashOffset
+    context.strokeRect(-20, 35, 250, 4)
 
     this.mainCanvas.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset, srcRect.y - offset, canvas.width, canvas.height)
 
-    //context.lineDashOffset += 0.1
+    this.lineDashOffset += 1.1
   }
+
+  drawSelectedRectNeat(srcRect, offset = 0) {
+    // const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
+
+     //if (!this.offCanvases[cacheKey]) {
+       const lineWidth = 5
+       const { canvas, context } = this.offCanvas
+
+       const rect = {
+         width: srcRect.width + (offset * 2) + (lineWidth * 2),
+         height: srcRect.height + (offset * 2) + (lineWidth * 2),
+       }
+
+       //const { canvas, context } = this.offCanvas
+
+       const m = context.moveTo.bind(context)
+       const l = context.lineTo.bind(context)
+       const bp = context.beginPath.bind(context)
+       const cp = context.closePath.bind(context)
+
+
+       context.lineWidth = lineWidth
+       context.strokeStyle = '#000'
+       context.setLineDash([5, 3])
+
+       bp()
+       m(lineWidth, lineWidth)
+       l(rect.width - lineWidth, lineWidth)
+
+       //cp()
+     //}
+
+     //const { canvas, context } = this.offCanvas
+
+     context.lineWidth = lineWidth
+     context.strokeStyle = '#fff'
+     context.setLineDash([5, 3])
+
+     context.lineDashOffset = 0
+     context.clearRect(0, 0, canvas.width, canvas.height)
+     context.stroke()
+
+     context.lineWidth = this.lineDashOffset
+     context.strokeRect(-20, 25, 250, 18)
+
+     this.mainCanvas.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset, srcRect.y - offset, canvas.width, canvas.height)
+
+     this.lineDashOffset += 1.1
+   }
 
   update(scene) {
     this.scene = scene
 
     this.mainCanvas = scene.mainCanvas
 
-    this.isOpen = Math.sin(Date.now() / 380) > 0.9
+    this.isOpen = Math.sin(Date.now() / 380 / scene.skipFrames) > 0.9
 
     this.targetWidth = (this.isOpen) ? 10 : this.width
 
@@ -105,7 +172,7 @@ class PitBridge {
         if (boxesCollide(this, entity, { y: -10, x: 25, width: -45 })) {
           //console.log('bird hit');
 
-          if (this.isOpen || (this.bridgeWidth < this.targetWidth)) {
+          if (this.isOpen || (this.bridgeWidth < this.width)) {
             //console.log('fall');
             entity.isFrozen = true
             entity.speed.y = 2
@@ -120,18 +187,22 @@ class PitBridge {
   }
 
   draw() {
+    this.mainCanvas.drawRect({ ...this, x: this.x - 10, width: this.width + 20, color: '#555' })
+
     this.mainCanvas.drawRect(this)
 
-    this.mainCanvas.drawRect({
+    /*this.mainCanvas.drawRect({
       ...this,
       color: 'blue',
       width: this.bridgeWidth,
       height: 10,
-    })
+    })*/
 
     this.drawSelectedRect({ ...this, width: this.bridgeWidth })
 
-    this.drawJumpParticles({ x: 40, y: -this.height })
+    this.drawJumpParticles({ x: -this.width / 2 - 6 * Math.random(), y: -this.height })
+
+
 
     if (!this.jumpTimer) {
       this.jumpTimer = 1
@@ -142,6 +213,16 @@ class PitBridge {
       this.jumpParticles = null
       this.jumpTimer = 1
     }
+
+    const val = Math.sin(Date.now() / 700)
+
+    if (val > 0 && val < 0.03) {
+      console.log('2');
+
+      this.jumpParticles2 = null
+    }
+
+    this.drawJumpParticles2({ x: -this.width / 2 + 6 * Math.random(), y: -this.height })
 
     /*this.mainCanvas.drawRect({
       ...this,

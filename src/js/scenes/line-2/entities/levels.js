@@ -10,11 +10,17 @@ export default (scene) => {
   const levels = {
     basics: () => {
       const groundY = 550
-      const startY = groundY
+      const startY = groundY - 5
 
-      const bird = new Bird({ x: 490, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, questionable: true, sleeping: true, wakeRadius: 100 })
+      const bird = new Bird({ x: 490, y: groundY - 80, bad: true, speed: { x: 0, y: 0 }, questionable: true, sleeping: true, })
       const bird2 = new Bird({ x: 150, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
       const bird3 = new Bird({ x: 50, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
+
+      const platform2 = new Platform({ x: 450, y: groundY - 60 })
+
+      bird.onPlatform = true
+      bird.host = platform2
+      bird.target = { entity: bird.host }
 
       return {
         groundY,
@@ -31,6 +37,7 @@ export default (scene) => {
         groups: {
           platforms: [
             new Platform({ x: 650, y: groundY - 60 }),
+            platform2,
           ],
         },
 
@@ -39,25 +46,26 @@ export default (scene) => {
         },
 
         update() {
-          if (bird.speed.x > 0) {
+          if (!bird.sleeping) {
             bird.questionable = false
 
-            bird.speed.x = 1
-            bird.menu.getField('stop-go').value = 'go'
-            bird.sleeping = false
+
+            //bird.sleeping = false
             bird.drew = false
             bird.questionable = false
 
             setTimeout(() => {
+              bird.speed.x = 1
+              bird.speed.y = 2
+              bird.menu.getField('stop-go').value = 'go'
+            }, 1000)
 
+            setTimeout(() => {
               bird2.sleeping = false
-
             }, 2000)
 
             setTimeout(() => {
-
               bird3.sleeping = false
-
             }, 4000)
 
             setTimeout(() => {
@@ -141,14 +149,7 @@ export default (scene) => {
         },
 
         update() {
-          if (!this.timeout) {
-            this.timeout = setInterval(() => {
-              const bird = new Bird({ x: -20, y: groundY - 20, bad: true })
 
-              // bird.menu.menuFields['stop-go'].value = 'go'
-              this.spawn(bird)
-            }, 15000)
-          }
         },
       }
     },
