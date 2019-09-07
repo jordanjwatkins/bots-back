@@ -150,6 +150,7 @@ class Line2 {
   }
 
   onClick = (event) => {
+    this.debug = true
     if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
 
     if (this.isPulserClick(event)) {
@@ -163,6 +164,7 @@ class Line2 {
 
     }
 
+    console.log('menus click', this.pulser, this.pulser.menu, this.pulser.menu.isMenuClick(event))
     if (this.pulser && this.pulser.menu && this.pulser.menu.isMenuClick(event)) {
       console.log('menus click')
 

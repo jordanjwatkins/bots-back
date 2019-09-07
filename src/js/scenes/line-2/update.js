@@ -1,6 +1,6 @@
-import * as sounds from './sounds'
-
-let zoom = 1 //4
+//import * as sounds from './sounds'
+import knote from '../../libs/knote'
+/*let zoom = 1 //4
 let slow = false
 
 let zoomingOut = false
@@ -8,7 +8,7 @@ let zoomingOut = false
 setTimeout(() => {
   zoomingOut = true
 }, 3000)
-
+*/
 /*setTimeout(() => {
   slow = true
 
@@ -17,11 +17,11 @@ setTimeout(() => {
   }, 2000)
 }, 8000)*/
 
-let skipFrames = 6
-let skippedFrames = 0
+//let skipFrames = 6
+//let skippedFrames = 0
 
 function update(scene, delta, extras) {
-  if (slow) {
+  /*if (slow) {
     const val = Math.sin(Date.now() / 1)
 
     if (val < 0) {
@@ -38,7 +38,7 @@ function update(scene, delta, extras) {
     }
   } else {
     scene.skipFrames = 1
-  }
+  }*/
 
   const { mainCanvas, entities, level } = scene
   const { groups } = level
@@ -72,7 +72,7 @@ function update(scene, delta, extras) {
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
-  zoomOut(mainCanvas)
+  //zoomOut(mainCanvas)
 
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
@@ -95,7 +95,7 @@ function update(scene, delta, extras) {
   // mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
 
   // win scene
-  if (scene.flyingBirdCount === scene.birdCount) {
+  /*if (scene.flyingBirdCount === scene.birdCount) {
     if (scene.allFlying) return
 
     const fired = scene.pulser.pulsesFiredCount
@@ -109,10 +109,10 @@ function update(scene, delta, extras) {
     setTimeout(() => {
       sounds.quickEnd()
     }, 500)
-  }
+  }*/
 }
 
-function zoomOut(mainCanvas) {
+/*function zoomOut(mainCanvas) {
   // basic zoom out
   if (zoom > 0 && zoomingOut) {
     zoom -= 0.05
@@ -121,7 +121,7 @@ function zoomOut(mainCanvas) {
   if (zoom < 1) zoom = 1
 
   mainCanvas.context.drawImage(mainCanvas.canvas, -((mainCanvas.canvas.width * zoom) / 2) - (zoom - 2) * 500, -((mainCanvas.canvas.height * zoom) / 2) - (zoom - 2) * 300, mainCanvas.canvas.width * zoom, mainCanvas.canvas.height * zoom)
-}
+}*/
 
 function updateEntities(entities, scene, z, delta) {
   if (!entities) return

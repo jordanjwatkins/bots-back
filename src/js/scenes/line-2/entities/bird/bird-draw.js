@@ -10,7 +10,7 @@ export default {
       color: this.color,
     })
 
-    if (this.absorber) {
+    /*if (this.absorber) {
       this.offCanvas.drawRect({
         x: 0,
         y: 0 + this.height - 4,
@@ -28,7 +28,7 @@ export default {
         height: 8,
         color: this.color,
       })
-    }
+    }*/
 
     const yellow = '#FBF236'
 

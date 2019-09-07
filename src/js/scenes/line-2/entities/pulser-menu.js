@@ -106,7 +106,7 @@ class PulserMenu extends BirdMenu {
 
     //console.log('y', y, 15 + (15 + padding * 2) * y);
 
-    console.log(fontSize, padding, scale, y);
+    //console.log(fontSize, padding, scale, y);
 
 
 

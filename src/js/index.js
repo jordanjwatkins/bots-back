@@ -1,5 +1,5 @@
 //import audioUnlock from '@aneutralgiraffe/audio-unlock-splash'
-import knote from './libs/knote'
+//import knote from './libs/knote'
 import Line2 from './scenes/line-2'
 
 const scenes = {

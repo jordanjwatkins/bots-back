@@ -103,9 +103,9 @@ class BirdMenu {
       width: this.menuCanvas.canvas.width,
     }
 
-    const debug2 = false
+    const debug2 = true
 
-    if (debug2 && this.bird.width === 20) {
+    if (debug2 && this.bird.width !== 20) {
       this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 10)
     }
 
@@ -193,7 +193,7 @@ class BirdMenu {
     this.menuItems.forEach((fieldKey, index) => {
       const field = this.menuFields[fieldKey]
 
-      console.log('menu item:', this.menuFields, fieldKey);
+      //console.log('menu item:', this.menuFields, fieldKey);
 
 
       if (field.hot || this.bird.occupied) {

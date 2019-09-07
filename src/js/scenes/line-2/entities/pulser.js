@@ -1,6 +1,6 @@
-import * as sounds from '../sounds'
-import Pulse from './pulse'
-import PulserMenu from './pulser-menu';
+//import * as sounds from '../sounds'
+//import Pulse from './pulse'
+import PulserMenu from './pulser-menu'
 
 class Pulser {
   constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 3, chargeSpeed = 4 }) {
@@ -35,7 +35,7 @@ class Pulser {
     this.menu.destroy()
   }
 
-  canPulse() {
+  /*canPulse() {
     return (this.chargeCount > 0)
   }
 
@@ -56,7 +56,7 @@ class Pulser {
         y: lineToPulse.y,
       })
     ))
-  }
+  }*/
 
   updateChargeProgress(scene) {
     const { mainCanvas } = scene
@@ -140,7 +140,7 @@ class Pulser {
 
       //console.log(parseInt(this.mainCanvas.globalAlpha), savedAlpha, savedAlpha + parseInt(scene.mainCanvas.globalAlpha) - 0.1);
 
-      const temp = parseInt(scene.mainCanvas.globalAlpha) - 1
+      //const temp = parseInt(scene.mainCanvas.globalAlpha) - 1
 
 
       //scene.mainCanvas.context.globalAlpha = temp

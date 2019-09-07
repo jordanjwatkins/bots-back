@@ -105,7 +105,7 @@ export default {
     }
 
     if (nextEnemy) { //this.bad &&
-      console.log(nextEnemy, this.movingToGround, this.movingOffPlatform);
+      //console.log(nextEnemy, this.movingToGround, this.movingOffPlatform);
 
       if (this.movingToGround || this.movingOffPlatform) {
         this.movingToGround = false

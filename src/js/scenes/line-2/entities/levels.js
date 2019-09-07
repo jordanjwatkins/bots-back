@@ -156,45 +156,47 @@ export default (scene) => {
       }
     },
 
-    stackTests: () => {
-      const groundY = 550
+    /*
+      stackTests: () => {
+        const groundY = 550
 
-      return {
-        groundY,
-        entities: [
+        return {
+          groundY,
+          entities: [
 
-          new Bird({ x: 10, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
-          new Bird({ x: 70, y: groundY - 20, preSpawned: true }),
-          new Bird({ x: 100, y: groundY - 20, preSpawned: true }),
+            new Bird({ x: 10, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
+            new Bird({ x: 70, y: groundY - 20, preSpawned: true }),
+            new Bird({ x: 100, y: groundY - 20, preSpawned: true }),
 
-          new Bird({ x: 580, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
+            new Bird({ x: 580, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
 
-          new Bird({ x: 770, y: groundY - 20, preSpawned: true }),
-          new Bird({ x: 960, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
-        ],
-
-        groups: {
-          platforms: [
-            new Platform({ x: 650, y: groundY - 60 }),
+            new Bird({ x: 770, y: groundY - 20, preSpawned: true }),
+            new Bird({ x: 960, y: groundY - 50, heavy: true, width: 50, height: 50, preSpawned: true }),
           ],
-        },
 
-        spawn(entity) {
-          this.entities.push(entity)
-        },
+          groups: {
+            platforms: [
+              new Platform({ x: 650, y: groundY - 60 }),
+            ],
+          },
 
-        update() {
-          if (!this.timeout) {
-            this.timeout = setInterval(() => {
-              const bird = new Bird({ x: -20, y: groundY - 20, bad: true })
+          spawn(entity) {
+            this.entities.push(entity)
+          },
 
-              // bird.menu.menuFields['stop-go'].value = 'go'
-              this.spawn(bird)
-            }, 15000)
-          }
-        },
-      }
-    },
+          update() {
+            if (!this.timeout) {
+              this.timeout = setInterval(() => {
+                const bird = new Bird({ x: -20, y: groundY - 20, bad: true })
+
+                // bird.menu.menuFields['stop-go'].value = 'go'
+                this.spawn(bird)
+              }, 15000)
+            }
+          },
+        }
+      },
+    */
   }
 
   return levels

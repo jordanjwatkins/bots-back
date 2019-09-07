@@ -1,4 +1,4 @@
-import images from './images'
+//import images from './images'
 import ImageFx from './ImageFx'
 
 class MainCanvas {
@@ -30,7 +30,22 @@ class MainCanvas {
   }
 
   get boundingRect() {
-    return this.canvas.getBoundingClientRect()
+    const boundingRect = this.canvas.getBoundingClientRect()
+
+    // Support for Edge
+    if (Number.isFinite(boundingRect.left)) {
+
+      const { left, top, width, height } = boundingRect
+
+      return {
+        x: left,
+        y: top,
+        width,
+        height,
+      }
+    }
+
+    return boundingRect
   }
 
   set opacity(value) {
@@ -44,6 +59,8 @@ class MainCanvas {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
+  /*
+    wombat
   testRect(color) {
     this.context.fillStyle = color || '#000'
 
@@ -65,7 +82,7 @@ class MainCanvas {
 
   rotateThing(thing) {
     this.context.rotateThing(thing.rotation * (Math.PI / 180))
-  }
+  }*/
 
   drawRect({ x, y, color, width = 30, height = 60 }) {
     this.context.fillStyle = color || '#000'
@@ -73,8 +90,9 @@ class MainCanvas {
     this.context.fillRect(x, y, width, height)
   }
 
+
   drawThing(thing, frame = 0) {
-    if (thing.spriteName) thing.sprite = images[thing.spriteName]
+    if (thing.spriteName) return;//wombat thing.sprite = images[thing.spriteName]
 
     if (!thing.sprite) return
 
@@ -120,9 +138,13 @@ class MainCanvas {
   isClickHit(event, clickRect, scale = 1) {
     const canvasRect = this.boundingRect
 
+    //console.log('bounding',this.boundingRect, this.boundingRect.y);
+
+
     //console.log('lick hit y1', event.pageY, canvasRect.y + clickRect.y + clickRect.height, event.pageY < canvasRect.y + clickRect.y + clickRect.height);
     //console.log('lick hit y2', event.pageY, canvasRect.y + clickRect.y, event.pageY > canvasRect.y + clickRect.y);
 
+    //console.log(event.pageY, canvasRect.y, clickRect.y, scale);
 
     return (
       event.pageY < canvasRect.y + clickRect.y * scale + clickRect.height * scale &&
@@ -189,7 +211,9 @@ class MainCanvas {
     return lines
   }
 
-  drawRollingLine() {
+  /*
+    wombat
+    drawRollingLine() {
     const { canvas, context } = this
 
     const vh = canvas.height
@@ -261,7 +285,7 @@ class MainCanvas {
     context.stroke()
 
     context.restore()
-  }
+  }*/
 
   drawRollingLineReversed() {
     const { canvas, context } = this
@@ -351,7 +375,7 @@ class MainCanvas {
     this.scanlinesCanvas = canvas
   }
 
-  drawStar(x, y, color, size) {
+  /*drawStar(x, y, color, size) {
     const { context } = this
 
     context.save()
@@ -393,9 +417,9 @@ class MainCanvas {
     context.fill()
 
     context.restore()
-  }
+  }*/
 
-  drawTriangle(x, y, scale, flip = false) {
+  /*drawTriangle(x, y, scale, flip = false) {
     const { context } = this
 
     const colorPrimary = '#000'
@@ -451,7 +475,7 @@ class MainCanvas {
     context.fill()
 
     context.restore()
-  }
+  }*/
 
   drawTriangleFromPoints(points, scale, flip = false) {
     const { context } = this
@@ -463,8 +487,6 @@ class MainCanvas {
     if (Math.random() > 0.2) this.globalAlpha = '0.2'
     if (Math.random() > 0.9) this.globalAlpha = '0.25'
     if (Math.random() > 0.9) this.globalAlpha = '0.3'
-
-
 
     context.save()
 
