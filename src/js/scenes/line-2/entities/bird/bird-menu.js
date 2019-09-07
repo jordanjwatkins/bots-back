@@ -16,8 +16,8 @@ class BirdMenu {
 
     this.menuItems = [
       'stop-go',
-      'slow-fast',
-      'dont-climb',
+      //'slow-fast',
+      //'dont-climb',
     ]
 
     this.menuCanvas = (!this.bird.bad) ?
@@ -59,9 +59,13 @@ class BirdMenu {
   }
 
   addMenuFieldOnClick() {
+    console.log('add menu field');
+
     this.onMenuFieldClickHandler = event => this.onMenuFieldClick(event)
 
     this.mainCanvas.canvas.addEventListener('click', this.onMenuFieldClickHandler)
+
+    console.log('add menu field', this.onMenuFieldClickHandler);
   }
 
   removeMenuFieldOnClick() {
@@ -69,9 +73,11 @@ class BirdMenu {
   }
 
   onMenuFieldClick(event) {
+    console.log('click menu field')
     this.menuItems.forEach((fieldKey) => {
       const field = this.menuFields[fieldKey]
       const { rect } = field
+      console.log('click menu field', field.value)
 
       if (this.isMenuFieldClick(event, rect) && !field.disabled) {
         console.log('click menu field', field.value)
@@ -141,6 +147,7 @@ class BirdMenu {
   }
 
   drawMenu() {
+    if (this.bird.dead) return
     this.menuCanvas.context.fillStyle = '#000'
 
     if (this.bird.bad && !this.bird.questionable) this.menuCanvas.context.fillStyle = (Math.sin(Date.now() / 100) > 0.1) ? 'red' : 'black'
@@ -185,6 +192,15 @@ class BirdMenu {
   drawMenuItems() {
     this.menuItems.forEach((fieldKey, index) => {
       const field = this.menuFields[fieldKey]
+
+      console.log('menu item:', this.menuFields, fieldKey);
+
+
+      if (field.hot || this.bird.occupied) {
+        field.disabled = true
+      } else {
+        field.disabled = false
+      }
 
       this.drawMenuItem(index, fieldKey, field)
     })

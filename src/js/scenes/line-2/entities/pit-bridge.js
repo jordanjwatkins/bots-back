@@ -93,7 +93,7 @@ class PitBridge {
     this.lineDashOffset += 1.1
   }
 
-  drawSelectedRectNeat(srcRect, offset = 0) {
+  /*drawSelectedRectNeat(srcRect, offset = 0) {
     // const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
 
      //if (!this.offCanvases[cacheKey]) {
@@ -140,7 +140,7 @@ class PitBridge {
      this.mainCanvas.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset, srcRect.y - offset, canvas.width, canvas.height)
 
      this.lineDashOffset += 1.1
-   }
+   }*/
 
   update(scene) {
     this.scene = scene
@@ -201,8 +201,6 @@ class PitBridge {
     this.drawSelectedRect({ ...this, width: this.bridgeWidth })
 
     this.drawJumpParticles({ x: -this.width / 2 - 6 * Math.random(), y: -this.height })
-
-
 
     if (!this.jumpTimer) {
       this.jumpTimer = 1

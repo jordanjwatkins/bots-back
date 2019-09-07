@@ -69,6 +69,8 @@ class Pulser {
 
     if (this.chargeCount < this.maxChargeCount) this.chargeProgress += this.chargeSpeed
 
+    if (this.dead) this.chargeCount -= 1
+
     this.drawChargeProgress(mainCanvas)
     this.drawCharges(mainCanvas)
   }
@@ -81,7 +83,9 @@ class Pulser {
     const chunkCount = Math.floor(this.chargeProgress / progressIndicatorCount)
 
     for (let i = 0; i < progressIndicatorCount - 1; i++) {
-      const color = (i >= chunkCount) ? '#111' : 'yellow'
+      let color = (i >= chunkCount) ? '#111' : 'yellow'
+
+      if (this.dead && !(i >= chunkCount)) color = 'red'
 
       mainCanvas.drawRect({
         x: this.x + 6 + chunkWidth * i + gutterWidth * i,
@@ -184,7 +188,7 @@ class Pulser {
       const x3 = x + this.menu.menuCanvas.canvas.width
       const y3 = y1*/
 
-      scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
+      if (!this.dead) scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
       //scene.mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
 
       //scene.mainCanvas.drawTriangleFromPoints([{ x: 100, y: 300 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 1)
@@ -200,6 +204,11 @@ class Pulser {
     this.eyeOffset += 0.1
 
     if (this.eyeOffset > 100) this.eyeOffset = 100
+
+    if (this.dead) {
+      this.eyeOffset -= 5
+      if (this.eyeOffset < 0) this.eyeOffset = 0
+    }
 
     scene.mainCanvas.drawRect({
       x: this.x + this.width / 2 - 2,
@@ -222,7 +231,7 @@ class Pulser {
       y: this.y - 17 - Math.round(this.eyeOffset),
       width: 30,
       height: 5,
-      color: 'blue',
+      color: (this.dead) ? 'black' : 'blue',
     })
 
     // pad

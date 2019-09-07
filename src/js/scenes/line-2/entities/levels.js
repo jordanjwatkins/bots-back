@@ -1,5 +1,4 @@
 import Bird from './bird'
-import Line from './line'
 import Platform from './platform'
 import PitBridge from './pit-bridge'
 import Pulser from './pulser'
@@ -13,8 +12,8 @@ export default (scene) => {
       const startY = groundY - 5
 
       const bird = new Bird({ x: 490, y: groundY - 80, bad: true, speed: { x: 0, y: 0 }, questionable: true, sleeping: true, })
-      const bird2 = new Bird({ x: 150, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
-      const bird3 = new Bird({ x: 50, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
+      const bird2 = new Bird({ x: 270, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
+      const bird3 = new Bird({ x: 170, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
 
       const platform2 = new Platform({ x: 450, y: groundY - 60 })
 
@@ -38,19 +37,21 @@ export default (scene) => {
           platforms: [
             new Platform({ x: 650, y: groundY - 60 }),
             platform2,
+            //new Platform({ x: 430, y: groundY - 30, width: 20 }), // power up (climb?/sprint?)
           ],
         },
 
         spawn(entity) {
           this.entities.push(entity)
+
+          setTimeout(() => {
+            entity.pulser.occupied = true
+          }, 100)
         },
 
         update() {
-          if (!bird.sleeping) {
-            bird.questionable = false
-
-
-            //bird.sleeping = false
+          if (!bird.sleeping && !bird.awake) {
+            bird.awake = true
             bird.drew = false
             bird.questionable = false
 
@@ -58,6 +59,7 @@ export default (scene) => {
               bird.speed.x = 1
               bird.speed.y = 2
               bird.menu.getField('stop-go').value = 'go'
+              bird.movingToGround = true
             }, 1000)
 
             setTimeout(() => {

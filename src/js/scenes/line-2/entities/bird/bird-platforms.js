@@ -177,6 +177,7 @@ export default {
       console.log('platform exit')
 
       this.movingToTarget = true
+      this.movingOffPlatform = true
 
       this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
 

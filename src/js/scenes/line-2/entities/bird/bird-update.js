@@ -8,7 +8,11 @@ export default {
   },
 
   enemyAhead() {
-    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0 })
+    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0, height: 200 })
+  },
+
+  allyAhead() {
+    return collisions(this, this.allies, { x: 10 * this.directionX, y: 0 })
   },
 
   enemyHere() {
@@ -21,7 +25,22 @@ export default {
   },
 
   update({ mainCanvas, entities, level, pulser }) {
-    if (this.dead) return
+    if (this.dead) {
+      if (this.hp > -40) {
+        if (!this.splat) {
+          this.jumpParticlesOn = true
+          this.jumpParticles = null
+          this.splat = true
+        }
+
+        this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
+        this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
+      }
+
+      this.hp -= 1
+
+      return
+    }
 
     if (this.isFrozen) {
       this.speed.x = 0
@@ -50,8 +69,22 @@ export default {
 
     const stopGo = this.menu.getField('stop-go')
 
+    // jump down from spawner
     if ((stopGo.value === 'go') && this.y + this.height === level.groundY - 5) {
       this.y += 5
+
+      this.clearingSpawner = true
+
+      //this.pulser.occupied = false
+    }
+
+    if (this.clearingSpawner) {
+      if (this.x < 800) {
+        console.log('cleared');
+
+        this.pulser.occupied = false
+        this.clearingSpawner = false
+      }
     }
 
     if (stopGo.value === 'go') {
@@ -69,6 +102,19 @@ export default {
 
     if (nextEnemy) {
       this.speed.x = 0
+    }
+
+    if (nextEnemy) { //this.bad &&
+      console.log(nextEnemy, this.movingToGround, this.movingOffPlatform);
+
+      if (this.movingToGround || this.movingOffPlatform) {
+        this.movingToGround = false
+
+        console.log('instakill');
+
+        nextEnemy.hp = 0
+      }
+
     }
 
     if (!nextEnemy) {
@@ -89,15 +135,22 @@ export default {
       }
     }
 
+    let nextAllies = this.allyAhead()
+    let nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
+
     // don't go below the ground
     if (this.y + this.height > this.level.groundY) this.y = this.level.groundY - this.height
 
     //nextEnemies = this.enemyHere()
     //nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
-    if (nextEnemy) {
+    if (nextEnemy || nextAlly || (this.bad && this.x > 900)) {
       this.speed.x = 0
     // nextEnemy.speed.x = 0
+    }
+
+    if (this.bad && this.x > 900) {
+      this.pulser.dead = true
     }
 
     this.updatePlatforms()
@@ -108,13 +161,14 @@ export default {
 
     if (this.jumpParticlesOn) this.drawJumpParticles()
 
-    if (nextEnemy && nextEnemy.hp > 0 && this.hp > 0) {
+    if ((this.bad && this.x > 900) || nextEnemy && nextEnemy.hp > 0 && this.hp > 0) {
       this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
 
-     // this.hp -= 1
-      this.hp -= nextEnemy.damage
+      // this.hp -= 1
+      if (nextEnemy && nextEnemy.damage) this.hp -= nextEnemy.damage
 
       this.jumpParticlesOn = true
+
       if (this.hp === 75 || this.hp === 50 || this.hp === 25) this.jumpParticles = null
     }
 

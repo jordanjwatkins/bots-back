@@ -10,9 +10,10 @@ class PulserMenu extends BirdMenu {
     this.scene = bird.scene
     this.bird = bird
     this.imageFx = new ImageFx(bird.mainCanvas.canvas, bird.mainCanvas.context)
-    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 100, bgColor: '#000' })
+    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 60, bgColor: '#000' })
 
     this.menuFields = {
+      'spawn-1': { values: ['spawn'], value: 'spawn', rect: {} },
       small: { values: ['small'], value: 'small', rect: {} },
       heavy: { values: ['heavy'], value: 'heavy', rect: {} },
       small2: { values: ['small'], value: 'small', rect: {} },
@@ -22,8 +23,8 @@ class PulserMenu extends BirdMenu {
     }
 
     this.menuItems = [
-      'small',
-      'heavy',
+      'spawn-1',
+      //'heavy',
       //'heavy2',
       //'small2',
       //'small3',
@@ -35,21 +36,28 @@ class PulserMenu extends BirdMenu {
     const { scene } = this
     const { level } = scene
 
+    console.log('onMenuFieldClick');
+
+
     this.menuItems.forEach((fieldKey) => {
       const field = this.menuFields[fieldKey]
       const { rect } = field
+
+      console.log('onMenuFieldClick', fieldKey, field, rect);
 
       if (this.isMenuFieldClick(event, rect) && !field.disabled) {
         const { value } = field
 
         console.log('click menu field', value)
+        field.hot = true
         field.disabled = true
+        //field.blocked = true
 
-        if (value === 'small') level.spawn(new Bird({ x: 830, y: level.startY - 20 }))
+        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 20 }))
         if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         setTimeout(() => {
-          field.disabled = false
+          field.hot = false
         }, 2000)
       }
     })
@@ -97,6 +105,9 @@ class PulserMenu extends BirdMenu {
     //return { x: 0, y: (padding * 2 * y) + fontSize / 2 + (fontSize * y), width: 200, height: fontSize + padding / 2 }
 
     //console.log('y', y, 15 + (15 + padding * 2) * y);
+
+    console.log(fontSize, padding, scale, y);
+
 
 
     return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale, width: 200, height: 15 + padding * 2 }

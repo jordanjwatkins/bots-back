@@ -13,6 +13,8 @@ import levels from './entities/levels'
 
 // import Dev from './dev'
 
+const levelSelect = true
+
 class Line2 {
   constructor() {
     // this.dev = new Dev(this)
@@ -200,7 +202,7 @@ class Line2 {
     this.sceneContainer = dom.make('<div class="scene-container"><div></div></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
-    if (this.dev && this.dev.levelSelect) this.dev.levelSelect()
+    //if (this.dev && this.dev.levelSelect) this.dev.levelSelect()
 
     document.body.appendChild(this.sceneContainer)
   }
@@ -256,8 +258,10 @@ class Line2 {
 
     this.lines = this.entities.filter(entity => entity.type === 'line')
 
-    this.levelSelect = this.levelSelect || new LevelSelect(this)
-    this.level.entities.push(this.levelSelect)
+    if (levelSelect) {
+      this.levelSelect = this.levelSelect || new LevelSelect(this)
+      this.level.entities.push(this.levelSelect)
+    }
   }
 
   freshStart() {
@@ -279,7 +283,7 @@ class Line2 {
   startNextLevel() {
     this.currentLevel = this.nextLevel
 
-    this.levelSelect.updateSquadNextX(this.currentLevel)
+    if (this.levelSelect) this.levelSelect.updateSquadNextX(this.currentLevel)
 
     this.freshStart()
   }

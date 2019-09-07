@@ -49,6 +49,7 @@ class ImageFx {
     this.strokeRect({ x: 0, y: 0, color: 'red', width: this.canvas.width, height: this.canvas.height })
   }
 
+  // stroke rect instead of drawing path?
   drawSelectedRect(srcRect, offset = 2) {
     const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
 
@@ -92,7 +93,7 @@ class ImageFx {
   }
 
   noise(offsetX, offsetY) {
-    if (!this.offCanvases.c1) {
+    if (!this.offCanvases['c1']) {
       // the noise canvases are a bit larger than the destination canvas so they can be offset randomly and still fill the destination canvas
       const { canvas, context } = this.initOffCanvas({ key: 'c1', bgColor: '#FFF', width: this.canvas.width + 50, height: this.canvas.height + 50 })
       const { canvas: canvas2, context: context2 } = this.initOffCanvas({ key: 'c2', bgColor: '#000', width: this.canvas.width + 50, height: this.canvas.height + 50 })
@@ -125,11 +126,11 @@ class ImageFx {
 
     this.context.globalAlpha = alpha
 
-    this.context.drawImage(this.offCanvases.c1.canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
+    this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
 
     this.context.globalAlpha = alpha
 
-    this.context.drawImage(this.offCanvases.c2.canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
+    this.context.drawImage(this.offCanvases['c2'].canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
 
     //this.context.drawImage(this.offCanvases.c3.canvas, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
 
@@ -137,7 +138,7 @@ class ImageFx {
   }
 
   vignette() {
-    if (!this.offCanvases.v1) {
+    if (!this.offCanvases['v1']) {
       const { canvas, context } = this.initOffCanvas({ key: 'v1' })
 
       // Transform to facilitate ellipse
@@ -155,12 +156,12 @@ class ImageFx {
       context.fillRect(0, 0, canvas.width, canvas.height)
     }
 
-    const { canvas } = this.offCanvases.v1
+    const { canvas } = this.offCanvases['v1']
 
     this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, -80, 0, this.canvas.width + 160, this.canvas.height)
   }
 
-  hueShift(imageData, frames = 1) {
+  /*hueShift(imageData, frames = 1) {
     eachPixel(imageData, ({ x, y, pixelIndex }) => {
       const pixels = imageData.data
       const i = pixelIndex
@@ -187,7 +188,7 @@ class ImageFx {
     })
 
     return imageData
-  }
+  }*/
 
   applyNoise(imageData, frames = 1) {
     if (!this.noiseMap) this.noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height, frames)
