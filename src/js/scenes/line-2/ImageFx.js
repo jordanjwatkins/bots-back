@@ -51,8 +51,56 @@ class ImageFx {
     this.strokeRect({ x: 0, y: 0, color: 'red', width: this.canvas.width, height: this.canvas.height })
   }
 
-  // stroke rect instead of drawing path?
+  // offset is outward for positive, inward for negative
   drawSelectedRect(srcRect, offset = 2) {
+    const lineWidth = 2
+
+    const { context } = this
+
+    context.lineWidth = lineWidth
+    context.strokeStyle = '#111'
+    context.setLineDash([5, 3])
+
+    context.strokeRect(
+      srcRect.x - offset - lineWidth,
+      srcRect.y - offset - lineWidth,
+      srcRect.width + offset * 2 + lineWidth * 2,
+      srcRect.height + offset * 2 + lineWidth * 2,
+    )
+
+    context.lineDashOffset += 0.1
+  }
+
+  /*drawSelectedRect3(srcRect, offset = 2) {
+    const cacheKey = `W${srcRect.width}H${srcRect.height}O${offset}`
+    const lineWidth = 2
+
+    const rect = {
+      width: srcRect.width + (offset * 2) + (lineWidth * 2),
+      height: srcRect.height + (offset * 2) + (lineWidth * 2),
+    }
+
+    if (!this.offCanvases[cacheKey]) {
+
+      const { context } = this.initOffCanvas({ key: cacheKey, width: rect.width, height: rect.height })
+
+      context.lineWidth = lineWidth
+      context.strokeStyle = '#000'
+      context.setLineDash([5, 3])
+    }
+
+    const { canvas, context } = this.offCanvases[cacheKey]
+
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.strokeRect(lineWidth, lineWidth, rect.width - lineWidth * 2, rect.height - lineWidth * 2)
+    //context.stroke()
+
+    this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset - lineWidth, srcRect.y - offset - lineWidth, canvas.width, canvas.height)
+
+    context.lineDashOffset += 0.1
+  }*/
+
+  /*drawSelectedRect2(srcRect, offset = 2) {
     const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
 
     if (!this.offCanvases[cacheKey]) {
@@ -86,7 +134,7 @@ class ImageFx {
     this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset, srcRect.y - offset, canvas.width, canvas.height)
 
     context.lineDashOffset += 0.1
-  }
+  }*/
 
   noise(offsetX, offsetY) {
     if (!this.offCanvases['c1']) {
@@ -100,29 +148,6 @@ class ImageFx {
 
     this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, this.canvas.height, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
   }
-
-  /*
-  // cached version (slightly larger code)
-  vignette2() {
-    if (!this.offCanvases['v1']) {
-      const { canvas, context } = this.initOffCanvas({ key: 'v1' })
-
-      // Create gradient
-      const gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2)
-
-      // Add colors
-      gradient.addColorStop(0.9, 'rgba(0,0,0,0)')
-      gradient.addColorStop(1, 'rgba(0,0,0,0.3)')
-
-      // Fill with gradient
-      context.fillStyle = gradient
-      context.fillRect(0, 0, canvas.width, canvas.height)
-    }
-
-    const { canvas } = this.offCanvases['v1']
-
-    this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, -80, 0, this.canvas.width + 160, this.canvas.height)
-  }*/
 
   vignette() {
     // Create gradient
@@ -141,92 +166,29 @@ class ImageFx {
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  applyNoise(imageData, frames = 1) {
-    if (!this.noiseMap) this.noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height, frames)
+  applyNoise(imageData) {
+    const noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height)
 
-    // console.log(imageData.width);
-
-    eachPixel(imageData, ({ x, y, pixelIndex }) => {
-      const pixels = imageData.data
-      const i = pixelIndex
-
-      const frameWidth = imageData.width / frames
-      const frameX = (x % frameWidth)
-
-      const p = Math.floor(frameX + y * frameWidth)
-
-      const r = pixels[i]
-      const g = pixels[i + 1]
-      const b = pixels[i + 2]
-      const a = pixels[i + 3]
-
-      let alpha = (this.noiseMap[p]) ? 35 : 0
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      let alpha = (noiseMap[Math.floor(i / 4)]) ? 35 : 0
 
       // some browsers (Edge) don't like invalid values
-      if (alpha < 0) alpha = 0
-      if (alpha > 255) alpha = 255
+      //if (alpha < 0) alpha = 0
+      //if (alpha > 255) alpha = 255
 
       alpha *= Math.random()
-
-      return {
-        r,
-        g,
-        b,
-        a: alpha,
-      }
-    })
+      imageData.data[i + 3] = alpha
+    }
 
     return imageData
   }
 }
 
-function eachPixel(imageData, fn) {
-  const pixels = imageData.data
-
-  let x
-  let y
-
-  for (let i = 0; i < pixels.length; i += 4) {
-    x = (i / 4) % imageData.width
-    y = Math.floor((i / 4) / imageData.width)
-
-    const updatedPixel = fn({ imageData, x, y, pixelIndex: i })
-
-    // eslint-disable-next-line no-continue
-    if (!updatedPixel) continue
-
-    const { r, g, b, a } = fn({ imageData, x, y, pixelIndex: i  })
-
-    pixels[i] = r
-    pixels[i + 1] = g
-    pixels[i + 2] = b
-    pixels[i + 3] = a
-  }
-}
-
-/*function makeNoiseMap(width, height, frames) {
+function makeBinaryNoiseMap(width, height) {
   const map = []
 
-  for (let i = 0; i < height; i++) {
-    for (let j = 0; j < width / frames; j++) {
-      map.push(255 - Math.random() * 100)
-    }
-  }
-
-  return map
-}*/
-
-function makeBinaryNoiseMap(width, height, frames) {
-  const map = []
-
-  for (let i = 0; i < height; i++) {
-    for (let j = 0; j < width / frames; j++) {
-      if (Math.random() > 0.5) {
-        map.push(1)
-      } else {
-        map.push(0)
-      }
-    }
+  for (let i = 0; i < width * height; i++) {
+    map.push(Math.round(Math.random()))
   }
 
   return map
