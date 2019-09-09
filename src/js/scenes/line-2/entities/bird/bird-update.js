@@ -58,6 +58,7 @@ export default {
     this.imageFx = this.imageFx || new ImageFx(this.mainCanvas.canvas, this.mainCanvas.context)
 
     if (!this.fightParticles) this.fightParticles = new Particles({ target: this })
+    if (!this.thrustParticles) this.thrustParticles = new Particles({ target: this })
 
     if (!this.eventsAttached) this.attachEvents(mainCanvas)
 
@@ -164,6 +165,8 @@ export default {
 
     this.updatePlatforms()
 
+    if (this.speed.y !== 0) this.thrustParticles.drawThrust()
+
     this.fly()
 
     if (this.hp > 0) this.draw(mainCanvas)
@@ -171,8 +174,6 @@ export default {
     if (this.jumpParticlesOn) this.drawJumpParticles()
 
     if ((this.bad && this.x > 900) || (nextEnemy && nextEnemy.hp > 0 && !this.movingOffPlatform) && this.hp > 0) {
-      console.log('!!!!!!!!!!!!!!!!!!!!');
-
       this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
 
       // this.hp -= 1

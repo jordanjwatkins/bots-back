@@ -8,12 +8,13 @@ import Storage from './storage'
 import Cloud from './entities/cloud'
 import Ground from './entities/ground'
 import Pulser from './entities/pulser'
-import LevelSelect from './entities/level-select'
+//import LevelSelect from './entities/level-select'
 import levels from './entities/levels'
+import Platform from './entities/platform';
 
 // import Dev from './dev'
 
-const levelSelect = true
+const levelSelect = false
 
 class Line2 {
   constructor() {
@@ -267,6 +268,8 @@ class Line2 {
   }
 
   freshStart() {
+    Platform.clear()
+
     this.removeEvents()
 
     this.mainCanvas.context.globalAlpha = 1.0

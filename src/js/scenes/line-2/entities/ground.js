@@ -6,7 +6,7 @@ class Ground {
       z: 3,
       width: 20,
       height: 20,
-      color: '#8A6F30',
+      color: '#804939',
     }
 
     Object.assign(this, defaults, props)
@@ -15,7 +15,8 @@ class Ground {
   }
 
   update({ mainCanvas }) {
-    mainCanvas.drawRect(this)
+    //mainCanvas.drawRect(this)
+    mainCanvas.drawRect({ ...this, color: this.color })
 
     mainCanvas.drawRect({
       width: this.spotSize,

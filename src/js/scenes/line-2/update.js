@@ -1,14 +1,16 @@
 //import * as sounds from './sounds'
-import knote from '../../libs/knote'
+//import knote from '../../libs/knote'
+
+let showTitle = true
 
 let zoom = 5.8
-zoom = 1
+//zoom = 1
 
 let zoomingOut = false
 
 setTimeout(() => {
   zoomingOut = true
-}, 7000)
+}, (showTitle) ? 14000 : 7000)
 
 /*let slow = false
 setTimeout(() => {
@@ -30,7 +32,7 @@ setTimeout(() => {
   scaleTitle = true
 }, 3000);
 
-let showTitle = false
+
 
 function update(scene, delta, extras) {
   /*if (slow) {
@@ -78,10 +80,13 @@ function update(scene, delta, extras) {
 
   mainCanvas.lateRenders = []
 
-  mainCanvas.clearCanvas()
+  //mainCanvas.clearCanvas()
 
   // draw background color so zoom works
-  mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: mainCanvas.canvas.style.backgroundColor })
+
+  mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d0b15' })
+  mainCanvas.drawRect({ x: 0, y: 200, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d122b' })
+  mainCanvas.drawRect({ x: 0, y: 400, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#34085d' })
 
   // background z of 1
   updateEntities(entities, scene, 1, delta)
@@ -90,6 +95,9 @@ function update(scene, delta, extras) {
   updateEntities(entities, scene, 2, delta)
 
   if (groups) groups.platforms.forEach(entity => entity.update(scene, delta))
+
+  if (groups) groups.platforms[0].drawAll()
+  if (groups) groups.platforms[0].drawLate()
 
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
@@ -103,13 +111,16 @@ function update(scene, delta, extras) {
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
-  zoomOut(mainCanvas)
 
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
-  if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10)
+
+  if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#111')
 
   if (extras) extras()
+
+
+  zoomOut(mainCanvas)
 
   // mainCanvas.drawRollingLine()
   mainCanvas.drawRollingLineReversed()

@@ -9,8 +9,8 @@ class ImageFx {
   initOffCanvas({ key = 'c1', bgColor, width, height }) {
     const canvas = document.createElement('canvas')
 
-    canvas.width = width || this.canvas.width + 50
-    canvas.height = height || this.canvas.height + 50
+    canvas.width = width || this.canvas.width
+    canvas.height = height || this.canvas.height
 
     const context = canvas.getContext('2d')
 
@@ -51,14 +51,74 @@ class ImageFx {
     this.strokeRect({ x: 0, y: 0, color: 'red', width: this.canvas.width, height: this.canvas.height })
   }
 
-  // offset is outward for positive, inward for negative
-  drawSelectedRect(srcRect, offset = 2) {
-    const lineWidth = 2
+  drawSelectedRect3(srcRect, offset = 2, lineWidth = 1, color = '#000', speed = 0.1) {
+    const cacheKey = `W${srcRect.width}H${srcRect.height}O${offset}`
+    //const lineWidth = 2
 
+    const rect = {
+      width: srcRect.width + (offset * 2) + (lineWidth * 2),
+      height: srcRect.height + (offset * 2) + (lineWidth * 2),
+    }
+
+    if (!this.offCanvases[cacheKey]) {
+
+      const { context } = this.initOffCanvas({ key: cacheKey, width: rect.width, height: rect.height })
+
+      context.lineWidth = lineWidth
+      context.strokeStyle = '#000'
+      context.setLineDash([5, 3])
+    }
+
+    const { canvas, context } = this.offCanvases[cacheKey]
+
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.strokeRect(lineWidth, lineWidth, rect.width - lineWidth * 2, rect.height - lineWidth * 2)
+    //context.stroke()
+
+    this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset - lineWidth, srcRect.y - offset - lineWidth, canvas.width, canvas.height)
+
+    context.lineDashOffset += 0.1
+  }
+
+  drawSelectedRect(srcRect, offset = 2, lineWidth = 1, color = '#000', speed = 0.1, lineDash = [5, 3]) {
+    const cacheKey = `k${srcRect.width}${srcRect.height}${offset}${color}`
+
+    if (!this.offCanvases[cacheKey]) {
+      console.log('cache miss');
+
+      const { context, canvas } = this.initOffCanvas({
+        key: cacheKey,
+        width: srcRect.width + Math.abs(offset) * 2 + lineWidth * 2,
+        height: srcRect.height + Math.abs(offset) * 2 + lineWidth * 2,
+      })
+
+      context.lineWidth = lineWidth
+      context.strokeStyle = color
+      context.setLineDash(lineDash)
+    }
+
+    const { canvas, context } = this.offCanvases[cacheKey]
+
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.strokeRect(lineWidth / 2, lineWidth / 2, srcRect.width + lineWidth + offset, srcRect.height + lineWidth + offset)
+
+    this.context.drawImage(
+      canvas,
+      0, 0, canvas.width, canvas.height,
+      srcRect.x - offset / 2 - lineWidth,
+      srcRect.y - offset / 2 - lineWidth,
+      canvas.width, canvas.height,
+    )
+
+    context.lineDashOffset += speed
+  }
+
+  // offset is outward for positive, inward for negative
+  /*drawSelectedRect2(srcRect, offset = 2, lineWidth = 1, color = '#000', lineDashOffset = -1) {
     const { context } = this
 
     context.lineWidth = lineWidth
-    context.strokeStyle = '#111'
+    context.strokeStyle = color
     context.setLineDash([5, 3])
 
     context.strokeRect(
@@ -68,8 +128,12 @@ class ImageFx {
       srcRect.height + offset * 2 + lineWidth * 2,
     )
 
-    context.lineDashOffset += 0.1
-  }
+    if (lineDashOffset === -1)  {
+      context.lineDashOffset += 0.1
+    } else {
+      context.lineDashOffset = lineDashOffset
+    }
+  }*/
 
   noise(offsetX, offsetY) {
     if (!this.offCanvases['c1']) {
@@ -105,7 +169,7 @@ class ImageFx {
     const noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height)
 
     for (let i = 0; i < imageData.data.length; i += 4) {
-      let alpha = (noiseMap[Math.floor(i / 4)]) ? 35 : 0
+      let alpha = (noiseMap[Math.floor(i / 4)]) ? 25 : 0
 
       // some browsers (Edge) don't like invalid values
       //if (alpha < 0) alpha = 0

@@ -15,7 +15,7 @@ export default (scene) => {
       const bird2 = new Bird({ x: 270, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
       const bird3 = new Bird({ x: 170, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
 
-      const platform2 = new Platform({ x: 450, y: groundY - 60 })
+      const platform2 = new Platform({ x: 400, width: 120, y: groundY - 60 })
 
       bird.onPlatform = true
       bird.host = platform2
@@ -38,7 +38,11 @@ export default (scene) => {
           platforms: [
             new Platform({ x: 650, y: groundY - 60 }),
             platform2,
+
+            new Platform({ x: 150, y: groundY - 160 }),
             //new Platform({ x: 430, y: groundY - 30, width: 20 }), // power up (climb?/sprint?)
+
+            //...Array(7).fill(0).map(() => new Platform({ x: 1050 * Math.random(), y: groundY - 100 - 660 * Math.random(), width: 200 + 399 * Math.random() })),
           ],
         },
 
@@ -101,7 +105,7 @@ export default (scene) => {
           new PitBridge({ x: 380, y: groundY, width: 200, height: 300 }),
         ],
 
-        pulser: new Pulser({ x: 880, y: 420 }),
+        pulser: new Pulser({ x: 880, y: startY - 50 }),
 
         groups: {
           platforms: [
@@ -109,7 +113,7 @@ export default (scene) => {
 
             new Platform({ x: 480, y: startY + 40, width: 60, height: 20 }),
 
-            new Platform({ x: 0, y: startY + 40, width: 300, height: 300 }),
+            new Platform({ x: -40, y: startY + 40, width: 300, height: 180 }),
           ],
         },
 
@@ -160,7 +164,7 @@ export default (scene) => {
       }
     },
 
-    /*
+
       stackTests: () => {
         const groundY = 550
 
@@ -200,7 +204,7 @@ export default (scene) => {
           },
         }
       },
-    */
+
   }
 
   return levels

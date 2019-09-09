@@ -70,6 +70,72 @@ class Particles {
     particle.color = (Math.random() > 0.5) ? '#ddd' : '#999'
   }
 
+  /*makeThrustParticle() {
+    const { target, offCanvas } = this
+    //const { randomDirection } = target
+    const { centerX, centerY } = offCanvas
+
+    return {
+      x: centerX,
+      y: 0,
+      vX: 0.7 * Math.random() * this.randomDirection(),
+      vY: 1.3 + 0.5 * Math.random(),
+      color: (Math.random() > 0.5) ? '#ddd' : '#999',
+    }
+  }*/
+
+  makeThrustParticle(particle = {}) {
+    const { target, offCanvas, randomDirection } = this
+    //const { randomDirection } = target
+    const { centerX, centerY } = offCanvas
+
+    particle.x = centerX + 7 * Math.random() * randomDirection()
+    particle.y = 0
+    particle.vX = 0.7 * Math.random() * randomDirection()
+    particle.vY = 1.5 + 0.5 * Math.random()
+    particle.color = (Math.random() > 0.5) ? '#ddd' : '#999'
+
+    return particle
+  }
+
+  drawThrustParticles() {
+    const { target, particleSize, fightCount, fightParticles, offCanvas } = this
+    const { width, height } = target
+
+    this.fightCount = fightCount || 0
+
+    //if (fightCount > 10) this.fightCount = 0
+
+    if (!fightParticles) {
+      this.fightParticles = Array(width * 2).fill(0).map(() => this.makeThrustParticle())
+    }
+
+    this.fightParticles.forEach((particle) => {
+      particle.x += particle.vX
+      particle.y += particle.vY
+
+      offCanvas.context.globalAlpha = 0.3 - 0.1 * Math.random()
+
+      const dy = Math.abs(offCanvas.centerX - particle.x)
+      const dx = Math.abs(offCanvas.centerY - particle.y)
+
+      if (dx > offCanvas.canvas.width / 3 || dy > offCanvas.canvas.height / 20) offCanvas.context.globalAlpha = 0.1
+      if (dx > offCanvas.canvas.width / 2 || dy > offCanvas.canvas.height / 16) {
+        this.makeThrustParticle(particle)
+      }
+
+      this.drawSpark(particle, 10, particle.color)
+
+      offCanvas.context.globalAlpha = 1
+
+      particle.vY += 0.1
+    })
+
+    //offCanvas.context.restore()
+
+    this.fightCount += 1
+  }
+
   drawFightParticles() {
     const { target, particleSize, fightCount, fightParticles, offCanvas } = this
     const { width, height } = target
@@ -170,6 +236,32 @@ class Particles {
 
 
     this.drawToMain()
+  }
+
+  drawThrust() {
+
+    this.drawCount = this.drawCount || 1
+    this.drawCount += 1
+
+    //if (this.drawCount % 10 === 0) {
+      this.offCanvas.clear()
+      this.drawThrustParticles()
+      //this.offCanvas.trace()
+    //}
+
+    const { x, y } = this.getTargetCenter()
+    this.target.mainCanvas.context.drawImage(
+      this.offCanvas.canvas,
+
+      0, 0,
+      this.offCanvas.canvas.width,
+      this.offCanvas.canvas.height,
+
+      x - this.offCanvas.canvas.width / 2,
+      y + this.offCanvas.canvas.height / 2 - this.target.height,
+      this.offCanvas.canvas.width,
+      this.offCanvas.canvas.height,
+    )
   }
 }
 

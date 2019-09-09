@@ -10,7 +10,9 @@ class MainCanvas {
 
     this.context = this.canvas.getContext('2d')
 
-    this.canvas.style.backgroundColor = '#639bff'
+    //this.canvas.style.backgroundColor = '#639bff'
+
+    this.canvas.style.backgroundColor = '#1d0b15'
 
     this.context.imageSmoothingEnabled = false
 
@@ -188,8 +190,12 @@ class MainCanvas {
     }
   }
 
-  drawSelectedRect(srcRect, offset = 2) {
-    this.imageFx.drawSelectedRect(srcRect, offset)
+  drawSelectedRect(srcRect, offset, lineWidth, color, lineDashOffset) {
+    this.imageFx.drawSelectedRect(srcRect, offset, lineWidth, color, lineDashOffset)
+  }
+
+  drawSelectedRect2(srcRect, offset, lineWidth, color, lineDashOffset) {
+    this.imageFx.drawSelectedRect2(srcRect, offset, lineWidth, color, lineDashOffset)
   }
 
   makeScanlines(vh, vw) {
@@ -480,7 +486,7 @@ class MainCanvas {
   drawTriangleFromPoints(points, scale, flip = false) {
     const { context } = this
 
-    this.colorPrimary = this.colorPrimary || '#000'
+    this.colorPrimary = this.colorPrimary || '#FFF'
 
     this.globalAlpha = this.globalAlpha || 0.2
 

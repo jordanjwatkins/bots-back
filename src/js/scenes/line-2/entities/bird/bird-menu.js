@@ -154,6 +154,9 @@ class BirdMenu {
 
     this.menuCanvas.context.fillRect(0, 0, this.menuCanvas.canvas.width, this.menuCanvas.canvas.height)
 
+    this.menuCanvas.context.strokeStyle = '#666'
+    this.menuCanvas.context.strokeRect(0, 0, this.menuCanvas.canvas.width, this.menuCanvas.canvas.height)
+
     const { x, y } = this.getMenuXy()
 
     this.drawMenuItems()

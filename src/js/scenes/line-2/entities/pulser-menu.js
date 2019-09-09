@@ -56,6 +56,8 @@ class PulserMenu extends BirdMenu {
         if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 25 }))
         if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
+        this.bird.chargeCount -= 1
+
         setTimeout(() => {
           field.hot = false
         }, 2000)

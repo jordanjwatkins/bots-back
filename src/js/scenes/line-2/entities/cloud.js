@@ -9,8 +9,8 @@ class Cloud {
 
     this.moving = true
 
-    this.color = 'white'
-
+    //this.color = 'white'
+    this.color = '#111'
     this.speed = {
       x: speedX * Math.random(),
       y: speedY,
