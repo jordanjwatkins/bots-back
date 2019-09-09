@@ -3,7 +3,7 @@ import { boxesCollide, collisions } from '../../../libs/collisions'
 import birdJumpParticles from './bird/bird-jump-particles';
 
 class PitBridge {
-  constructor({ x = 0, y = 0, width = 60, height = 20 }) {
+  constructor({ x = 0, y = 0, width = 60, height = 20, lockedClosed }) {
     this.imageFx = new ImageFx()
 
     this.offCanvas = this.imageFx.initOffCanvas({ width, height })
@@ -28,6 +28,7 @@ class PitBridge {
     this.bridgeWidth = this.width
 
     this.lineDashOffset = 0
+    this.lockedClosed = lockedClosed
   }
 
   getUpperRightCorner() {
@@ -148,6 +149,8 @@ class PitBridge {
     this.mainCanvas = scene.mainCanvas
 
     this.isOpen = Math.sin(Date.now() / 380 / scene.skipFrames) > 0.9
+
+    if (this.lockedClosed) this.isOpen = false
 
     this.targetWidth = (this.isOpen) ? 10 : this.width
 

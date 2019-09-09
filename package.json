@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --config webpack.config.dev.js",
     "prod": "npm run prod-tiny",
     "prod-base": "rm -rf build && webpack --config webpack.config.min.js",
-    "prod-tiny": "npm run prod-base && rm -rf build/manifest.json && rm -rf build/favicon.ico && npm run zip",
+    "prod-tiny": "npm run prod-base && npm run mangle && rm -rf build/manifest.json && rm -rf build/favicon.ico && npm run zip",
     "mangle": "node mangle-more.js",
     "eslint": "eslint src/**/*.js",
     "zip": "rm -rf build.zip && powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\"",

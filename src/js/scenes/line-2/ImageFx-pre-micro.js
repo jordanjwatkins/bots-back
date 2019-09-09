@@ -92,27 +92,60 @@ class ImageFx {
     if (!this.offCanvases['c1']) {
       // the noise canvases are a bit larger than the destination canvas so they can be offset randomly and still fill the destination canvas
       const { canvas, context } = this.initOffCanvas({ key: 'c1', bgColor: '#FFF', width: this.canvas.width + 50, height: this.canvas.height + 50 })
+      const { canvas: canvas2, context: context2 } = this.initOffCanvas({ key: 'c2', bgColor: '#000', width: this.canvas.width + 50, height: this.canvas.height + 50 })
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
-      context.putImageData(this.applyNoise(imageData), 0, 0)
+      const filtered = this.applyNoise(imageData)
+
+      context.putImageData(filtered, 0, 0)
+
+      const imageData2 = context2.getImageData(0, 0, canvas.width, canvas.height)
+      const filtered2 = this.applyNoise(imageData2)
+
+      context2.putImageData(filtered2, 0, 0)
+
+      //const { canvas: canvas3, context: context3 } = this.initOffCanvas({ key: 'c3', bgColor: '#000' })
+      //const imageData3 = this.context.getImageData(0, 0, canvas.width, canvas.height)
+      //const filtered3 = this.hueShift(imageData3)
+
+      //context3.putImageData(filtered3, 0, 0)
     }
 
-    this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, this.canvas.height, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+    this.context.save()
+
+    const alpha = 1
+    const coarsenessX = 1
+    const coarsenessY = 1
+    const coarsenessHeight = this.canvas.height / coarsenessY
+    const coarsenessWidth = this.canvas.height / coarsenessX
+
+    this.context.globalAlpha = alpha
+
+    this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
+
+    this.context.globalAlpha = alpha
+
+    this.context.drawImage(this.offCanvases['c2'].canvas, offsetX, offsetY, coarsenessWidth, coarsenessHeight, 0, 0, this.canvas.width, this.canvas.height)
+
+    //this.context.drawImage(this.offCanvases.c3.canvas, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+
+    this.context.restore()
   }
 
-  /*
-  // cached version (slightly larger code)
-  vignette2() {
+  vignette() {
     if (!this.offCanvases['v1']) {
       const { canvas, context } = this.initOffCanvas({ key: 'v1' })
 
+      // Transform to facilitate ellipse
+      //context.setTransform(1, 0, 0, 0.6153846153846154, 0, 0)
+
       // Create gradient
-      const gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2)
+      const gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0.000, canvas.width / 2, canvas.height / 2, canvas.width / 2)
 
       // Add colors
-      gradient.addColorStop(0.9, 'rgba(0,0,0,0)')
-      gradient.addColorStop(1, 'rgba(0,0,0,0.3)')
+      gradient.addColorStop(0.860, 'rgba(0, 0, 0, 0.000)')
+      gradient.addColorStop(1.000, 'rgba(0, 0, 0, 0.267)')
 
       // Fill with gradient
       context.fillStyle = gradient
@@ -122,24 +155,36 @@ class ImageFx {
     const { canvas } = this.offCanvases['v1']
 
     this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, -80, 0, this.canvas.width + 160, this.canvas.height)
-  }*/
-
-  vignette() {
-    // Create gradient
-    const gradient = this.context.createRadialGradient(
-      this.canvas.width / 2, this.canvas.height / 2, 0,
-      this.canvas.width / 2 - 10, this.canvas.height / 2,
-      this.canvas.width / 2 + 20,
-    )
-
-    // Add colors
-    gradient.addColorStop(0.9, 'rgba(0,0,0,0)')
-    gradient.addColorStop(1, 'rgba(0,0,0,0.2)')
-
-    // Fill with gradient
-    this.context.fillStyle = gradient
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
+
+  /*hueShift(imageData, frames = 1) {
+    eachPixel(imageData, ({ x, y, pixelIndex }) => {
+      const pixels = imageData.data
+      const i = pixelIndex
+
+      const frameWidth = imageData.width / frames
+      const frameX = (x % frameWidth)
+
+      const p = Math.floor(frameX + y * frameWidth)
+
+      const r = pixels[i]
+      const g = pixels[i + 1]
+      const b = pixels[i + 2]
+      const a = pixels[i + 3]
+
+      if (r > 100) imageData.data[xYToPixelIndex(x + 1, y - 3, imageData)] = imageData.data[xYToPixelIndex(x + 1, y - 3, imageData)] + r / 2
+      if (g > 200) imageData.data[xYToPixelIndex(x - 5, y - 6, imageData) + 1] = imageData.data[xYToPixelIndex(x - 5, y - 6, imageData) + 1] + g / 2
+
+      return {
+        r,
+        g,
+        b,
+        a,
+      }
+    })
+
+    return imageData
+  }*/
 
   applyNoise(imageData, frames = 1) {
     if (!this.noiseMap) this.noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height, frames)
@@ -180,6 +225,17 @@ class ImageFx {
   }
 }
 
+function xYToPixelIndex(x, y, imageData) {
+  return ((y * imageData.width) * 4) + (x * 4)
+}
+
+function pixelIndexToXY(pixelIndex, imageData) {
+  return {
+    x: (pixelIndex / 4) % imageData.width,
+    y: Math.floor((pixelIndex / 4) / imageData.width),
+  }
+}
+
 function eachPixel(imageData, fn) {
   const pixels = imageData.data
 
@@ -195,7 +251,7 @@ function eachPixel(imageData, fn) {
     // eslint-disable-next-line no-continue
     if (!updatedPixel) continue
 
-    const { r, g, b, a } = fn({ imageData, x, y, pixelIndex: i  })
+    const { r, g, b, a } = fn({ imageData, x, y, pixelIndex: i })
 
     pixels[i] = r
     pixels[i + 1] = g
@@ -204,7 +260,7 @@ function eachPixel(imageData, fn) {
   }
 }
 
-/*function makeNoiseMap(width, height, frames) {
+function makeNoiseMap(width, height, frames) {
   const map = []
 
   for (let i = 0; i < height; i++) {
@@ -214,7 +270,7 @@ function eachPixel(imageData, fn) {
   }
 
   return map
-}*/
+}
 
 function makeBinaryNoiseMap(width, height, frames) {
   const map = []

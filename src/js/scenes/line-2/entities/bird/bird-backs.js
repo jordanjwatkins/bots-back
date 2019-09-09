@@ -28,8 +28,8 @@ export default {
         !ally.onPlatform &&
 
         ally.x < this.x &&
-        Math.abs(this.x - ally.x) < 280 &&
-        Math.abs(Math.abs((this.y + this.height) - ally.y)) < 250
+        Math.abs(this.x - ally.x) < 60 &&
+        Math.abs(Math.abs((this.y + this.height) - ally.y)) < 150
       ) {
         return ally
       }
@@ -37,7 +37,7 @@ export default {
   },
 
   updateOnOffBack(stopGo) {
-    const climb = this.menu.getField('dont-climb').value === 'climb' || this.bad
+    const climb = this.menu.getField('dont-climb').value === 'climb' //|| this.bad
 
     if (stopGo.value === 'go') {
       const filterAllies = this.closeMountableAllies()
@@ -64,10 +64,12 @@ export default {
       } else if (this.onBack && !this.movingToBack) {
         console.log('moving to ground')
 
-        this.movingToBack = false
+        //this.movingToBack = false
         this.onBack = false
         this.movingToGround = true
         this.flying = true
+
+        console.log('moving to x', this.x, this.x - 40);
 
         this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
       }
@@ -139,6 +141,8 @@ export default {
         dy = 0
         this.x = target.x + target.width / 2 - this.width / 2
         this.y = target.y - this.height
+
+        this.target = null
       } else {
         dx += this.directionX
         dy -= 1
@@ -162,7 +166,7 @@ export default {
 
       dx = Math.floor(dx)
 
-      if (dx === 0 && dy === 0) {
+      if (Math.abs(dx * 10) < 15 && Math.abs(dy * 10) < 15) {
         console.log('ground landed')
 
         this.movingToGround = false
@@ -174,10 +178,13 @@ export default {
         this.jumpParticles = null
 
         if (this.host) this.host.backOccupied = false
+        this.target = null
       }
 
       if (this.flying) {
-        this.speed.x = dx
+        console.log(dx - 1, Math.ceil(dy / 30));
+
+        this.speed.x = dx - 1
         this.speed.y = Math.ceil(dy / 30)
       }
     }

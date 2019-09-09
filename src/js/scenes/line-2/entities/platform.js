@@ -40,6 +40,12 @@ class Platform {
 
   draw() {
     this.mainCanvas.drawRect(this)
+
+    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#222' })
+    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#555', y: this.y + this.height / 3 })
+    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#222', y: this.y + this.height / 3 * 2 })
+
+    this.mainCanvas.drawSelectedRect({ ...this }, 0)
   }
 }
 

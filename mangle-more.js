@@ -6997,52 +6997,61 @@ const namesToReplace = Array.from(new Set([
   ...random2,
 ]))
 
-const toReplace = _.difference(_.uniq(src.match(/[a-zA-Z]{5}[a-zA-Z]+/g)), reserved.concat(blackList1, domProps))
+/*
 
-toReplace.sort(function(a, b){
-  // ASC  -> a.length - b.length
-  // DESC -> b.length - a.length
-  return b.length - a.length;
-});
+  const toReplace = _.difference(_.uniq(src.match(/[a-zA-Z]{5}[a-zA-Z]+/g)), reserved.concat(blackList1, domProps))
+
+  toReplace.sort(function(a, b){
+    // ASC  -> a.length - b.length
+    // DESC -> b.length - a.length
+    return b.length - a.length;
+  });
 
 
-toReplace.forEach((name, index) => {
-  const regex = new RegExp(`(key:")${name}(")`, 'g')
-  const regex2 = new RegExp(`(\\.)${name}`, 'g')
+  toReplace.forEach((name, index) => {
+    const regex = new RegExp(`(key:")${name}(")`, 'g')
+    const regex2 = new RegExp(`(\\.)${name}`, 'g')
 
-  const regex3 = new RegExp(`${name}(:)`, 'g')
-  const regex32 = new RegExp(`(,)${name}(:)`, 'g')
-  const regex4 = new RegExp(`(})${name}(\\()`, 'g')
-  const regex42 = new RegExp(`({)${name}(\\()`, 'g')
-  const regex5 = new RegExp(`(},)${name}(\\()`, 'g')
-  const regex6 = new RegExp(`(,)${name}(\\()`, 'g')
-  const regex7 = new RegExp(`(get )${name}(\\()`, 'g')
-  const regex8 = new RegExp(`(set )${name}(\\()`, 'g')
-  const regex9 = new RegExp(`(this.)${name}(=)`, 'g')
+    const regex3 = new RegExp(`${name}(:)`, 'g')
+    const regex32 = new RegExp(`(,)${name}(:)`, 'g')
+    const regex4 = new RegExp(`(})${name}(\\()`, 'g')
+    const regex42 = new RegExp(`({)${name}(\\()`, 'g')
+    const regex5 = new RegExp(`(},)${name}(\\()`, 'g')
+    const regex6 = new RegExp(`(,)${name}(\\()`, 'g')
+    const regex7 = new RegExp(`(get )${name}(\\()`, 'g')
+    const regex8 = new RegExp(`(set )${name}(\\()`, 'g')
+    const regex9 = new RegExp(`(this.)${name}(=)`, 'g')
 
-  src = src.replace(regex, replacer)
-  src = src.replace(regex2, replacer2)
-  src = src.replace(regex3, replacer3)
-  src = src.replace(regex32, replacer)
-  src = src.replace(regex4, replacer)
-  src = src.replace(regex42, replacer)
-  src = src.replace(regex5, replacer)
-  src = src.replace(regex6, replacer)
-  src = src.replace(regex7, replacer)
-  src = src.replace(regex8, replacer)
+    src = src.replace(regex, replacer)
+    src = src.replace(regex2, replacer2)
+    src = src.replace(regex3, replacer3)
+    src = src.replace(regex32, replacer)
+    src = src.replace(regex4, replacer)
+    src = src.replace(regex42, replacer)
+    src = src.replace(regex5, replacer)
+    src = src.replace(regex6, replacer)
+    src = src.replace(regex7, replacer)
+    src = src.replace(regex8, replacer)
 
-  function replacer(match, p1, p2) {
-    return `${p1}z${index}${p2}`
-  }
+    function replacer(match, p1, p2) {
+      return `${p1}z${index}${p2}`
+    }
 
-  function replacer2(match, p1) {
-    return `${p1}z${index}`
-  }
+    function replacer2(match, p1) {
+      return `${p1}z${index}`
+    }
 
-  function replacer3(match, p1) {
-    return `z${index}${p1}`
-  }
-})
+    function replacer3(match, p1) {
+      return `z${index}${p1}`
+    }
+  })
+*/
+
+//let replaced = `ws(t){const i=this,h=(i,h,s,e,n)=>{t.bt.S({x:i,y:h,width:s,height:e,color:n})};i.ys="b12341",i.gs=i.gs||1,i.gs+=.1;let s=i.x-35,e=i.y+i.height-39;i.fs=i.fs||0,i.xs=1,i.Ms=1,i.vs=1,i.ps>18&&(i.xs=2,i.Ms=2),i.ps>39&&(i.Ms=1),i.gs<43?i.ps=Math.floor(i.gs):(i.vs=2,i.fs-=.1),s+=Math.floor(i.fs),Math.sin(Date.now()/100),i.vs>1&&Math.sin(Date.now()/100)>0&&(i.vs=3),h(s+6-(i.ps>21?i.ps-22:0)+(i.ps>39?i.ps-39:0),e+7-(i.ps>21?22:i.ps)+(i.ps>39&&i.ps<43?i.ps-39:0),20,28,"white"),h(s,2===i.xs?e+16:e,4,2===i.xs?8:24,"blue"),2===i.xs&&h(s-14,e+16,14,4,"blue"),h(2===i.xs?s-14+(2===i.Ms?1:0):s,2===i.xs?e+18+(1===i.Ms?-1:0):e+1,2===i.Ms?1:2,2===i.Ms?2:1,"yellow"),h(s+1,e+3,2,20,"red"),i.xs,h(s,e+24,3,1,"green"),h(s-1,e+25,1,1,"green"),h(s+3,e+25,1,1,"green"),h(s-2,e+26,1,3===i.vs?7:8,"green"),h(s+4,e+26,1,2===i.vs?7:8,"green"),i.ps<22?h(s+1,e+24-i.ps,20,2,"green"):h(s+1-i.ps+22+(i.ps>39?i.ps-39:0),e+3+(i.ps>39&&i.ps<43?i.ps-39:0),20,2,"green")}};`
+
+//let replacement = `ws(t){const ms = Math.sin,const dn = Date.now(),const i=this,h=(i,h,s,e,n)=>{t.bt.S({x:i,y:h,width:s,height:e,color:n})};i.ys="b12341",i.gs=i.gs||1,i.gs+=.1;let s=i.x-35,e=i.y+i.height-39;i.fs=i.fs||0,i.xs=1,i.Ms=1,i.vs=1,i.ps>18&&(i.xs=2,i.Ms=2),i.ps>39&&(i.Ms=1),i.gs<43?i.ps=Math.floor(i.gs):(i.vs=2,i.fs-=.1),s+=Math.floor(i.fs),ms(dn/100),i.vs>1&&ms(dn/100)>0&&(i.vs=3),h(s+6-(i.ps>21?i.ps-22:0)+(i.ps>39?i.ps-39:0),e+7-(i.ps>21?22:i.ps)+(i.ps>39&&i.ps<43?i.ps-39:0),20,28,"white"),h(s,2===i.xs?e+16:e,4,2===i.xs?8:24,"blue"),2===i.xs&&h(s-14,e+16,14,4,"blue"),h(2===i.xs?s-14+(2===i.Ms?1:0):s,2===i.xs?e+18+(1===i.Ms?-1:0):e+1,2===i.Ms?1:2,2===i.Ms?2:1,"yellow"),h(s+1,e+3,2,20,"red"),i.xs,h(s,e+24,3,1,"green"),h(s-1,e+25,1,1,"green"),h(s+3,e+25,1,1,"green"),h(s-2,e+26,1,3===i.vs?7:8,"green"),h(s+4,e+26,1,2===i.vs?7:8,"green"),i.ps<22?h(s+1,e+24-i.ps,20,2,"green"):h(s+1-i.ps+22+(i.ps>39?i.ps-39:0),e+3+(i.ps>39&&i.ps<43?i.ps-39:0),20,2,"green")}};`
+
+//src = src.replace('throw new TypeError("Invalid attempt to destructure non-iterable instance")', 'throw')
 
 fs.writeFileSync(path, src, 'UTF-8')
 

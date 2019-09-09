@@ -53,7 +53,7 @@ class PulserMenu extends BirdMenu {
         field.disabled = true
         //field.blocked = true
 
-        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 20 }))
+        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 25 }))
         if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         setTimeout(() => {

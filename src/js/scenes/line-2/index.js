@@ -36,7 +36,7 @@ class Line2 {
     this.showedTitle = true
     this.showedExposition = true
 
-    this.mainCanvas.canvas.style.letterSpacing = '-1px'
+    //this.mainCanvas.canvas.style.letterSpacing = '-1px'
 
     this.fitViewport()
 

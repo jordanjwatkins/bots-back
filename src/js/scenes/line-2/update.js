@@ -1,15 +1,17 @@
 //import * as sounds from './sounds'
 import knote from '../../libs/knote'
-/*let zoom = 1 //4
-let slow = false
+
+let zoom = 5.8
+zoom = 1
 
 let zoomingOut = false
 
 setTimeout(() => {
   zoomingOut = true
-}, 3000)
-*/
-/*setTimeout(() => {
+}, 7000)
+
+/*let slow = false
+setTimeout(() => {
   slow = true
 
   setTimeout(() => {
@@ -19,6 +21,16 @@ setTimeout(() => {
 
 //let skipFrames = 6
 //let skippedFrames = 0
+
+let titleCanvas
+
+let fontSize = 39
+let scaleTitle = false
+setTimeout(() => {
+  scaleTitle = true
+}, 3000);
+
+let showTitle = false
 
 function update(scene, delta, extras) {
   /*if (slow) {
@@ -40,8 +52,27 @@ function update(scene, delta, extras) {
     scene.skipFrames = 1
   }*/
 
+
   const { mainCanvas, entities, level } = scene
   const { groups } = level
+
+  if (showTitle) {
+    titleCanvas = titleCanvas || mainCanvas.imageFx.initOffCanvas({ key: 'title', width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, bgColor: '#000' })
+
+    titleCanvas.context.font = `${fontSize}px monospace`
+
+    if (!scaleTitle) titleCanvas.context.fillStyle = '#000'
+    if (!scaleTitle) titleCanvas.clear()
+    if (!scaleTitle) titleCanvas.drawRect({ x: 0, y: 0, width: titleCanvas.canvas.width, height: titleCanvas.canvas.height })
+    if (scaleTitle) fontSize += 11
+
+    if (scaleTitle) titleCanvas.context.globalCompositeOperation = 'destination-out'
+
+    titleCanvas.context.fillStyle = '#FFF'
+
+    titleCanvas.context.fillText(`Bot's`, 110 - fontSize / 3, fontSize / 3 + 100)
+    titleCanvas.context.fillText(`Back`, 110 - fontSize / 3, fontSize / 3 + 200)
+  }
 
   if (level.update) scene.level.update()
 
@@ -72,11 +103,11 @@ function update(scene, delta, extras) {
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
-  //zoomOut(mainCanvas)
+  zoomOut(mainCanvas)
 
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
-  if (mainCanvas.selected && mainCanvas.selected.selected) mainCanvas.drawSelectedRect(mainCanvas.selected, 10)
+  if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10)
 
   if (extras) extras()
 
@@ -110,9 +141,11 @@ function update(scene, delta, extras) {
       sounds.quickEnd()
     }, 500)
   }*/
+
+  if (showTitle) mainCanvas.context.drawImage(titleCanvas.canvas, 0, 0, mainCanvas.canvas.width, mainCanvas.canvas.height)
 }
 
-/*function zoomOut(mainCanvas) {
+function zoomOut(mainCanvas) {
   // basic zoom out
   if (zoom > 0 && zoomingOut) {
     zoom -= 0.05
@@ -120,8 +153,14 @@ function update(scene, delta, extras) {
 
   if (zoom < 1) zoom = 1
 
-  mainCanvas.context.drawImage(mainCanvas.canvas, -((mainCanvas.canvas.width * zoom) / 2) - (zoom - 2) * 500, -((mainCanvas.canvas.height * zoom) / 2) - (zoom - 2) * 300, mainCanvas.canvas.width * zoom, mainCanvas.canvas.height * zoom)
-}*/
+  mainCanvas.context.drawImage(
+    mainCanvas.canvas,
+    -((mainCanvas.canvas.width * zoom) / 2) - (zoom - 2) * 500,
+    -((mainCanvas.canvas.height * zoom) / 2) - (zoom - 2) * 300 + (32 * (zoom - 1)),
+    mainCanvas.canvas.width * zoom,
+    mainCanvas.canvas.height * zoom,
+  )
+}
 
 function updateEntities(entities, scene, z, delta) {
   if (!entities) return

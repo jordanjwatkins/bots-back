@@ -46,21 +46,21 @@ class Particles {
 
   makeFightParticle() {
     const { target, offCanvas } = this
-    const { randomDirection } = target
+    //const { randomDirection } = target
     const { centerX, centerY } = offCanvas
 
     return {
-      x: centerX + (target.width / 2 * Math.random() * randomDirection()),
-      y: centerY + (target.height / 2 * Math.random() * randomDirection()),
-      vX: 1.1 * Math.random() * randomDirection(),
-      vY: 1.1 * Math.random() * randomDirection(),
+      x: centerX + (target.width / 2 * Math.random() * this.randomDirection()),
+      y: centerY + (target.height / 2 * Math.random() * this.randomDirection()),
+      vX: 1.1 * Math.random() * this.randomDirection(),
+      vY: 1.1 * Math.random() * this.randomDirection(),
       color: (Math.random() > 0.5) ? '#ddd' : '#999',
     }
   }
 
   restartFightParticle(particle) {
-    const { target, offCanvas } = this
-    const { randomDirection } = target
+    const { target, offCanvas, randomDirection } = this
+    //const { randomDirection } = target
     const { centerX, centerY } = offCanvas
 
     particle.x = centerX + (target.width / 2 * Math.random() * randomDirection())
@@ -118,6 +118,7 @@ class Particles {
   }
 
   drawSpark(spark, sparkSize = 4, color) {
+    //console.log('draw fight',spark, sparkSize, color);
     this.offCanvas.drawRect({
       x: spark.x - sparkSize / 2,
       y: spark.y - sparkSize / 2,
@@ -129,6 +130,19 @@ class Particles {
 
   drawToMain() {
     const { x, y } = this.getTargetCenter()
+
+    //console.log(this.target.mainCanvas);
+
+    //this.target.mainCanvas.context.fillRect(100,100,100,100)
+
+    //console.log(this.offCanvas.canvas.width,
+     // this.offCanvas.canvas.height,
+
+     // x - this.offCanvas.canvas.width / 2,  (this.target.width / 2), this.target.directionX,
+     // y - this.offCanvas.canvas.height / 2,
+     // this.offCanvas.canvas.width,
+      //this.offCanvas.canvas.height);
+
 
     this.target.mainCanvas.context.drawImage(
       this.offCanvas.canvas,

@@ -9,7 +9,7 @@ export default (scene) => {
   const levels = {
     basics: () => {
       const groundY = 550
-      const startY = groundY - 5
+      const startY = groundY
 
       const bird = new Bird({ x: 490, y: groundY - 80, bad: true, speed: { x: 0, y: 0 }, questionable: true, sleeping: true, })
       const bird2 = new Bird({ x: 270, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, sleeping: true })
@@ -28,6 +28,7 @@ export default (scene) => {
           bird,
           bird2,
           bird3,
+          new PitBridge({ x: -50, y: groundY, width: 200, height: 200, lockedClosed: true }),
           //new PitBridge({ x: 300, y: groundY }),
         ],
 
@@ -86,10 +87,9 @@ export default (scene) => {
 
     stackAttack: () => {
       const groundY = 550
-      const startY = groundY - 80
+      const startY = groundY - 120
 
       const bird = new Bird({ x: 690, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, questionable: true })
-
 
       return {
         groundY,
@@ -98,7 +98,7 @@ export default (scene) => {
           bird,
           //bird2,
           //bird3,
-          //new PitBridge({ x: 300, y: groundY }),
+          new PitBridge({ x: 380, y: groundY, width: 200, height: 300 }),
         ],
 
         pulser: new Pulser({ x: 880, y: 420 }),
@@ -106,6 +106,10 @@ export default (scene) => {
         groups: {
           platforms: [
             new Platform({ x: 750, y: startY, width: 300, height: 300 }),
+
+            new Platform({ x: 480, y: startY + 40, width: 60, height: 20 }),
+
+            new Platform({ x: 0, y: startY + 40, width: 300, height: 300 }),
           ],
         },
 

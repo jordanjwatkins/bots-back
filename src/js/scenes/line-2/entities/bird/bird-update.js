@@ -70,7 +70,7 @@ export default {
     const stopGo = this.menu.getField('stop-go')
 
     // jump down from spawner
-    if ((stopGo.value === 'go') && this.y + this.height === level.groundY - 5) {
+    if ((stopGo.value === 'go') && this.y + this.height === level.startY - 5) {
       this.y += 5
 
       this.clearingSpawner = true
@@ -110,12 +110,21 @@ export default {
       if (this.movingToGround || this.movingOffPlatform) {
         this.movingToGround = false
 
-        console.log('instakill');
+        if (this.fallDead) this.fallDead = nextEnemy
 
-        nextEnemy.hp = 0
+        console.log('instakill')
+
+        //nextEnemy.hp = 0
       }
 
     }
+
+    //if (!this.movingToGround && !this.movingOffPlatform && this.fallDead && this.fallDead.hp) {
+      //this.fallDead.hp = 0
+    //  this.fallDead = false
+
+    //  console.log('instakill complete')
+    //}
 
     if (!nextEnemy) {
       nextEnemies = this.enemyHere()
@@ -144,7 +153,7 @@ export default {
     //nextEnemies = this.enemyHere()
     //nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
-    if (nextEnemy || nextAlly || (this.bad && this.x > 900)) {
+    if (nextEnemy || (nextAlly && !this.movingToGround) || (this.bad && this.x > 900)) {
       this.speed.x = 0
     // nextEnemy.speed.x = 0
     }
@@ -161,11 +170,19 @@ export default {
 
     if (this.jumpParticlesOn) this.drawJumpParticles()
 
-    if ((this.bad && this.x > 900) || nextEnemy && nextEnemy.hp > 0 && this.hp > 0) {
+    if ((this.bad && this.x > 900) || (nextEnemy && nextEnemy.hp > 0 && !this.movingOffPlatform) && this.hp > 0) {
+      console.log('!!!!!!!!!!!!!!!!!!!!');
+
       this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
 
       // this.hp -= 1
-      if (nextEnemy && nextEnemy.damage) this.hp -= nextEnemy.damage
+      if (nextEnemy && nextEnemy.damage) {
+        if (nextEnemy.fallDead && nextEnemy.fallDead === this) {
+          this.hp = 0
+        } else {
+          this.hp -= nextEnemy.damage
+        }
+      }
 
       this.jumpParticlesOn = true
 
@@ -204,9 +221,9 @@ export default {
     const x3 = 930
     const y3 = this.pulser.y - 18 - this.pulser.eyeOffset
 
-    if (this.menu && this.menu.isMenuOpen) this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
+    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
 
-    if (this.menu && this.menu.isMenuOpen) this.mainCanvas.lateRenders.push(() => this.menu.drawMenu())
+    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) this.mainCanvas.lateRenders.push(() => this.menu.drawMenu())
 
     this.spawnScan()
 

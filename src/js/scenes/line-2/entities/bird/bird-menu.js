@@ -10,7 +10,7 @@ class BirdMenu {
     this.menuFields = {
       'stop-go': { values: ['stop', 'go'], value: 'stop', rect: {} },
       'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: {} },
-      'dont-climb': { values: ['dont', 'climb'], value: 'dont', rect: {} },
+      'dont-climb': { values: ['dont', 'climb'], value: 'climb', rect: {} },
       'dont-climb2': { values: ['dont', 'climb'], value: 'dont', rect: {} },
     }
 
@@ -103,7 +103,7 @@ class BirdMenu {
       width: this.menuCanvas.canvas.width,
     }
 
-    const debug2 = true
+    const debug2 = false
 
     if (debug2 && this.bird.width !== 20) {
       this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 10)
@@ -147,12 +147,13 @@ class BirdMenu {
   }
 
   drawMenu() {
-    if (this.bird.dead) return
+    if (this.bird.dead || this.eyeOffset < 30) return
     this.menuCanvas.context.fillStyle = '#000'
 
-    if (this.bird.bad && !this.bird.questionable) this.menuCanvas.context.fillStyle = (Math.sin(Date.now() / 100) > 0.1) ? 'red' : 'black'
+    if (this.bird.bad && !this.bird.questionable) this.menuCanvas.context.fillStyle = (Math.sin(Date.now() / 100) > 0.1) ? 'red' : '#000'
 
     this.menuCanvas.context.fillRect(0, 0, this.menuCanvas.canvas.width, this.menuCanvas.canvas.height)
+
     const { x, y } = this.getMenuXy()
 
     this.drawMenuItems()
@@ -231,15 +232,15 @@ class BirdMenu {
     context.fillStyle = (field.disabled) ? '#999' : '#FFF'
     context.strokeStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
-    context.globalAlpha = 0.1
+    //context.globalAlpha = 0.1
 
     this.totalWidth = 0
 
     if (this.bird.bad) {
       if (this.bird.questionable) {
-        context.fillText('?', 10, 21)
+        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? ' ' : '?', 10, 21)
       } else {
-        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? ' ' : '!', 10, 21)
+        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? '!' : '!', 10, 21)
       }
 
       return this.getTextRect(y)

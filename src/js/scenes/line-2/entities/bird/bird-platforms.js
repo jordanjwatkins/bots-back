@@ -2,16 +2,19 @@ import { boxesCollide, collisions } from '../../../../libs/collisions'
 
 export default {
   closeMountablePlatforms() {
-    if (this.movingToBack || this.movingToGround || this.backOccupied) return []
+    if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
+
+    //console.log('plats allowed', this.target);
+
 
     return this.level.groups.platforms.filter((platform) => {
       if (
         //!(this.platform && platform === this.platform) &&
         //!platform.entry.occupied &&
         platform.entry.x < this.x &&
-        platform.entry.y < this.y &&
+        //platform.entry.y < this.y &&
 
-        Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 10 &&
+        Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 &&
 
         !collisions(
           { x: platform.entry.x - this.width, y: platform.entry.y - this.height, width: this.width, height: this.height },
@@ -19,7 +22,7 @@ export default {
         )
 
       ) {
-        console.log('close mountable');
+        console.log('close mountable plat');
 
         return platform
       }
@@ -79,6 +82,8 @@ export default {
     const { target } = this
 
     console.log('platform landed', this.x, this.y)
+
+    if (this.host) this.host.backOccupied = false
 
     this.land()
 
@@ -159,7 +164,16 @@ export default {
     this.movingOffPlatform = false
     this.onPlatform = false
 
+    if (this.fallDead === true) {
+      this.dead = true
+      this.hp = -20
+      this.fallDead = false
+      this.jumpParticles = null
+    }
+
     if (this.host) this.host.backOccupied = false
+
+    this.target = null
   },
 
   shouldExitPlatform() {
@@ -179,9 +193,15 @@ export default {
       this.movingToTarget = true
       this.movingOffPlatform = true
 
-      this.target = { x: this.x - 40, y: this.level.groundY, width: 1, height: 1 }
+      this.target = { x: this.x - this.width, y: this.level.groundY, width: 1, height: 1 }
+
+      console.log((this.level.groundY - this.y));
+
+      if (this.level.groundY - this.y > 110) this.fallDead = true
 
       this.movingFn = this.moveOffPlatform
+
+      //this.jump()
     }
 
     if (this.movingToTarget) {
