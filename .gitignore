@@ -5,3 +5,4 @@ build*
 .vscode
 *.code-workspace
 *.md
+_build*
