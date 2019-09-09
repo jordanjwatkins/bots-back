@@ -12,7 +12,7 @@
     "eslint": "eslint src/**/*.js",
     "zip": "rm -rf build.zip && powershell.exe -nologo -noprofile -command \"& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('build', 'build.zip'); }\"",
     "analyze-prod": "webpack --config webpack.config.min.js --analyze",
-    "prod-test": "npm run prod-tiny && cd build && http-server -p 8081"
+    "prod-test": "npm run prod-tiny && cd build && http-server -p 8083"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
