@@ -10,7 +10,7 @@ class Platform {
     lateRenders = []
   }
 
-  constructor({ x = 0, y = 0, width = 60, height = 20 }) {
+  constructor({ x = 0, y = 0, width = 60, height = 20, upgrade }) {
 
 
     //this.offCanvas = offCanvas
@@ -35,7 +35,7 @@ class Platform {
     this.rgba2 = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 255)`
 
     this.drawn = false
-
+    this.upgrade = upgrade
   }
 
   getUpperRightCorner() {

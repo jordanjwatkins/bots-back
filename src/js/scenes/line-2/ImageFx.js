@@ -47,11 +47,11 @@ class ImageFx {
     this.context.strokeRect(x, y, width, height)
   }
 
-  trace() {
+  /*trace() {
     this.strokeRect({ x: 0, y: 0, color: 'red', width: this.canvas.width, height: this.canvas.height })
-  }
+  }*/
 
-  drawSelectedRect3(srcRect, offset = 2, lineWidth = 1, color = '#000', speed = 0.1) {
+  /*drawSelectedRect3(srcRect, offset = 2, lineWidth = 1, color = '#000', speed = 0.1) {
     const cacheKey = `W${srcRect.width}H${srcRect.height}O${offset}`
     //const lineWidth = 2
 
@@ -78,14 +78,12 @@ class ImageFx {
     this.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset - lineWidth, srcRect.y - offset - lineWidth, canvas.width, canvas.height)
 
     context.lineDashOffset += 0.1
-  }
+  }*/
 
-  drawSelectedRect(srcRect, offset = 2, lineWidth = 1, color = '#000', speed = 0.1, lineDash = [5, 3]) {
+  drawSelectedRect(srcRect, offset = 2, lineWidth = 1, color = '#fff', speed = 0.1, lineDash = [5, 3]) {
     const cacheKey = `k${srcRect.width}${srcRect.height}${offset}${color}`
 
     if (!this.offCanvases[cacheKey]) {
-      console.log('cache miss');
-
       const { context, canvas } = this.initOffCanvas({
         key: cacheKey,
         width: srcRect.width + Math.abs(offset) * 2 + lineWidth * 2,

@@ -2,7 +2,11 @@ import { boxesCollide, collisions } from '../../../../libs/collisions'
 
 export default {
   closeMountablePlatforms() {
+
+
     if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
+
+
 
     //console.log('plats allowed', this.target);
 
@@ -23,6 +27,34 @@ export default {
 
       ) {
         console.log('close mountable plat');
+
+        if (platform.upgrade) {
+          console.log('upgrade', platform.upgrade);
+
+          this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
+
+          this.menu.menuItems.push('dont-climb')
+          this.menu.resetHeight()
+
+          platform.upgrade = false
+
+          let parentSpawn = this.level.spawn.bind(this.level)
+
+          this.level.spawn = (entity) => {
+            parentSpawn(entity)
+
+            console.log('level spawn');
+
+
+            setTimeout(() => {
+              entity.menu.menuItems.push('dont-climb')
+              entity.menu.resetHeight()
+            }, 100);
+
+
+            this.level.resetBaddie()
+          }
+        }
 
         return platform
       }
@@ -145,7 +177,7 @@ export default {
     } else {
       this.speed.x = dx - 1
 
-      this.speed.y = Math.ceil(dy / 40) + 1
+      this.speed.y = Math.ceil(dy / (this.menu.menuItems.includes('dont-climb') ? 40 : 10)) + 1
     }
   },
 
@@ -198,6 +230,8 @@ export default {
       console.log((this.level.groundY - this.y));
 
       if (this.level.groundY - this.y > 110) this.fallDead = true
+
+      if (this.menu.menuItems.includes('dont-climb') && (this.level.groundY - this.y < 190)) this.fallDead = false
 
       this.movingFn = this.moveOffPlatform
 

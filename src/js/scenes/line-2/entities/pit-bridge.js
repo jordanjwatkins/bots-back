@@ -17,7 +17,7 @@ class PitBridge {
 
     this.moving = true
 
-    this.color = 'black'
+    this.color = '#000'
     this.sparkColor = 'yellow'
 
     this.entry = this.getUpperRightCorner()

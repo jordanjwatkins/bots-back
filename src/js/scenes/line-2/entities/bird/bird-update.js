@@ -8,11 +8,19 @@ export default {
   },
 
   enemyAhead() {
-    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0, height: 200 })
+    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0, height: 20 })
+  },
+
+  enemyBelow() {
+    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 20, width: 20 })
   },
 
   allyAhead() {
     return collisions(this, this.allies, { x: 10 * this.directionX, y: 0 })
+  },
+
+  allyBelow() {
+    return collisions(this, this.allies, { x: 10 * this.directionX, y: 20, width: 20 })
   },
 
   enemyHere() {
@@ -76,6 +84,9 @@ export default {
 
       this.clearingSpawner = true
 
+      console.log('clearing');
+
+
       //this.pulser.occupied = false
     }
 
@@ -103,6 +114,9 @@ export default {
 
     if (nextEnemy) {
       this.speed.x = 0
+    } else {
+      nextEnemies = this.enemyBelow()
+      nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
     }
 
     if (nextEnemy) { //this.bad &&
@@ -111,7 +125,8 @@ export default {
       if (this.movingToGround || this.movingOffPlatform) {
         this.movingToGround = false
 
-        if (this.fallDead) this.fallDead = nextEnemy
+        this.fallDead = nextEnemy
+        //if (this.fallDead)
 
         console.log('instakill')
 
@@ -148,13 +163,26 @@ export default {
     let nextAllies = this.allyAhead()
     let nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
 
+    if (!nextAlly) {
+      nextAllies = this.allyBelow()
+      nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
+    }
+
+    if (nextAlly) {
+      //console.log('ally below');
+
+    }
+
     // don't go below the ground
-    if (this.y + this.height > this.level.groundY) this.y = this.level.groundY - this.height
+    if (this.y + this.height > this.level.groundY) {
+      this.y = this.level.groundY - this.height
+      this.speed.y = 0
+    }
 
     //nextEnemies = this.enemyHere()
     //nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
-    if (nextEnemy || (nextAlly && !this.movingToGround) || (this.bad && this.x > 900)) {
+    if (nextEnemy || (nextAlly && !this.movingToGround && !this.movingToBack) || (this.bad && this.x > 900)) {
       this.speed.x = 0
     // nextEnemy.speed.x = 0
     }
@@ -179,6 +207,8 @@ export default {
       // this.hp -= 1
       if (nextEnemy && nextEnemy.damage) {
         if (nextEnemy.fallDead && nextEnemy.fallDead === this) {
+          console.log('instakilled');
+
           this.hp = 0
         } else {
           this.hp -= nextEnemy.damage

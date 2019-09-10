@@ -24,7 +24,7 @@ class Pulser {
 
     this.chargeProgress = 0
     this.chargeSpeed = chargeSpeed
-    this.maxChargeCount = 3
+    this.maxChargeCount = 10
     this.chargeCount = chargeCount
     this.pulsesFiredCount = 0
 
@@ -71,17 +71,19 @@ class Pulser {
       if (this.chargeCount < this.maxChargeCount) this.chargeCount += 1
     }
 
-    if (this.chargeCount < this.maxChargeCount) this.chargeProgress += this.chargeSpeed
+    if (this.chargeCount + this.pulsesFiredCount < this.maxChargeCount) this.chargeProgress += this.chargeSpeed * 13
 
-    if (this.dead) this.chargeCount -= 1
+    if (this.dead)  {
+      this.chargeCount -= 1
+    }
 
     this.mainCanvas.context.filter = 'blur(1px)'
-    this.drawChargeProgress(mainCanvas)
+    //this.drawChargeProgress(mainCanvas)
     this.drawCharges(mainCanvas)
     this.mainCanvas.context.filter = 'none'
   }
 
-  drawChargeProgress(mainCanvas) {
+  /*drawChargeProgress(mainCanvas) {
     const progressIndicatorCount = 10
     const fullBarWidth = this.width - 6
     const gutterWidth = 1
@@ -101,21 +103,24 @@ class Pulser {
         color,
       })
     }
-  }
+  }*/
 
   drawCharges(mainCanvas) {
     const gutterWidth = 2
     const fullBarWidth = this.width - 6
-    const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount - 1)) / this.maxChargeCount
+    const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount * 2 - 1)) / this.maxChargeCount * 2
 
     for (let i = 0; i < this.maxChargeCount; i++) {
-      const color = (i >= this.chargeCount) ? '#3a4d94' : 'yellow'
+      let color = (i >= this.chargeCount - this.pulsesFiredCount) ? '#3a4d94' : 'yellow'
+      if (this.dead) color = Math.sin(Date.now() / 300) > 0 ? 'red' : '#3a4d94'
+      let y = (i < this.maxChargeCount / 2) ? 0 : chunkWidth + 2
+      let x = (i < this.maxChargeCount / 2) ? 0 : -(chunkWidth * (this.maxChargeCount / 2) + gutterWidth * (this.maxChargeCount / 2))
 
       mainCanvas.drawRect({
-        x: this.x + 3 + chunkWidth * i + gutterWidth * i,
-        y: this.y + 4,
+        x: this.x + 3 + chunkWidth * i + gutterWidth * i + x,
+        y: this.y + 4 + y,
         width: chunkWidth,
-        height: chunkWidth / 2,
+        height: chunkWidth,
         color,
       })
     }
@@ -165,10 +170,12 @@ class Pulser {
       if (!this.dead && this.eyeOffset > 40) scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
     }
 
-    this.boxColor = '#6a8aff'
+    this.boxColor = '#222'
+    //'#6a8aff'
+    //'#444'
 
     if (this.eyeOffset > 15) scene.mainCanvas.drawRect({ ...this, color: this.boxColor })
-    scene.mainCanvas.context.strokeStyle = '#444'
+    scene.mainCanvas.context.strokeStyle = '#6a8aff'
     if (this.eyeOffset > 15) {
       scene.mainCanvas.context.strokeRect(
         this.x,
@@ -181,13 +188,13 @@ class Pulser {
     if (this.eyeOffset > 16) this.updateChargeProgress(scene)
 
     // eye
-    this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -70
+    this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -15
 
-    //if (true) this.eyeOffset = 40
+    if (true) this.eyeOffset = 40
 
     this.eyeOffset += 0.1
 
-    //this.eyeOffset += 0.5
+    if (scene.seenIntro) this.eyeOffset += 0.5
 
     if (this.eyeOffset > 100) this.eyeOffset = 100
 
@@ -226,7 +233,7 @@ class Pulser {
       y: this.y - 17 - Math.round(this.eyeOffset),
       width: 30,
       height: 5,
-      color: (this.dead) ? 'black' : '#2472ff',
+      color: (this.dead) ? '#000' : '#2472ff',
     })
     this.mainCanvas.context.filter = 'none'
 
@@ -289,7 +296,7 @@ class Pulser {
     //this.liftFrame += 0.1
     this.liftFrame -= 0.1
 
-    //this.liftFrame -= 0.5
+    this.liftFrame -= 0.5
 
     let lifterX = this.x - 5
     let lifterY = this.y + this.height - 34

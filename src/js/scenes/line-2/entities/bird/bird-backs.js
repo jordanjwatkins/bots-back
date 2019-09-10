@@ -89,11 +89,11 @@ export default {
 
           this.host = null
           this.onBack = false
-        } else {
+        } else if (!this.movingToBack) {
           this.speed.x = this.host.speed.x
           //wombat
-          //this.y = this.host.y - this.height
-          //this.x = this.host.x + this.host.width / 2 - this.width / 2
+          this.y = this.host.y - this.height
+          this.x = this.host.x + this.host.width / 2 - this.width / 2
         }
       }
     } else if (!this.movingToPlatform && !this.onPlatform && !this.movingOffPlatform && !this.movingToBack && !this.movingToGround && this.y + this.height < this.level.groundY) {
@@ -103,11 +103,13 @@ export default {
     if (this.movingToBack) {
       //let target = this.host
 
-      let target = this.target
 
-      while (target.backOccupier) {
-        target = target.backOccupier
+
+      while (this.target.backOccupier) {
+        this.target = this.target.backOccupier
       }
+
+      let target = this.target
 
       stopGo.disabled = true
 
@@ -129,6 +131,11 @@ export default {
         this.flying = false
 
         this.onBack = true
+
+        if (this.host) {
+          this.host.backOccupied = false
+          this.host.backOccupier = false
+        }
 
         this.host = target
         target.backOccupied = true
@@ -177,7 +184,10 @@ export default {
 
         this.jumpParticles = null
 
-        if (this.host) this.host.backOccupied = false
+        if (this.host) {
+          this.host.backOccupied = false
+          this.host.backOccupier = false
+        }
         this.target = null
       }
 

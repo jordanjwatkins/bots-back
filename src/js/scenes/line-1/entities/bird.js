@@ -270,7 +270,7 @@ class Bird {
       y: this.y + 5,
       width: 3,
       height: 3,
-      color: 'black',
+      color: '#000',
     })
 
     mainCanvas.drawRect({
@@ -278,7 +278,7 @@ class Bird {
       y: this.y + 5,
       width: 3,
       height: 3,
-      color: 'black',
+      color: '#000',
     })
 
     // beak

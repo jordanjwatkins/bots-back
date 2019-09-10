@@ -12,7 +12,7 @@ class Line {
       y: 0,
     }
 
-    this.color = 'black'
+    this.color = '#000'
     this.type = 'line'
   }
 

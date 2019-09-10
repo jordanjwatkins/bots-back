@@ -48,6 +48,12 @@ class BirdMenu {
     this.padding = 7
   }
 
+  resetHeight() {
+    console.log('reset height');
+
+    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: this.menuItems.length * 30 + 25, bgColor: '#000' })
+  }
+
   destroy() {
     this.removeMenuFieldOnClick()
   }

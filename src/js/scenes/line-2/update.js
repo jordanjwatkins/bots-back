@@ -1,16 +1,20 @@
 //import * as sounds from './sounds'
 //import knote from '../../libs/knote'
 
-let showTitle = true
+let showTitle = false
 
 let zoom = 5.8
-//zoom = 1
+
+if (!showTitle) {
+  zoom = 1
+}
+
 
 let zoomingOut = false
 
 setTimeout(() => {
   zoomingOut = true
-}, (showTitle) ? 14000 : 7000)
+}, (showTitle) ? 14000 : 2000)
 
 /*let slow = false
 setTimeout(() => {
@@ -27,12 +31,12 @@ setTimeout(() => {
 let titleCanvas
 
 let fontSize = 39
+
 let scaleTitle = false
+
 setTimeout(() => {
   scaleTitle = true
 }, 3000);
-
-
 
 function update(scene, delta, extras) {
   /*if (slow) {
@@ -115,7 +119,7 @@ function update(scene, delta, extras) {
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
 
-  if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#111')
+  if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#fff')
 
   if (extras) extras()
 

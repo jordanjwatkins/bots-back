@@ -50,6 +50,7 @@ export default (scene) => {
           this.entities.push(entity)
 
           setTimeout(() => {
+            entity.menu.menuFields['dont-climb'].value = 'dont'
             entity.pulser.occupied = true
           }, 100)
         },
@@ -95,6 +96,8 @@ export default (scene) => {
 
       const bird = new Bird({ x: 690, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, questionable: true })
 
+      const thrusterUpgrade = new Platform({ x: 500, y: startY + 80, width: 30, height: 30, upgrade: 'thruster' })
+
       return {
         groundY,
         startY,
@@ -103,6 +106,7 @@ export default (scene) => {
           //bird2,
           //bird3,
           new PitBridge({ x: 380, y: groundY, width: 200, height: 300 }),
+
         ],
 
         pulser: new Pulser({ x: 880, y: startY - 50 }),
@@ -114,6 +118,8 @@ export default (scene) => {
             new Platform({ x: 480, y: startY + 40, width: 60, height: 20 }),
 
             new Platform({ x: -40, y: startY + 40, width: 300, height: 180 }),
+
+            thrusterUpgrade,
           ],
         },
 
@@ -122,6 +128,15 @@ export default (scene) => {
           entity.host = this.groups.platforms[0]
           entity.target = { entity: entity.host }
           this.entities.push(entity)
+
+          setTimeout(() => {
+            //entity.menu.menuFields['dont-climb'].value = 'dont'
+            entity.pulser.occupied = true
+          }, 100)
+        },
+
+        resetBaddie() {
+          //this.entities.push(new Bird({ x: 690, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, questionable: true }))
         },
 
         update() {
@@ -156,6 +171,11 @@ export default (scene) => {
 
         spawn(entity) {
           this.entities.push(entity)
+
+          setTimeout(() => {
+            entity.menu.menuFields['dont-climb'].value = 'dont'
+            entity.pulser.occupied = true
+          }, 100)
         },
 
         update() {
