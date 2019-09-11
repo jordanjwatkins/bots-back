@@ -96,7 +96,8 @@ export default (scene) => {
 
       const bird = new Bird({ x: 690, y: groundY - 20, bad: true, speed: { x: 0, y: 0 }, questionable: true })
 
-      const thrusterUpgrade = new Platform({ x: 500, y: startY + 80, width: 30, height: 30, upgrade: 'thruster' })
+      //const thrusterUpgrade = new Platform({ x: 710, y: startY + 30, width: 30, height: 30, upgrade: 'thruster' })
+      const thrusterUpgrade = new Platform({ x: 500, y: startY + 140, width: 20, height: 20, upgrade: 'thruster' })
 
       return {
         groundY,
@@ -180,6 +181,8 @@ export default (scene) => {
 
         update() {
 
+
+          mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: 500, y: 0 }, { x: 400, y: 600 }, { x: 600, y: 600 }], 1))
         },
       }
     },

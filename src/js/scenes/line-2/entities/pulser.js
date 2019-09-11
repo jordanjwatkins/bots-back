@@ -177,7 +177,9 @@ class Pulser {
     //'#444'
 
     if (this.eyeOffset > 15) scene.mainCanvas.drawRect({ ...this, color: this.boxColor })
+
     scene.mainCanvas.context.strokeStyle = '#6a8aff'
+
     if (this.eyeOffset > 15) {
       scene.mainCanvas.context.strokeRect(
         this.x,
@@ -206,81 +208,82 @@ class Pulser {
     }
 
     if (this.eyeOffset > 10) {
-    scene.mainCanvas.drawRect({
-      x: this.x + this.width / 2 - 2,
-      y: this.y - 20 - Math.round(this.eyeOffset),
-      width: 4,
-      height: 20 + Math.round(this.eyeOffset),
-      color: this.boxColor,
-    })
+      scene.mainCanvas.drawRect({
+        x: this.x + this.width / 2 - 2,
+        y: this.y - 20 - Math.round(this.eyeOffset),
+        width: 4,
+        height: 20 + Math.round(this.eyeOffset),
+        color: this.boxColor,
+      })
 
-    scene.mainCanvas.context.strokeRect(
-      this.x + this.width / 2 - 2,
-      this.y - 20 - Math.round(this.eyeOffset),
-       4,
-      20 + Math.round(this.eyeOffset)
-    )
+      scene.mainCanvas.context.strokeRect(
+        this.x + this.width / 2 - 2,
+        this.y - 20 - Math.round(this.eyeOffset),
+        4,
+        20 + Math.round(this.eyeOffset)
+      )
 
-    scene.mainCanvas.drawRect({
-      x: this.x + this.width / 2 - 15,
-      y: this.y - 20 - Math.round(this.eyeOffset),
-      width: 30,
-      height: 10,
-      color: '#333',
-    })
+      scene.mainCanvas.drawRect({
+        x: this.x + this.width / 2 - 15,
+        y: this.y - 20 - Math.round(this.eyeOffset),
+        width: 30,
+        height: 10,
+        color: '#333',
+      })
 
-    this.mainCanvas.context.filter = 'blur(1px)'
-    scene.mainCanvas.drawRect({
-      x: this.x + this.width / 2 - 15,
-      y: this.y - 17 - Math.round(this.eyeOffset),
-      width: 30,
-      height: 5,
-      color: (this.dead) ? '#000' : '#2472ff',
-    })
-    this.mainCanvas.context.filter = 'none'
+      this.mainCanvas.context.filter = 'blur(1px)'
+      scene.mainCanvas.drawRect({
+        x: this.x + this.width / 2 - 15,
+        y: this.y - 17 - Math.round(this.eyeOffset),
+        width: 30,
+        height: 5,
+        color: (this.dead) ? '#000' : '#2472ff',
+      })
+      this.mainCanvas.context.filter = 'none'
 
-    const x1 = this.x - 60
-    const y1 = this.y + this.height
+      const x1 = this.x - 60
+      const y1 = this.y + this.height
 
-    const x2 = this.x + this.menu.menuCanvas.canvas.width / 2
-    const y2 = this.y - 18 - this.eyeOffset
+      const x2 = this.x + this.menu.menuCanvas.canvas.width / 2
+      const y2 = this.y - 18 - this.eyeOffset
 
-    const x3 = this.x
-    const y3 = y1
+      const x3 = this.x
+      const y3 = y1
 
-    if (this.eyeOffset > 27 && this.eyeOffset < 30) scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
+      if (this.eyeOffset > 27 && this.eyeOffset < 30) scene.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1)
 
-    if (this.eyeOffset > 30) {
-    // pad
-    this.mainCanvas.context.filter = 'blur(2px)'
-    scene.mainCanvas.drawRect({
-      x: this.x - 55,
-      y: this.y + this.height - 6,
-      width: 30,
-      height: 4,
-      color: 'yellow',
-    })
-    this.mainCanvas.context.filter = 'none'
+      if (this.eyeOffset > 30) {
+        // pad
+        this.mainCanvas.context.filter = 'blur(2px)'
 
-    scene.mainCanvas.drawRect({
-      x: this.x - 60,
-      y: this.y + this.height - 5,
-      width: 40,
-      height: 5,
-      color: '#111',
-    })
+        scene.mainCanvas.drawRect({
+          x: this.x - 55,
+          y: this.y + this.height - 6,
+          width: 30,
+          height: 4,
+          color: 'yellow',
+        })
+        this.mainCanvas.context.filter = 'none'
 
-    scene.mainCanvas.drawRect({
-      x: this.x - 55,
-      y: this.y + this.height - 3,
-      width: 55,
-      height: 3,
-      color: '#333',
-    })
+        scene.mainCanvas.drawRect({
+          x: this.x - 60,
+          y: this.y + this.height - 5,
+          width: 40,
+          height: 5,
+          color: '#111',
+        })
+
+        scene.mainCanvas.drawRect({
+          x: this.x - 55,
+          y: this.y + this.height - 3,
+          width: 55,
+          height: 3,
+          color: '#333',
+        })
+      }
     }
-    }
 
-    this.drawLifter(scene)
+    //this.drawLifter(scene)
 
     if (!this.fightParticles) this.fightParticles = new Particles({ target: this })
     if (!this.fightParticles2) this.fightParticles2 = new Particles({ target: { ...this, x: 9, y: 589, directionX: 0, width: 99, height: 99 } })

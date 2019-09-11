@@ -32,7 +32,11 @@ export default {
     this.y += this.speed.y
   },
 
-  update({ mainCanvas, entities, level, pulser }) {
+  update(scene) {
+    const { mainCanvas, entities, level, pulser } = scene
+
+
+
     if (this.dead) {
       if (this.hp > -40) {
         if (!this.splat) {
@@ -52,10 +56,13 @@ export default {
 
     if (this.isFrozen) {
       this.speed.x = 0
+      //this.updatePlatforms()
       this.fly()
-      this.draw(mainCanvas)
+      //this.draw(mainCanvas)
 
-      return
+      //return
+
+      if (this.y > 700) this.dead = true
     }
 
     this.mainCanvas = mainCanvas
@@ -100,7 +107,7 @@ export default {
     }
 
     if (stopGo.value === 'go') {
-      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 2 : 1) * this.directionX
+      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 2.5 : 2) * this.directionX
       this.flying = true
     } else {
       this.speed.x = 0
@@ -174,7 +181,7 @@ export default {
     }
 
     // don't go below the ground
-    if (this.y + this.height > this.level.groundY) {
+    if (this.y + this.height > this.level.groundY && !this.isFrozen) {
       this.y = this.level.groundY - this.height
       this.speed.y = 0
     }
@@ -194,6 +201,10 @@ export default {
     this.updatePlatforms()
 
     if (this.speed.y !== 0) this.thrustParticles.drawThrust()
+
+    if (this.isFrozen) {
+      this.speedY -= 2
+    }
 
     this.fly()
 
@@ -263,5 +274,7 @@ export default {
       this.menu.debugRectFn()
       //this.mainCanvas.lateRenders.push(() => this.menu.debugRectFn())
     }
+
+    if (!this.bad && this.x + this.width < 0) scene.startNextLevel()
   },
 }

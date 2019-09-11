@@ -2,20 +2,17 @@ import { boxesCollide, collisions } from '../../../../libs/collisions'
 
 export default {
   closeMountablePlatforms() {
-
-
-    if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
-
-
+    //if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
 
     //console.log('plats allowed', this.target);
 
 
     return this.level.groups.platforms.filter((platform) => {
       if (
+        (platform.type === 'u' || (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad) && platform.entry.x < this.x)) &&
         //!(this.platform && platform === this.platform) &&
         //!platform.entry.occupied &&
-        platform.entry.x < this.x &&
+
         //platform.entry.y < this.y &&
 
         Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 &&
@@ -27,9 +24,8 @@ export default {
 
       ) {
         console.log('close mountable plat');
-
-        if (platform.upgrade) {
-          console.log('upgrade', platform.upgrade);
+        if (platform.type === 'u' && platform.upgrade && Math.abs(platform.entry.y - this.y) < 30 && Math.abs(platform.entry.x - this.x) < 30) {
+          console.log('upgrade', platform.upgrade)
 
           this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
 
@@ -49,12 +45,15 @@ export default {
             setTimeout(() => {
               entity.menu.menuItems.push('dont-climb')
               entity.menu.resetHeight()
-            }, 100);
+            }, 100)
 
 
-            this.level.resetBaddie()
+            //this.level.resetBaddie()
           }
         }
+
+
+        if (platform.type === 'u') return false
 
         return platform
       }
@@ -92,6 +91,14 @@ export default {
 
       this.target = { ...platform.entry, entity: platform }
       this.targetHost = platform
+
+      console.log(platform);
+
+      if (platform.type === 'u') {
+        console.log('upgrade');
+
+        //this.target.y += 220
+      }
 
       this.movingFn = this.moveTowardEntry
     }

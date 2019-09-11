@@ -41,7 +41,7 @@ setTimeout(() => {
 }, 3000)
 
 function update(scene, delta, extras) {
-  console.log(scene.currentLevel !== 'basics', !skipped);
+  //console.log(scene.currentLevel !== 'basics', !skipped);
 
 
   //console.log(scene.currentLevel);
@@ -93,10 +93,10 @@ function update(scene, delta, extras) {
     titleCanvas.context.fillText(`Back`, 110 - fontSize / 3, fontSize / 3 + 200)
   }
 
-  if (level.update) scene.level.update()
 
   mainCanvas.lateRenders = []
 
+  if (level.update) scene.level.update()
   //mainCanvas.clearCanvas()
 
   // draw background color so zoom works
@@ -114,7 +114,7 @@ function update(scene, delta, extras) {
   if (groups) groups.platforms.forEach(entity => entity.update(scene, delta))
 
   if (groups) groups.platforms[0].drawAll()
-  if (groups) groups.platforms[0].drawLate()
+
 
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
@@ -128,7 +128,7 @@ function update(scene, delta, extras) {
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
-
+  if (groups) groups.platforms[0].drawLate()
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
 

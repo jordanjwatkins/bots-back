@@ -50,69 +50,21 @@ class MainCanvas {
     return boundingRect
   }
 
-  set opacity(value) {
+  /*set opacity(value) {
     if (value < 0) value = 0
     if (value > 1) value = 1
 
     this.context.globalAlpha = value
-  }
+  }*/
 
   clearCanvas() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  /*
-    wombat
-  testRect(color) {
-    this.context.fillStyle = color || '#000'
-
-    this.context.fillRect(0, 0, 40, 20)
-  }
-
-  transform(thing) {
-    this.context.translate(thing.x, thing.y + (thing.height / 2))
-
-    if (thing.scaleX) this.flipX(thing)
-    if (thing.rotation) this.rotateThing(thing)
-
-    this.context.translate(-thing.x, -thing.y - (thing.height / 2))
-  }
-
-  flipX(thing) {
-    this.context.scale(thing.scaleX, 1)
-  }
-
-  rotateThing(thing) {
-    this.context.rotateThing(thing.rotation * (Math.PI / 180))
-  }*/
-
   drawRect({ x, y, color, width = 30, height = 60 }) {
     this.context.fillStyle = color || '#000'
 
     this.context.fillRect(x, y, width, height)
-  }
-
-
-  drawThing(thing, frame = 0) {
-    if (thing.spriteName) return;//wombat thing.sprite = images[thing.spriteName]
-
-    if (!thing.sprite) return
-
-    const spriteX = thing.x - (thing.width / 2)
-    const spriteY = thing.y - (thing.height / 2)
-
-    this.context.drawImage(
-      thing.sprite,
-
-      // sprite frame box
-      frame * thing.frameWidth + thing.frameOffset, 0, thing.frameWidth, thing.frameHeight,
-
-      // position in world
-      spriteX, spriteY,
-
-      // dimensions in world
-      thing.width, thing.height,
-    )
   }
 
   drawVignette() {
@@ -121,18 +73,18 @@ class MainCanvas {
 
   drawNoise(alpha) {
     this.noiseCount = this.noiseCount || 1
-    this.noiseSpeed = 5 // # of renders per noise update
+    //this.noiseSpeed = 5 // # of renders per noise update
 
     // don't update the noise every frame
-    if (this.noiseCount > this.noiseSpeed) {
+    if (this.noiseCount > 5) {
       // randomize render offset to make one frame of noise seem like several
-      this.noiseOffsetX = Math.round(Math.random() * 50)
-      this.noiseOffsetY = Math.round(Math.random() * 50)
+      //this.noiseOffsetX = Math.round(Math.random() * 50)
+      //this.noiseOffsetY = Math.round(Math.random() * 50)
 
       this.noiseCount = 0
     }
 
-    this.imageFx.noise(this.noiseOffsetX, this.noiseOffsetY, alpha)
+    this.imageFx.noise(Math.round(Math.random() * 50), Math.round(Math.random() * 50), alpha)
 
     this.noiseCount += 1
   }
@@ -156,7 +108,7 @@ class MainCanvas {
     )
   }
 
-  clickCoords = (event) => {
+  /*clickCoords = (event) => {
     const canvasRect = this.boundingRect
 
     return (this.debug) ?
@@ -172,7 +124,7 @@ class MainCanvas {
         unscaledX: (event.pageX - canvasRect.x) / this.scaleInDom,
         unscaledY: (event.pageY - canvasRect.y) / this.scaleInDom,
       }
-  }
+  }*/
 
   clickAreaDebug(clickRect, offset = 2) {
     return () => {
@@ -217,92 +169,11 @@ class MainCanvas {
     return lines
   }
 
-  /*
-    wombat
-    drawRollingLine() {
-    const { canvas, context } = this
-
-    const vh = canvas.height
-    const vw = canvas.width
-
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-    const cp = context.closePath.bind(context)
-
-    context.save()
-
-    context.globalAlpha = 0.05
-
-    context.lineWidth = vh / 5
-    context.strokeStyle = '#000'
-
-    if (this.rollY === undefined) this.rollY = -100
-
-    if (this.rollY > vh +  vh / 5) this.rollY = -100 - (800 * Math.random())
-
-    this.rollY += 10
-
-    const y = this.rollY
-
-    bp()
-    m(0, y)
-    l(vw, y)
-    cp()
-
-    context.stroke()
-
-    context.restore()
-  }
-
-  drawRollingLine2() {
-    const { canvas, context } = this
-
-    const vh = canvas.height
-    const vw = canvas.width
-
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-    const cp = context.closePath.bind(context)
-
-    context.save()
-
-    context.globalAlpha = 0.05
-
-    context.lineWidth = vh / 8
-    context.strokeStyle = '#FFF'
-
-    if (this.rollY2 === undefined) this.rollY2 = -100
-
-    if (this.rollY2 > vh) this.rollY2 = -100
-
-    this.rollY2 += 10
-
-    const y = this.rollY2
-
-    bp()
-    m(0, y)
-    l(vw, y)
-    m(0, y + vh / 4)
-    l(vw, y + vh / 4)
-    cp()
-
-    context.stroke()
-
-    context.restore()
-  }*/
-
   drawRollingLineReversed() {
     const { canvas, context } = this
 
     const vh = canvas.height
     const vw = canvas.width
-
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-    const cp = context.closePath.bind(context)
 
     context.save()
 
@@ -319,12 +190,12 @@ class MainCanvas {
 
     const y = this.rollY2
 
-    bp()
-    m(0, y)
-    l(vw, y)
-    m(0, y + vh / 4)
-    l(vw, y + vh / 4)
-    cp()
+    context.beginPath()
+    context.moveTo(0, y)
+    context.lineTo(vw, y)
+    context.moveTo(0, y + vh / 4)
+    context.lineTo(vw, y + vh / 4)
+    context.closePath()
 
     context.stroke()
 
@@ -347,11 +218,6 @@ class MainCanvas {
     const vh = canvas.height
     const vw = canvas.width
 
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-    const cp = context.closePath.bind(context)
-
     context.save()
 
     context.setTransform(1, 0, 0, 1, 0, 0)
@@ -367,11 +233,11 @@ class MainCanvas {
     this.scanlines.forEach((line) => {
       context.lineWidth = line.width
 
-      bp()
+      context.beginPath()
 
-      m(line.start[0], line.start[1])
-      l(line.end[0], line.end[1])
-      cp()
+      context.moveTo(line.start[0], line.start[1])
+      context.lineTo(line.end[0], line.end[1])
+      context.closePath()
 
       context.stroke()
     })

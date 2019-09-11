@@ -94,55 +94,6 @@ class PitBridge {
     this.lineDashOffset += 1.1
   }
 
-  /*drawSelectedRectNeat(srcRect, offset = 0) {
-    // const cacheKey = `selectedRectW${srcRect.width}H${srcRect.height}O${offset}`
-
-     //if (!this.offCanvases[cacheKey]) {
-       const lineWidth = 5
-       const { canvas, context } = this.offCanvas
-
-       const rect = {
-         width: srcRect.width + (offset * 2) + (lineWidth * 2),
-         height: srcRect.height + (offset * 2) + (lineWidth * 2),
-       }
-
-       //const { canvas, context } = this.offCanvas
-
-       const m = context.moveTo.bind(context)
-       const l = context.lineTo.bind(context)
-       const bp = context.beginPath.bind(context)
-       const cp = context.closePath.bind(context)
-
-
-       context.lineWidth = lineWidth
-       context.strokeStyle = '#000'
-       context.setLineDash([5, 3])
-
-       bp()
-       m(lineWidth, lineWidth)
-       l(rect.width - lineWidth, lineWidth)
-
-       //cp()
-     //}
-
-     //const { canvas, context } = this.offCanvas
-
-     context.lineWidth = lineWidth
-     context.strokeStyle = '#fff'
-     context.setLineDash([5, 3])
-
-     context.lineDashOffset = 0
-     context.clearRect(0, 0, canvas.width, canvas.height)
-     context.stroke()
-
-     context.lineWidth = this.lineDashOffset
-     context.strokeRect(-20, 25, 250, 18)
-
-     this.mainCanvas.context.drawImage(canvas, 0, 0, canvas.width, canvas.height, srcRect.x - offset, srcRect.y - offset, canvas.width, canvas.height)
-
-     this.lineDashOffset += 1.1
-   }*/
-
   update(scene) {
     this.scene = scene
 

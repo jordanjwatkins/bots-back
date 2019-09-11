@@ -208,12 +208,12 @@ class Line2 {
   }
 
   startNextLevel() {
-    this.currentLevel = this.nextLevel
+    //this.currentLevel = this.nextLevel
     this.seenIntro = true
 
-    if (this.levelSelect) this.levelSelect.updateSquadNextX(this.currentLevel)
+    if (this.levelSelect) this.levelSelect.switchToLevel(this.nextLevel)
 
-    this.freshStart()
+    //this.freshStart()
   }
 }
 

@@ -14,7 +14,7 @@ class LevelSelect {
 
     this.z = 3
 
-    this.opacity = 1
+    //this.opacity = 1
 
     this.scene = scene
 
@@ -49,34 +49,38 @@ class LevelSelect {
   onClick = (event) => {
     Object.keys(this.clickBoxes).forEach((levelName) => {
       if (this.scene.mainCanvas.isClickHit(event, this.clickBoxes[levelName])) {
-        const { scene } = this
-        console.log('static');
-
-        scene.skipped = true
-
-        scene.mainCanvas.imageFx.static(0.9)
-
-        setTimeout(() => {
-          scene.mainCanvas.imageFx.static(-0.09)
-        }, 100)
-
-        const levelState = scene.storage.state.levels[levelName]
-
-        console.log(levelName)
-
-        if (
-          scene.currentLevel === levelName ||
-          levelState ||
-          this.debug
-        ) {
-          console.log(levelName, this.clickBoxes)
-
-          scene.currentLevel = levelName
-
-          scene.freshStart()
-        }
+        this.switchToLevel(levelName)
       }
     })
+  }
+
+  switchToLevel(levelName) {
+    const { scene } = this
+    console.log('static');
+
+    scene.skipped = true
+
+    scene.mainCanvas.imageFx.static(0.9)
+
+    setTimeout(() => {
+      scene.mainCanvas.imageFx.static(-0.09)
+    }, 100)
+
+    //const levelState = scene.storage.state.levels[levelName]
+
+    console.log(levelName)
+
+    if (
+      scene.currentLevel === levelName ||
+      scene.storage.state.levels[levelName] ||
+      this.debug
+    ) {
+      console.log(levelName, this.clickBoxes)
+
+      scene.currentLevel = levelName
+
+      scene.freshStart()
+    }
   }
 
   getLevelIndexByName(name) {
@@ -90,7 +94,6 @@ class LevelSelect {
   drawBackground() {
     this.scene.mainCanvas.drawRect(this)
   }
-
 
   drawRoad() {
     const roadWidth = 6

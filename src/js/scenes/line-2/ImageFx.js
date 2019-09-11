@@ -42,7 +42,7 @@ class ImageFx {
   }
 
   strokeRect({ x, y, color, width = 30, height = 60 }) {
-    this.context.fillStyle = color || '#000'
+    this.context.strokeStyle = color || '#000'
 
     this.context.strokeRect(x, y, width, height)
   }
@@ -144,21 +144,22 @@ class ImageFx {
 
       this.alpha = 0.3
 
-      if (!alpha) this.static()
+      //if (!alpha) this.static()
     }
 
-    if (!alpha)  {
+    //if (!alpha)  {
       this.alpha += this.staticV || 0
 
       if (this.alpha > 1) this.alpha = 1
       if (this.alpha < 0.1) this.alpha = 0.1
 
       this.context.globalAlpha = this.alpha
-    } else {
-      this.context.globalAlpha = alpha
-    }
+    //} else {
+    //  this.context.globalAlpha = alpha
+    //}
 
     this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, this.canvas.height, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+
     this.context.globalAlpha = 1
   }
 
