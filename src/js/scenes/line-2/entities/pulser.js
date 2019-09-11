@@ -24,7 +24,7 @@ class Pulser {
 
     this.chargeProgress = 0
     this.chargeSpeed = chargeSpeed
-    this.maxChargeCount = 10
+    this.maxChargeCount = 12
     this.chargeCount = chargeCount
     this.pulsesFiredCount = 0
 
@@ -107,12 +107,14 @@ class Pulser {
 
   drawCharges(mainCanvas) {
     const gutterWidth = 2
-    const fullBarWidth = this.width - 6
+    const fullBarWidth = this.width
     const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount * 2 - 1)) / this.maxChargeCount * 2
 
     for (let i = 0; i < this.maxChargeCount; i++) {
       let color = (i >= this.chargeCount - this.pulsesFiredCount) ? '#3a4d94' : 'yellow'
+
       if (this.dead) color = Math.sin(Date.now() / 300) > 0 ? 'red' : '#3a4d94'
+
       let y = (i < this.maxChargeCount / 2) ? 0 : chunkWidth + 2
       let x = (i < this.maxChargeCount / 2) ? 0 : -(chunkWidth * (this.maxChargeCount / 2) + gutterWidth * (this.maxChargeCount / 2))
 

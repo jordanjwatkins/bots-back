@@ -50,16 +50,26 @@ class LevelSelect {
     Object.keys(this.clickBoxes).forEach((levelName) => {
       if (this.scene.mainCanvas.isClickHit(event, this.clickBoxes[levelName])) {
         const { scene } = this
+        console.log('static');
+
+        scene.skipped = true
+
+        scene.mainCanvas.imageFx.static(0.9)
+
+        setTimeout(() => {
+          scene.mainCanvas.imageFx.static(-0.09)
+        }, 100)
+
         const levelState = scene.storage.state.levels[levelName]
 
-        console.log(levelName);
+        console.log(levelName)
 
         if (
           scene.currentLevel === levelName ||
           levelState ||
           this.debug
         ) {
-          console.log(levelName, this.clickBoxes);
+          console.log(levelName, this.clickBoxes)
 
           scene.currentLevel = levelName
 

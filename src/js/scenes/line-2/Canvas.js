@@ -119,20 +119,20 @@ class MainCanvas {
     this.imageFx.vignette()
   }
 
-  drawNoise() {
+  drawNoise(alpha) {
     this.noiseCount = this.noiseCount || 1
     this.noiseSpeed = 5 // # of renders per noise update
 
     // don't update the noise every frame
     if (this.noiseCount > this.noiseSpeed) {
       // randomize render offset to make one frame of noise seem like several
-      this.noiseOffsetX = Math.round(Math.random() * 30)
-      this.noiseOffsetY = Math.round(Math.random() * 30)
+      this.noiseOffsetX = Math.round(Math.random() * 50)
+      this.noiseOffsetY = Math.round(Math.random() * 50)
 
       this.noiseCount = 0
     }
 
-    this.imageFx.noise(this.noiseOffsetX, this.noiseOffsetY)
+    this.imageFx.noise(this.noiseOffsetX, this.noiseOffsetY, alpha)
 
     this.noiseCount += 1
   }

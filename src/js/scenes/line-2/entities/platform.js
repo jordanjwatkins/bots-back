@@ -117,12 +117,12 @@ class Platform {
       offCanvas.strokeRect({ x: -100, y: 99, width: 1100, height: 122 })
 
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 100, width: 1100, height: 120 }, 0, 3, 'yellow', 17, [15, 1003]))
-      lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 100, width: 1100, height: 120 }, 0, 3, 'white', 15, [5, 1003]))
+      lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 100, width: 1100, height: 120 }, 0, 3, '#FFF', 15, [5, 1003]))
 
       offCanvas.strokeRect({ x: -100, y: 209, width: 1100, height: 222 })
 
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, 'yellow', 13, [15, 1003]))
-      lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, 'white', 16, [15, 1003]))
+      lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, '#FFF', 16, [15, 1003]))
     }
 
      //this.imageFx.drawSelectedRect({ ...this }, -27, 17, this.rgba, 0)

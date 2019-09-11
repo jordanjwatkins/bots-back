@@ -14,7 +14,7 @@ class WinSplash {
     this.x = this.width - (this.width / 2)
     this.y = this.height - (this.height / 2) - 30
 
-    this.color = 'white'
+    this.color = '#FFF'
 
     this.z = 4
 

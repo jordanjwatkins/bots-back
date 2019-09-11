@@ -133,7 +133,7 @@ class ImageFx {
     }
   }*/
 
-  noise(offsetX, offsetY) {
+  noise(offsetX, offsetY, alpha) {
     if (!this.offCanvases['c1']) {
       // the noise canvases are a bit larger than the destination canvas so they can be offset randomly and still fill the destination canvas
       const { canvas, context } = this.initOffCanvas({ key: 'c1', bgColor: '#FFF', width: this.canvas.width + 50, height: this.canvas.height + 50 })
@@ -141,9 +141,29 @@ class ImageFx {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
       context.putImageData(this.applyNoise(imageData), 0, 0)
+
+      this.alpha = 0.3
+
+      if (!alpha) this.static()
+    }
+
+    if (!alpha)  {
+      this.alpha += this.staticV || 0
+
+      if (this.alpha > 1) this.alpha = 1
+      if (this.alpha < 0.1) this.alpha = 0.1
+
+      this.context.globalAlpha = this.alpha
+    } else {
+      this.context.globalAlpha = alpha
     }
 
     this.context.drawImage(this.offCanvases['c1'].canvas, offsetX, offsetY, this.canvas.height, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+    this.context.globalAlpha = 1
+  }
+
+  static(v) {
+    this.staticV = v || 0.02
   }
 
   vignette() {
@@ -167,14 +187,19 @@ class ImageFx {
     const noiseMap = makeBinaryNoiseMap(imageData.width, imageData.height)
 
     for (let i = 0; i < imageData.data.length; i += 4) {
-      let alpha = (noiseMap[Math.floor(i / 4)]) ? 25 : 0
+      let alpha = (noiseMap[Math.floor(i / 4)]) ? 255 : 0
+
+      alpha *= Math.random()
 
       // some browsers (Edge) don't like invalid values
       //if (alpha < 0) alpha = 0
       //if (alpha > 255) alpha = 255
+      imageData.data[i] = alpha
+      imageData.data[i + 1] = alpha
+      imageData.data[i + 2] = alpha
 
-      alpha *= Math.random()
-      imageData.data[i + 3] = alpha
+      //alpha *= Math.random()
+      //imageData.data[i + 3] = alpha
     }
 
     return imageData

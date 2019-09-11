@@ -1,7 +1,8 @@
 //import * as sounds from './sounds'
 //import knote from '../../libs/knote'
 
-let showTitle = false
+let skipAllIntro = true
+let showTitle = true
 
 let zoom = 5.8
 
@@ -30,15 +31,21 @@ setTimeout(() => {
 
 let titleCanvas
 
-let fontSize = 39
+let fontSize = 59
 
 let scaleTitle = false
+let skipped = false
 
 setTimeout(() => {
   scaleTitle = true
-}, 3000);
+}, 3000)
 
 function update(scene, delta, extras) {
+  console.log(scene.currentLevel !== 'basics', !skipped);
+
+
+  //console.log(scene.currentLevel);
+
   /*if (slow) {
     const val = Math.sin(Date.now() / 1)
 
@@ -59,8 +66,14 @@ function update(scene, delta, extras) {
   }*/
 
 
+
+
   const { mainCanvas, entities, level } = scene
   const { groups } = level
+
+  if (scaleTitle && zoom > 1) {
+    mainCanvas.imageFx.static(-0.01)
+  }
 
   if (showTitle) {
     titleCanvas = titleCanvas || mainCanvas.imageFx.initOffCanvas({ key: 'title', width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, bgColor: '#000' })
@@ -126,13 +139,17 @@ function update(scene, delta, extras) {
 
   zoomOut(mainCanvas)
 
+  mainCanvas.drawNoise()
+
+  if (showTitle) mainCanvas.context.drawImage(titleCanvas.canvas, 0, 0, mainCanvas.canvas.width, mainCanvas.canvas.height)
+
   // mainCanvas.drawRollingLine()
   mainCanvas.drawRollingLineReversed()
   // mainCanvas.drawRollingLine2()
 
   mainCanvas.drawScanlines()
 
-  mainCanvas.drawNoise()
+  //mainCanvas.drawNoise(0.025 * zoom) //if (scaleTitle)
 
   mainCanvas.drawVignette()
 
@@ -157,7 +174,14 @@ function update(scene, delta, extras) {
     }, 500)
   }*/
 
-  if (showTitle) mainCanvas.context.drawImage(titleCanvas.canvas, 0, 0, mainCanvas.canvas.width, mainCanvas.canvas.height)
+  if ((scene.currentLevel !== 'basics' || skipAllIntro) && !skipped) {
+    skipped = true
+    zoom = 1
+    showTitle = false
+    scene.pulser.eyeOffset = 100
+    scene.mainCanvas.imageFx.static(-1)
+  }
+
 }
 
 function zoomOut(mainCanvas) {

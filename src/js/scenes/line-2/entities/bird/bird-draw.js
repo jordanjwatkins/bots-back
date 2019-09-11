@@ -42,7 +42,7 @@ export default {
           y: 0 + 3,
           width: 7,
           height: 7,
-          color: 'white',
+          color: '#FFF',
         })
 
         this.offCanvas.drawRect({
@@ -50,7 +50,7 @@ export default {
           y: 0 + 3,
           width: 7,
           height: 7,
-          color: 'white',
+          color: '#FFF',
         })
       }
 
@@ -60,7 +60,7 @@ export default {
           y: 0 + 3,
           width: 7,
           height: 7,
-          color: 'white',
+          color: '#FFF',
         })
 
         this.offCanvas.drawRect({
@@ -68,7 +68,7 @@ export default {
           y: 0 + 1,
           width: 11,
           height: 11,
-          color: 'white',
+          color: '#FFF',
         })
       }
 
@@ -78,7 +78,7 @@ export default {
           y: 0 + 3,
           width: 7,
           height: 7,
-          color: 'white',
+          color: '#FFF',
         })
 
         this.offCanvas.drawRect({
@@ -86,12 +86,12 @@ export default {
           y: 0,
           width: 13,
           height: 13,
-          color: 'white',
+          color: '#FFF',
         })
       }
     }
 
-    const eyeColor = (this.bad) ? 'white' : '#000'
+    const eyeColor = (this.bad) ? '#FFF' : '#000'
 
     this.offCanvas.drawRect({
       x: 0 + 2,

@@ -10,7 +10,7 @@ import Ground from './entities/ground'
 import Pulser from './entities/pulser'
 import LevelSelect from './entities/level-select'
 import levels from './entities/levels'
-import Platform from './entities/platform';
+import Platform from './entities/platform'
 
 // import Dev from './dev'
 
@@ -151,26 +151,6 @@ class Line2 {
   }
 
   onClick = (event) => {
-    this.debug = true
-    if (this.debug) console.log('canvas click', this.mainCanvas.clickCoords(event)) // eslint-disable-line no-console
-
-    if (this.isPulserClick(event)) {
-      console.log('pulser');
-      if (!this.pulser.menu.isMenuOpen) {
-        console.log('open');
-
-        this.mainCanvas.selected = this.pulser
-        this.pulser.menu.openMenu()
-      }
-
-    }
-
-    console.log('menus click', this.pulser, this.pulser.menu, this.pulser.menu.isMenuClick(event))
-    if (this.pulser && this.pulser.menu && this.pulser.menu.isMenuClick(event)) {
-      console.log('menus click')
-
-    }
-
     this.entities.forEach((entity) => {
       if (entity.type === 'bird' && !entity.bad) {
         if (entity.isBirdClick(event, this.mainCanvas)) {
@@ -180,22 +160,7 @@ class Line2 {
           entity.onAnyClick(event)
         }
       }
-
     })
-  }
-
-  isPulserClick(event) {
-    const scale = this.mainCanvas.scaleInDom
-    const entity = this.pulser
-
-    return (
-      this.mainCanvas.isClickHit(event, {
-        x: entity.x * scale,
-        y: entity.y * scale,
-        height: entity.height * scale,
-        width: entity.width * scale,
-      })
-    )
   }
 
   initializeDom() {
@@ -205,33 +170,12 @@ class Line2 {
     this.sceneContainer = dom.make('<div class="scene-container"><div></div></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
-    //if (this.dev && this.dev.levelSelect) this.dev.levelSelect()
-
     document.body.appendChild(this.sceneContainer)
   }
 
   initEntities() {
     this.entities = this.level.entities
     this.birdCount = this.level.birdCount
-
-    let cloudSize = 50 + 60 * Math.random()
-
-    this.level.entities.unshift(new Cloud({
-      x: Math.round(-100 + ((this.mainCanvas.width / 3) * Math.random())),
-      y: Math.round(150 + (200 * Math.random())),
-      width: cloudSize,
-      height: cloudSize * 0.3,
-    }))
-
-    cloudSize = 50 + 60 * Math.random()
-
-    this.level.entities.unshift(new Cloud({
-      x: Math.round(400 + ((this.mainCanvas.width / 2) * Math.random())),
-      y: Math.round(50 + (150 * Math.random())),
-      width: cloudSize,
-      height: cloudSize * 0.3,
-      speedX: 0.5 - 0.2 * Math.random(),
-    }))
 
     this.level.entities.unshift(new Ground({
       width: this.mainCanvas.width,
@@ -240,31 +184,13 @@ class Line2 {
       speedX: 0.5 - 0.2 * Math.random(),
     }))
 
-    this.level.entities.unshift(new Cloud({
-      x: Math.round(-500 + ((this.mainCanvas.width / 2) * Math.random())),
-      y: Math.round(50 + (120 * Math.random())),
-      width: cloudSize,
-      height: cloudSize * 0.3,
-      speedX: 0.5 - 0.2 * Math.random(),
-    }))
-
-    this.level.entities.unshift(new Cloud({
-      x: Math.round(-400 + ((this.mainCanvas.width / 2) * Math.random())),
-      y: Math.round(50 + (20 * Math.random())),
-      width: cloudSize,
-      height: cloudSize * 0.3,
-      speedX: 0.5 - 0.2 * Math.random(),
-    }))
+    Array(50).fill(0).forEach(() => this.level.entities.unshift(new Cloud()))
 
     this.pulser = this.level.pulser || new Pulser({ x: 880, y: 500 })
     this.level.entities.unshift(this.pulser)
 
-    this.lines = this.entities.filter(entity => entity.type === 'line')
-
-    if (levelSelect) {
-      this.levelSelect = this.levelSelect || new LevelSelect(this)
-      this.level.entities.push(this.levelSelect)
-    }
+    this.levelSelect = this.levelSelect || new LevelSelect(this)
+    this.level.entities.push(this.levelSelect)
   }
 
   freshStart() {
@@ -277,10 +203,6 @@ class Line2 {
 
     this.initLevel()
     this.initEntities()
-
-    this.allFlying = false
-    this.gameOver = false
-    this.fadingOut = false
 
     this.attachEvents()
   }
