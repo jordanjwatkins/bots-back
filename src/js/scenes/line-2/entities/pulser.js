@@ -51,7 +51,7 @@ class Pulser {
       this.chargeCount -= 1
     }
 
-    this.mainCanvas.context.filter = 'blur(1px)'
+    this.mainCanvas.context.filter = 'none'
     //this.drawChargeProgress(mainCanvas)
     this.drawCharges(mainCanvas)
     this.mainCanvas.context.filter = 'none'
@@ -183,7 +183,7 @@ class Pulser {
         color: '#333',
       })
 
-      this.mainCanvas.context.filter = 'blur(1px)'
+      this.mainCanvas.context.filter = 'none'
       scene.mainCanvas.drawRect({
         x: this.x + this.width / 2 - 15,
         y: this.y - 17 - Math.round(this.eyeOffset),
@@ -206,7 +206,7 @@ class Pulser {
 
       if (this.eyeOffset > 30) {
         // pad
-        this.mainCanvas.context.filter = 'blur(2px)'
+        this.mainCanvas.context.filter = 'none'
 
         scene.mainCanvas.drawRect({
           x: this.x - 55,

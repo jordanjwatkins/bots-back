@@ -101,7 +101,7 @@ class LevelSelect {
     const roadY = 34
     const x = 25
 
-    this.scene.mainCanvas.context.filter = 'blur(1px)'
+    this.scene.mainCanvas.context.filter = 'none'
 
     // road
     this.scene.mainCanvas.drawRect({

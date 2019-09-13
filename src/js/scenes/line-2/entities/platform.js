@@ -65,7 +65,7 @@ class Platform {
     offCanvas2.strokeRect({ ...this, color, width: 20, x: this.x + 5, y: this.y + 5, height: 20 })
     offCanvas2.context.lineWidth = 3
     offCanvas2.strokeRect({ ...this, color })
-    offCanvas2.context.filter = 'blur(5px)'
+    offCanvas2.context.filter = 'none'
     offCanvas2.strokeRect({ ...this, color })
     offCanvas2.context.filter = 'none'
     offCanvas2.context.lineWidth = 1
@@ -116,16 +116,11 @@ class Platform {
       if (this.height < 30) {
         this.imageFx.drawSelectedRect({ ...this }, -26, 14, '#555', 0, [5, 3], offCanvas.context)
 
-        offCanvas.context.filter = 'blur(2px)'
+        offCanvas.context.filter = 'none'
         offCanvas.drawRect({ ...this, height: 5, color: this.rgba, y: this.y + this.height / 2 - 2 })
         offCanvas.context.filter = 'none'
         offCanvas.drawRect({ ...this, height: 5, color: this.rgba, y: this.y + this.height / 2 - 2 })
       }
-
-      // simple glowy
-      //offCanvas.context.filter = 'blur(1px)'
-      //offCanvas.drawRect({ ...this, color: this.rgba2, x: this.x - 3, y: this.y - 2, width: this.width + 6, height: this.height + 5 })
-      //offCanvas.context.filter = 'none'
     }
 
     if (!this.upgrade && this.type === 'u') offCanvas2.context.clearRect(this.x - 7, this.y - 7, this.width + 14, this.height + 14)

@@ -108,7 +108,7 @@ export default {
 
     if (this.reverseScan) eyeColor = '#FFF'
 
-    //this.offCanvas.context.filter = 'blur(1px)'
+    //this.offCanvas.context.filter = 'none'
 
     this.offCanvas.drawRect({
       x: 0 + 2 + ((this.bad) ? 8 : 0),

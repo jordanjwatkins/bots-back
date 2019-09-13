@@ -156,12 +156,6 @@ export default (scene) => {
         startY,
         groundY,
         entities: [
-          // new Bird({ x: 900, y: groundY - 20 }),
-          // new Bird({ x: 960, y: groundY - 50, heavy: true, width: 50, height: 50 }),
-          //new Bird({ x: 30, y: groundY - 30, bad: true }),
-          // new Bird({ x: 70, y: groundY - 20, bad: true }),
-          // new Bird({ x: 90, y: groundY - 20, bad: true }),
-          // new Bird({ x: 130, y: groundY - 20, bad: true }),
           new Bird({ x: 120, y: groundY - 30, bad: true }),
           new PitBridge({ x: 250, y: groundY, width: 200, height: 200 }),
           new PitBridge({ x: 530, y: groundY, width: 230, height: 200 }),
@@ -174,12 +168,8 @@ export default (scene) => {
             new Platform({ x: 630, y: groundY - 80, width: 100 }),
 
             new Platform({ x: 615, y: groundY - 115, width: 20, height: 20, upgrade: 'e1', color: '#2472ff' }),
-            new Platform({ x: 480, y: groundY - 30, width: 20, height: 20, upgrade: 'e2', color: '#2472ff' }),
+            new Platform({ x: 460, y: groundY - 30, width: 20, height: 20, upgrade: 'e2', color: '#2472ff' }),
             new Platform({ x: 30, y: groundY - 70, width: 20, height: 20, upgrade: 'e3', color: '#2472ff' }),
-
-           // new Platform({ x: 600, y: groundY - 20, width: 20, height: 20, upgrade: 'e2', color: '#2472ff' }),
-           // new Platform({ x: 630, y: groundY - 20, width: 20, height: 20, upgrade: 'e1', color: '#2472ff' }),
-            //new Platform({ x: 660, y: groundY - 20, width: 20, height: 20, upgrade: 'e3', color: '#2472ff' }),
           ],
         },
 
@@ -197,15 +187,11 @@ export default (scene) => {
 
           if (scene.e2 || 1) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 430, y: 550 }, { x: 590, y: 550 }], 1, '#ff9292'))
 
-          if (scene.e1 || 1) {
-            mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 750, y: 550 }, { x: 890, y: 550 }], 1, 'red'))
-
-            //this.spawnScanOffset -= 0.4
-          }
+          if (scene.e1 || 1) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 750, y: 550 }, { x: 890, y: 550 }], 1, 'red'))
 
           mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 150, y: 550 }, { x: 990, y: 550 }], 1, '#FFF'))
 
-          if (scene.e1 && scene.e2 && scene.e3) { // && scene.e2 && scene.e3) {
+          if (1||scene.e1 && scene.e2 && scene.e3) { // && scene.e2 && scene.e3) {
 
             console.log('game won');
             if (!this.startStatic) {
