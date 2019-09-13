@@ -1,37 +1,21 @@
-//import * as sounds from './sounds'
-//import knote from '../../libs/knote'
-
-let skipAllIntro = true
+const skipAllIntro = false
 let showTitle = true
 
-let zoom = 5.8
+let zoom = 3
 
 if (!showTitle) {
   zoom = 1
 }
 
-
 let zoomingOut = false
 
 setTimeout(() => {
   zoomingOut = true
-}, (showTitle) ? 14000 : 2000)
-
-/*let slow = false
-setTimeout(() => {
-  slow = true
-
-  setTimeout(() => {
-    slow = false
-  }, 2000)
-}, 8000)*/
-
-//let skipFrames = 6
-//let skippedFrames = 0
+}, (showTitle) ? 8000 : 2000)
 
 let titleCanvas
 
-let fontSize = 59
+let fontSize = 69
 
 let scaleTitle = false
 let skipped = false
@@ -41,33 +25,6 @@ setTimeout(() => {
 }, 3000)
 
 function update(scene, delta) {
-  //console.log(scene.currentLevel !== 'basics', !skipped);
-
-
-  //console.log(scene.currentLevel);
-
-  /*if (slow) {
-    const val = Math.sin(Date.now() / 1)
-
-    if (val < 0) {
-      //return
-    }
-
-    scene.skipFrames = 6
-
-    if (skippedFrames < scene.skipFrames) {
-      skippedFrames += 1
-      return
-    } else {
-      skippedFrames = 1
-    }
-  } else {
-    scene.skipFrames = 1
-  }*/
-
-
-
-
   const { mainCanvas, entities, level } = scene
   const { groups } = level
 
@@ -89,16 +46,15 @@ function update(scene, delta) {
 
     titleCanvas.context.fillStyle = '#FFF'
 
-    titleCanvas.context.fillText(`Bot's`, 110 - fontSize / 3, fontSize / 3 + 100)
-    titleCanvas.context.fillText(`Back`, 110 - fontSize / 3, fontSize / 3 + 200)
+    titleCanvas.context.fillText('Bot\'s', 110 - fontSize / 3, fontSize / 3 + 100)
+    titleCanvas.context.fillText('Back', 110 - fontSize / 3, fontSize / 3 + 200)
   }
 
   mainCanvas.lateRenders = []
 
   if (level.update) scene.level.update()
-  //mainCanvas.clearCanvas()
 
-  // draw background color so zoom works
+  // background colors
   mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d0b15' })
   mainCanvas.drawRect({ x: 0, y: 200, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d122b' })
   mainCanvas.drawRect({ x: 0, y: 400, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#34085d' })
@@ -113,7 +69,7 @@ function update(scene, delta) {
 
   if (groups) groups.platforms[0].drawAll()
 
-  if (groups) groups.platforms[0].drawLate()
+
 
   // draw foreground at z of 3
   updateEntities(entities, scene, 3, delta)
@@ -126,6 +82,8 @@ function update(scene, delta) {
 
   mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
+  if (groups) groups.platforms[0].drawLate()
+
   // draw overlay at z of 6
   updateEntities(entities, scene, 6, delta)
 
@@ -135,7 +93,9 @@ function update(scene, delta) {
     mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.width, height: mainCanvas.width, color: '#FFF' })
 
     mainCanvas.context.fillStyle = '#000'
-    if (level.winText) mainCanvas.context.fillText('JS13K', 100, 100)
+    mainCanvas.context.textAlign = 'left'
+    if (level.winText) mainCanvas.context.fillText('Bot\'s Back', 80, 90)
+    if (level.winText) mainCanvas.context.fillText('Jordan J Watkins - JS13K 2019', 80, 120)
   }
 
   zoomOut(mainCanvas)
@@ -156,11 +116,9 @@ function update(scene, delta) {
     scene.pulser.eyeOffset = 100
     scene.mainCanvas.imageFx.static(-1)
   }
-
 }
 
 function zoomOut(mainCanvas) {
-  // basic zoom out
   if (zoom > 0 && zoomingOut) {
     zoom -= 0.05
   }
@@ -182,7 +140,6 @@ function updateEntities(entities, scene, z, delta) {
   scene.flyingBirdCount = 0
 
   entities.forEach((entity) => {
-    //if (entity.isFrozen) slow = true
     if (entity.z === z) entity.update(scene, delta)
 
     if (entity.type === 'bird' && entity.flying) {

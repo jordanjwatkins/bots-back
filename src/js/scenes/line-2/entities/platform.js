@@ -50,11 +50,11 @@ class Platform {
     offCanvas = offCanvas || this.imageFx.initOffCanvas({})
     offCanvas2 = offCanvas2 || this.imageFx.initOffCanvas({})
 
-    if (this.upgrade === 'e1') delete scene.storage.state[this.upgrade]
+    //if (this.upgrade === 'e1') delete scene.storage.state[this.upgrade]
     ///if (this.upgrade === 'e2') delete scene.storage.state[this.upgrade]
     //if (this.upgrade === 'e3') delete scene.storage.state[this.upgrade]
 
-    if (scene.storage.state[this.upgrade] || scene[this.upgrade]) {
+    if (scene[this.upgrade]) {
       return
     }
 

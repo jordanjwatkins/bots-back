@@ -4,7 +4,7 @@ import ImageFx from '../../ImageFx'
 
 export default {
   enemyFarAhead() {
-    return collisions(this, this.enemies, { x: 100 * this.directionX, y: 0, height: 200 })
+    return collisions(this, this.enemies, { x: 150 * this.directionX, y: 0, height: 200 })
   },
 
   enemyAhead() {
@@ -63,8 +63,8 @@ export default {
           this.splat = true
         }
 
-        //this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
-        //this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
+        this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
+        this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
       }
 
       this.hp -= 1
@@ -113,7 +113,7 @@ export default {
     }
 
     if (stopGo.value === 'go') {
-      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 3 : 2) * this.directionX
+      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 2 : 1) * this.directionX
       this.flying = true
     } else {
       this.speed.x = 0
@@ -179,12 +179,9 @@ export default {
     let nextAllies = this.allyAhead()
     let nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
 
-
-
-    if (nextAlly) {
-      console.log('ally ahead');
-
-    }
+    //if (nextAlly) {
+      //console.log('ally ahead');
+    //}
 
     // don't go below the ground
     if (this.y + this.height > this.level.groundY && !this.isFrozen) {
@@ -197,7 +194,6 @@ export default {
 
     if (nextEnemy || (nextAlly && !this.movingToGround && !this.movingToBack) || (this.bad && this.x > 900)) {
       this.speed.x = 0
-    // nextEnemy.speed.x = 0
     }
 
     if (!nextAlly) {
@@ -221,7 +217,7 @@ export default {
     if (this.isFrozen) {
       this.speedY -= 2
       this.speed.x = 0
-      if (this.y > 700) this.dead = true
+      if (this.y > 600) this.dead = true
     }
 
     this.fly()
@@ -283,7 +279,7 @@ export default {
     const y3 = this.pulser.y - 18 - this.pulser.eyeOffset
     //console.log(this.menu && this.menu.isMenuOpen,  pulser.eyeOffset > 30);
 
-    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) {
+    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30 && !this.isFrozen) {
       this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
       this.mainCanvas.lateRenders.push(() => this.menu.drawMenu())
     }
@@ -291,11 +287,11 @@ export default {
 
     this.spawnScan()
 
-    if (this.menu && this.menu.debugRectFn) {
+    //if (this.menu && this.menu.debugRectFn) {
       // this.mainCanvas.context.setTransform(1, 0, 0, 1, 0, 0)
-      this.menu.debugRectFn()
+      //this.menu.debugRectFn()
       //this.mainCanvas.lateRenders.push(() => this.menu.debugRectFn())
-    }
+    //}
 
     if (!this.bad && this.x + this.width < 0) scene.startNextLevel()
   },

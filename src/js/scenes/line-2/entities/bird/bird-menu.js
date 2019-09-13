@@ -20,11 +20,11 @@ class BirdMenu {
       //'dont-climb',
     ]
 
-    if (this.bird.scene.storage.state.thruster) {
+    if (this.bird.scene.thruster) {
       this.menuItems.push('dont-climb')
     }
 
-    if (this.bird.scene.storage.state.booster) {
+    if (this.bird.scene.booster) {
       this.menuItems.push('slow-fast')
     }
 

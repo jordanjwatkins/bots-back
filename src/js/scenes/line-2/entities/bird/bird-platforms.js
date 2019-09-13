@@ -2,39 +2,29 @@ import { boxesCollide, collisions } from '../../../../libs/collisions'
 
 export default {
   closeMountablePlatforms() {
-    // if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
-
-    // console.log('plats allowed', this.target);
-
-
     return this.level.groups.platforms.filter((platform) => {
-      //console.log(platform.type);
-
       if (platform.type === 'u') {
-        //console.log('upgrade plat', platform.upgrade);
-
         if (platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 25 && Math.abs(platform.x + platform.width / 2 - this.x) < 15) {
-          console.log('upgrade touch')
           this.allies.forEach((ally) => {
             if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
           })
 
           let upgradeField
 
-          if (platform.upgrade === 'thruster' && !this.scene.storage.state.thruster) {
+          if (platform.upgrade === 'thruster' && !this.scene.thruster) {
             upgradeField = 'dont-climb'
 
 
-            this.scene.storage.state.thruster = true
+            this.scene.thruster = true
 
             this.allies.forEach((ally) => {
               if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
             })
-          } else if (platform.upgrade === 'booster' && !this.scene.storage.state.booster) {
+          } else if (platform.upgrade === 'booster' && !this.scene.booster) {
             upgradeField = 'slow-fast'
 
 
-            this.scene.storage.state.booster = true
+            this.scene.booster = true
 
             this.allies.forEach((ally) => {
               if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
@@ -56,31 +46,7 @@ export default {
 
       if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return false
 
-      /* console.log(
-        //(platform.type === 'u'),
-        //this,
-        (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad)),
-        this.movingToBack , this.movingToGround , this.backOccupied , this.bad,
-        platform.entry.x < this.x,
-      ) */
-
-      //! (this.platform && platform === this.platform) &&
-      //! platform.entry.occupied &&
-
-      // platform.entry.y < this.y &&
-
-      /* Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 ,
-
-      !collisions(
-        { x: platform.entry.x - this.width, y: platform.entry.y - this.height, width: this.width, height: this.height },
-        this.level.entities.filter(entity => entity.type === 'bird'),
-      )); */
       if (
-        // (platform.type === 'u' || (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad) && platform.entry.x < this.x)) &&
-        //! (this.platform && platform === this.platform) &&
-        //! platform.entry.occupied &&
-
-        // platform.entry.y < this.y &&
         platform.entry.x < this.x &&
         Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 &&
 
@@ -89,55 +55,6 @@ export default {
           this.level.entities.filter(entity => entity.type === 'bird'),
         )
       ) {
-        //console.log('close mountable plat')
-        /*if (platform.type === 'u' && platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 30 && Math.abs(platform.x + platform.width / 2 - this.x) < 30) {
-          console.log('upgrade', platform.upgrade)
-
-          this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
-
-          let upgradeField
-
-          if (platform.upgrade === 'thruster' && !this.scene.storage.state.thruster) {
-            upgradeField = 'dont-climb'
-
-
-            this.scene.storage.state.thruster = true
-          } else if (platform.upgrade === 'booster' && !this.scene.storage.state.booster) {
-            upgradeField = 'slow-fast'
-
-
-            this.scene.storage.state.booster = true
-          } else if (!this.scene[platform.upgrade]) {
-            this.scene[platform.upgrade] = true
-          }
-
-
-          if (upgradeField) this.menu.menuItems.push(upgradeField)
-
-          this.menu.resetHeight()
-
-          platform.upgrade = false*/
-
-          /* const parentSpawn = this.level.spawn.bind(this.level)
-
-          this.level.spawn = (entity) => {
-            parentSpawn(entity)
-
-            console.log('level spawn')
-
-
-            setTimeout(() => {
-              entity.menu.menuItems.push('dont-climb')
-              entity.menu.resetHeight()
-            }, 100)
-
-
-            // this.level.resetBaddie()
-          } */
-        //}
-
-        //if (platform.type === 'u') return false
-
         return platform
       }
 

@@ -67,8 +67,6 @@ class LevelSelect {
       scene.mainCanvas.imageFx.static(-0.09)
     }, 100)
 
-    // const levelState = scene.storage.state.levels[levelName]
-
     console.log(levelName)
 
     if (

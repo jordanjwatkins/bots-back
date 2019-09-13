@@ -50,23 +50,13 @@ class PitBridge {
       height: srcRect.height + (offset * 2) + (lineWidth * 2),
     }
 
-    // const { canvas, context } = this.offCanvas
-
-    const m = context.moveTo.bind(context)
-    const l = context.lineTo.bind(context)
-    const bp = context.beginPath.bind(context)
-
-
     context.lineWidth = lineWidth
     context.strokeStyle = '#000'
     // context.setLineDash([5, 3])
 
-    bp()
-    m(lineWidth - 13, lineWidth - 5)
-    l(rect.width - 13 - lineWidth, lineWidth - 5)
-
-    // cp()
-    // }
+    context.beginPath()
+    context.moveTo(lineWidth - 13, lineWidth - 5)
+    context.lineTo(rect.width - 13 - lineWidth, lineWidth - 5)
 
     // const { canvas, context } = this.offCanvas
 
@@ -116,11 +106,6 @@ class PitBridge {
       if (this.bridgeWidth > this.targetWidth) this.bridgeWidth = this.targetWidth
     }
 
-    // const hits = collisions(this, this.scene.entities)
-
-    // if (hits) console.log(hits);
-
-
     this.scene.entities.forEach((entity) => {
       if (entity.type === 'bird') {
         if (boxesCollide(this, entity, { y: -10, x: 25, width: -45 })) {
@@ -143,15 +128,6 @@ class PitBridge {
 
     this.mainCanvas.drawRect(this)
 
-
-
-    /* this.mainCanvas.drawRect({
-      ...this,
-      color: 'blue',
-      width: this.bridgeWidth,
-      height: 10,
-    })*/
-
     this.drawSelectedRect({ ...this, width: this.bridgeWidth })
 
     if (!this.steam) return
@@ -171,21 +147,12 @@ class PitBridge {
     const val = Math.sin(Date.now() / 700)
 
     if (val > 0 && val < 0.03) {
-      console.log('2')
-
       this.jumpParticles2 = null
     }
 
     this.drawJumpParticles2({ x: -this.width / 2 + 6 * Math.random(), y: -this.height })
 
     this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
-
-    /*this.mainCanvas.drawRect({
-      ...this,
-      y: this.y - 10,
-      color: '#fff',
-      height: 10,
-    }) */
   }
 }
 

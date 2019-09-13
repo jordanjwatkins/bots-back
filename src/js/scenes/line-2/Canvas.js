@@ -50,13 +50,6 @@ class MainCanvas {
     return boundingRect
   }
 
-  /*set opacity(value) {
-    if (value < 0) value = 0
-    if (value > 1) value = 1
-
-    this.context.globalAlpha = value
-  }*/
-
   clearCanvas() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
@@ -118,7 +111,7 @@ class MainCanvas {
       }
   }*/
 
-  clickAreaDebug(clickRect, offset = 2) {
+  /*clickAreaDebug(clickRect, offset = 2) {
     return () => {
       this.context.setTransform(1, 0, 0, 1, 0, 0)
 
@@ -132,7 +125,7 @@ class MainCanvas {
         color: 'red',
       })
     }
-  }
+  }*/
 
   drawSelectedRect(...args) {
     this.imageFx.drawSelectedRect(...args)
