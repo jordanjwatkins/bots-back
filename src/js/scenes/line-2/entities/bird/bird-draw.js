@@ -1,7 +1,9 @@
 export default {
   drawToCanvas() {
     this.offCanvas = this.offCanvas || this.imageFx.initOffCanvas({ width: this.width + 10, height: this.height + 4 })
+
     this.offCanvas.clear()
+
     this.offCanvas.drawRect({
       x: 2 + ((this.bad) ? 3 : 0),
       y: -2,
@@ -10,7 +12,7 @@ export default {
       color: this.color,
     })
 
-    const yellow = '#FBF236'
+    //const yellow = '#FBF236'
 
     // feet
     /*this.offCanvas.drawRect({
@@ -28,6 +30,17 @@ export default {
       height: 3,
       color: yellow,
     })*/
+
+    const speed = (this.flying) ? 0.4 : 0
+
+
+    this.imageFx.drawSelectedRect({
+      x: 4,
+      y: 24,
+      width: 24,
+      height: 4,
+    }, 0, 4, ((this.bad) ? 'red' : 'yellow'), this.bad ? -speed : speed, [5, 3], this.offCanvas.context)
+    this.offCanvas.context.filter = 'none'
 
     if (this.sleeping) return
 
@@ -123,16 +136,7 @@ export default {
       color: yellow,
     })*/
 
-    const speed = (this.flying) ? 0.4 : 0
 
-
-    this.imageFx.drawSelectedRect({
-      x: 4,
-      y: 24,
-      width: 24,
-      height: 4,
-    }, 0, 4, ((this.bad) ? 'red' : 'yellow'), this.bad ? -speed : speed, [5, 3], this.offCanvas.context)
-    this.offCanvas.context.filter = 'none'
     //this.drew = false
 
   },

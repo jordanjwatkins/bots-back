@@ -43,7 +43,7 @@ class BirdMenu {
         this.openMenu()
         this.mainCanvas.selected = this.bird
         this.bird.selected = true
-      }, 800)
+      }, 1500)
     }
 
     if (this.bird.bad && this.bird.questionable) {
@@ -154,6 +154,8 @@ class BirdMenu {
   }
 
   openMenu() {
+    console.log('open menu');
+
     this.isMenuOpen = true
   }
 
@@ -162,7 +164,13 @@ class BirdMenu {
   }
 
   drawMenu() {
-    if (this.bird.dead || this.eyeOffset < 30) return
+     //if (!this.bird.bad && this.bird.type === 'bird')console.log(this.bird.dead, this.eyeOffset < 30, this.eyeOffset);
+
+    if (this.bird.dead || (this.eyeOffset && this.eyeOffset < 30)) return
+
+    //if (!this.bird.bad && this.bird.type === 'bird') console.log('draw menu');
+
+
     this.menuCanvas.context.fillStyle = '#000'
 
     if (this.bird.bad && !this.bird.questionable) this.menuCanvas.context.fillStyle = (Math.sin(Date.now() / 100) > 0.1) ? 'red' : '#000'
@@ -188,7 +196,7 @@ class BirdMenu {
 
     let x = this.bird.x + this.bird.width / 2 - width / 2
 
-    if (!this.bird.bad && this.type ==='bird') {
+    if (!this.bird.bad) {
       x = this.bird.x + this.bird.width + 10
     }
 
@@ -250,13 +258,14 @@ class BirdMenu {
     context.fillStyle = (field.disabled) ? '#999' : '#FFF'
     context.strokeStyle = (field.disabled) ? '#999' : '#FFF'
     context.font = `${fontSize}px monospace`
+    context.textAlign = 'left'
     //context.globalAlpha = 0.1
 
     this.totalWidth = 0
 
     if (this.bird.bad) {
       if (this.bird.questionable) {
-        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? ' ' : '?', 10, 21)
+        context.fillText(Math.sin(Date.now() / 100) > 0.1 ? '?' : '?', 10, 21)
       } else {
         context.fillText(Math.sin(Date.now() / 100) > 0.1 ? '!' : '!', 10, 21)
       }
@@ -279,7 +288,11 @@ class BirdMenu {
         this.totalWidth += context.measureText(textPart).width
       })
     } else {
-      context.fillText(text, 20 + padding + this.totalWidth, 10 + padding + (padding * 2.2 * y) + 15 + (15 * y))
+      context.fillText(
+        (Math.sin(Date.now() / 300) > -0.5 || field.disabled) ? text[0].toUpperCase() : '',
+        14 + padding + this.totalWidth,
+        10 + padding + (padding * 2.2 * y) + 15 + (15 * y)
+      )
     }
 
     return this.getTextRect(y)

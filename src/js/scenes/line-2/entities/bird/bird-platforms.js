@@ -8,14 +8,16 @@ export default {
 
 
     return this.level.groups.platforms.filter((platform) => {
-      console.log(platform.type);
+      //console.log(platform.type);
 
       if (platform.type === 'u') {
-        console.log('upgrade plat', platform.upgrade);
+        //console.log('upgrade plat', platform.upgrade);
 
         if (platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 25 && Math.abs(platform.x + platform.width / 2 - this.x) < 15) {
           console.log('upgrade touch')
-          this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
+          this.allies.forEach((ally) => {
+            if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
+          })
 
           let upgradeField
 
@@ -24,11 +26,19 @@ export default {
 
 
             this.scene.storage.state.thruster = true
+
+            this.allies.forEach((ally) => {
+              if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
+            })
           } else if (platform.upgrade === 'booster' && !this.scene.storage.state.booster) {
             upgradeField = 'slow-fast'
 
 
             this.scene.storage.state.booster = true
+
+            this.allies.forEach((ally) => {
+              if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
+            })
           } else if (!this.scene[platform.upgrade]) {
             this.scene[platform.upgrade] = true
             this.reverseScan = true
@@ -79,7 +89,7 @@ export default {
           this.level.entities.filter(entity => entity.type === 'bird'),
         )
       ) {
-        console.log('close mountable plat')
+        //console.log('close mountable plat')
         /*if (platform.type === 'u' && platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 30 && Math.abs(platform.x + platform.width / 2 - this.x) < 30) {
           console.log('upgrade', platform.upgrade)
 
@@ -153,7 +163,7 @@ export default {
   },
 
   getTargetPlatform(climb) {
-    console.log('get target');
+    //console.log('get target');
 
     const closePlatforms = this.closeMountablePlatforms()
 
@@ -186,6 +196,11 @@ export default {
     this.jumpParticlesOn = true
     this.jumpParticles = null
 
+    if (this.host) {
+      this.host.backOccupied = false
+      this.host.backOccupier = null
+    }
+
     this.host = null
     this.onBack = false
     this.onPlatform = false
@@ -199,7 +214,7 @@ export default {
 
     console.log('platform landed', this.x, this.y)
 
-    if (this.host) this.host.backOccupied = false
+    //if (this.host) this.host.backOccupied = false
 
     this.land()
 
@@ -238,16 +253,16 @@ export default {
     // console.log(dx, dy)
 
     // if (dx === 0 && dy === 0) {
-    if (Math.abs(dx * 10) < 5) { //  && Math.abs(dy * 10) < 5
+    if (Math.abs(dx * 10) < 5 && Math.abs(dy * 10) < 15) {
       this.onPlatformLand()
     } else {
       this.speed.x = dx - 1
 
-      if (dy < -1) {
-        this.speed.y = Math.ceil(dx) - 7
-      } else {
-        this.speed.y = 0
-      }
+      //if (dy / 10 < -1) {
+        this.speed.y = Math.ceil(dy / 10) - 1
+      //} else {
+        //this.speed.y = 0
+      //}
     }
   },
 

@@ -10,10 +10,10 @@ class PulserMenu extends BirdMenu {
     this.scene = bird.scene
     this.bird = bird
     this.imageFx = new ImageFx(bird.mainCanvas.canvas, bird.mainCanvas.context)
-    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 60, bgColor: '#000' })
+    this.menuCanvas = this.mainCanvas.imageFx.initOffCanvas({ key: 'pulserMenu', width: 100, height: 55, bgColor: '#000' })
 
     this.menuFields = {
-      'spawn-1': { values: ['spawn'], value: 'spawn', rect: {} },
+      'spawn-1': { values: ['deploy'], value: 'deploy', rect: {} },
       //small: { values: ['small'], value: 'small', rect: {} },
       //heavy: { values: ['heavy'], value: 'heavy', rect: {} },
       //small2: { values: ['small'], value: 'small', rect: {} },
@@ -55,8 +55,8 @@ class PulserMenu extends BirdMenu {
         field.disabled = true
         //field.blocked = true
 
-        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 35, heavy: true, absorbed: 2 }))
-        if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
+        if (value === 'deploy') level.spawn(new Bird({ x: 830, y: level.startY - 35, heavy: true, absorbed: 2 }))
+        //if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         this.bird.pulsesFiredCount += 1
 
@@ -84,7 +84,7 @@ class PulserMenu extends BirdMenu {
 
 
 
-    return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale, width: 200, height: 15 + padding * 2 }
+    return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale - 10, width: 200, height: 15 + padding * 2 + 20 }
   }
 
 

@@ -8,7 +8,10 @@ export default {
   },
 
   enemyAhead() {
-    return collisions(this, this.enemies, { x: 10 * this.directionX, y: 0, height: 20 })
+    return (this.bad) ?
+      collisions(this, this.enemies, { x: 0, y: 0, height: 20, width: 0 }) :
+      collisions(this, this.enemies, { x: 0, y: 0, height: 20, width: 20 })
+
   },
 
   enemyBelow() {
@@ -16,7 +19,7 @@ export default {
   },
 
   allyAhead() {
-    return collisions(this, this.allies, { x: 10 * this.directionX, y: 0 })
+    return collisions(this, this.allies, { x: -10, y: 0, width: -20 })
   },
 
   allyBelow() {
@@ -36,6 +39,11 @@ export default {
     const { mainCanvas, entities, level, pulser } = scene
 
     this.scene = scene
+    this.mainCanvas = mainCanvas
+    this.level = level
+    this.pulser = pulser
+
+    this.imageFx = this.imageFx || new ImageFx(this.mainCanvas.canvas, this.mainCanvas.context)
 
     if (this.reverseScan && !this.dead) {
       if (this.hp < -40) this.dead = true
@@ -65,24 +73,6 @@ export default {
     }
 
     if (this.hp < -40) return
-
-    if (this.isFrozen) {
-      this.speed.x = 0
-      //this.updatePlatforms()
-      this.fly()
-      //this.draw(mainCanvas)
-
-      //return
-
-      if (this.y > 700) this.dead = true
-    }
-
-    this.mainCanvas = mainCanvas
-    this.level = level
-
-    this.pulser = pulser
-
-    this.imageFx = this.imageFx || new ImageFx(this.mainCanvas.canvas, this.mainCanvas.context)
 
     if (!this.fightParticles) this.fightParticles = new Particles({ target: this })
     if (!this.thrustParticles) this.thrustParticles = new Particles({ target: this })
@@ -132,8 +122,8 @@ export default {
 
     if (!this.bad) this.updateOnOffBack(stopGo)
 
-    let nextEnemies = this.enemyAhead()
-    let nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
+    let nextEnemies
+    let nextEnemy
 
     if (nextEnemy) {
       this.speed.x = 0
@@ -157,6 +147,9 @@ export default {
       }
 
     }
+
+    nextEnemies = this.enemyAhead()
+    nextEnemy = nextEnemies[0] ? nextEnemies[0].box2 : null
 
     //if (!this.movingToGround && !this.movingOffPlatform && this.fallDead && this.fallDead.hp) {
       //this.fallDead.hp = 0
@@ -186,13 +179,10 @@ export default {
     let nextAllies = this.allyAhead()
     let nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
 
-    if (!nextAlly) {
-      nextAllies = this.allyBelow()
-      nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
-    }
+
 
     if (nextAlly) {
-      //console.log('ally below');
+      console.log('ally ahead');
 
     }
 
@@ -210,8 +200,18 @@ export default {
     // nextEnemy.speed.x = 0
     }
 
+    if (!nextAlly) {
+      nextAllies = this.allyBelow()
+      nextAlly = nextAllies[0] ? nextAllies[0].box2 : null
+    }
+
     if (this.bad && this.x > 900) {
       this.pulser.dead = true
+
+      setTimeout(() => {
+        // restart level
+        this.scene.levelSelect.switchToLevel(this.scene.currentLevel)
+      }, 1000)
     }
 
     this.updatePlatforms()
@@ -220,6 +220,8 @@ export default {
 
     if (this.isFrozen) {
       this.speedY -= 2
+      this.speed.x = 0
+      if (this.y > 700) this.dead = true
     }
 
     this.fly()
@@ -260,6 +262,7 @@ export default {
 
       if (this.host) {
         this.host.backOccupied = false
+        this.host.backOccupier = null
       }
 
 
@@ -278,10 +281,13 @@ export default {
 
     const x3 = 930
     const y3 = this.pulser.y - 18 - this.pulser.eyeOffset
+    //console.log(this.menu && this.menu.isMenuOpen,  pulser.eyeOffset > 30);
 
-    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
+    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) {
+      this.mainCanvas.lateRenders.push(() => this.mainCanvas.drawTriangleFromPoints([{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }], 1))
+      this.mainCanvas.lateRenders.push(() => this.menu.drawMenu())
+    }
 
-    if (this.menu && this.menu.isMenuOpen && pulser.eyeOffset > 30) this.mainCanvas.lateRenders.push(() => this.menu.drawMenu())
 
     this.spawnScan()
 

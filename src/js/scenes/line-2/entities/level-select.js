@@ -14,7 +14,7 @@ class LevelSelect {
 
     this.z = 3
 
-    //this.opacity = 1
+    // this.opacity = 1
 
     this.scene = scene
 
@@ -24,7 +24,7 @@ class LevelSelect {
 
     this.type = 'levelSelect'
 
-    //this.attachEvents()
+    // this.attachEvents()
     this.scene.mainCanvas.canvas.addEventListener('click', this.onClick)
   }
 
@@ -44,7 +44,7 @@ class LevelSelect {
     const { canvas } = this.scene.mainCanvas
 
     canvas.removeEventListener('click', this.onClick)
-  }*/
+  } */
 
   onClick = (event) => {
     Object.keys(this.clickBoxes).forEach((levelName) => {
@@ -56,7 +56,8 @@ class LevelSelect {
 
   switchToLevel(levelName) {
     const { scene } = this
-    console.log('static');
+
+    console.log('static')
 
     scene.skipped = true
 
@@ -66,7 +67,7 @@ class LevelSelect {
       scene.mainCanvas.imageFx.static(-0.09)
     }, 100)
 
-    //const levelState = scene.storage.state.levels[levelName]
+    // const levelState = scene.storage.state.levels[levelName]
 
     console.log(levelName)
 
@@ -149,6 +150,18 @@ class LevelSelect {
   update(scene, delta) {
     this.drawBackground()
     this.drawRoad()
+
+
+    // context.fillStyle = (field.disabled) ? '#999' : '#FFF'
+    // context.strokeStyle = (field.disabled) ? '#999' : '#FFF'
+    // context.font = `${fontSize}px monospace`
+    // context.globalAlpha = 0.1
+
+    this.scene.mainCanvas.context.font = '14px monospace'
+
+    this.scene.mainCanvas.context.fillStyle = '#FFF'
+    this.scene.mainCanvas.context.textAlign = 'right'
+    this.scene.mainCanvas.context.fillText('Zone Select', 990, 25)
   }
 }
 

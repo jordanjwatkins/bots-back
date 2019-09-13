@@ -59,8 +59,6 @@ export default {
 
         this.jumpParticlesOn = true
         this.jumpParticles = null
-
-
       } else if (this.onBack && !this.movingToBack) {
         console.log('moving to ground')
 
@@ -68,6 +66,10 @@ export default {
         this.onBack = false
         this.movingToGround = true
         this.flying = true
+
+        this.host.backOccupied = false
+        this.host.backOccupier = null
+        this.host = null
 
         console.log('moving to x', this.x, this.x - 40);
 
@@ -188,6 +190,7 @@ export default {
           this.host.backOccupied = false
           this.host.backOccupier = false
         }
+
         this.target = null
       }
 

@@ -61,26 +61,6 @@ class Platform {
     this.draw()
   }
 
-  /*draw2() {
-    this.mainCanvas.drawRect(this)
-
-    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#222' })
-    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#555', y: this.y + this.height / 3 })
-    this.mainCanvas.drawRect({...this, height: this.height / 3, color: '#222', y: this.y + this.height / 3 * 2 })
-
-    this.mainCanvas.drawRect({...this, height: 2, color: '#000', x: this.x - 1000, width: 1000, y: this.y + 3 * this.height / 12 })
-
-    this.mainCanvas.drawRect({...this, height: 1000, color: '#000', y: this.y - 1000, width: 2, x: this.x + this.width / 1.2 })
-    this.mainCanvas.drawRect({...this, height: 1000, color: '#000', y: this.y - 1000, width: 2, x: this.x + this.width / 1.7 })
-
-    this.mainCanvas.drawRect({...this, height: 1000, color: '#000', y: this.y + this.height, width: 2, x: this.x + this.width / 1.4 })
-
-    this.mainCanvas.context.filter = 'blur(1px)'
-    this.mainCanvas.drawRect({ ...this, color: this.rgba2, x: this.x - 3, y: this.y - 2, width: this.width + 6, height: this.height + 5 })
-    this.mainCanvas.drawSelectedRect({ ...this }, -27, 17, this.rgba, 0.1)
-    this.mainCanvas.context.filter = 'none'
-  }*/
-
   drawUpgrade(color) {
     offCanvas2.strokeRect({ ...this, color, width: 20, x: this.x + 5, y: this.y + 5, height: 20 })
     offCanvas2.context.lineWidth = 3
@@ -105,14 +85,7 @@ class Platform {
 
       //if (!this.offCanvas.drawSelectedRect) this.offCanvas.drawSelectedRect = this.imageFx.drawSelectedRect
 
-      offCanvas.drawRect(this)
-
-      offCanvas.drawRect({ ...this, height: this.height / 3, color: '#222' })
-      offCanvas.drawRect({ ...this, height: this.height / 3, color: '#555', y: this.y + this.height / 3 })
-      offCanvas.drawRect({ ...this, height: this.height / 3, color: '#222', y: this.y + this.height / 3 * 2 })
-
-      if (this.height >= 30) offCanvas.drawRect({ ...this, height: 2, color: this.rgba, y: this.y + this.height / 15 })
-
+      // lines
       offCanvas.drawRect({ ...this, height: 2, color: '#000', x: this.x - 1000, width: 1000, y: this.y + 3 * this.height / 12 })
 
       offCanvas.drawRect({ ...this, height: 1000, color: '#000', y: this.y - 1000, width: 2, x: this.x + this.width / 1.3 * Math.random() })
@@ -120,13 +93,8 @@ class Platform {
 
       offCanvas.drawRect({ ...this, height: 1000, color: '#000', y: this.y + this.height, width: 2, x: this.x + this.width / 1.4 * Math.random() })
 
-      //this.offCanvas.context.filter = 'blur(1px)'
-      //this.offCanvas.drawRect({ ...this, color: this.rgba2, x: this.x - 3, y: this.y - 2, width: this.width + 6, height: this.height + 5 })
 
-      //this.offCanvas.context.filter = 'none'
-      if (this.height < 30) lateRenders.push(() => this.imageFx.drawSelectedRect({ ...this }, -26, 14, '#555', 0))
-      if (this.height < 30) lateRenders.push(() => this.mainCanvas.drawRect({ ...this, height: 5, color: this.rgba, y: this.y + this.height / 2 }))
-
+      // lit lines
       offCanvas.strokeRect({ x: -100, y: 99, width: 1100, height: 122 })
 
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 100, width: 1100, height: 120 }, 0, 3, 'yellow', 17, [15, 1003]))
@@ -136,6 +104,28 @@ class Platform {
 
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, 'yellow', 13, [15, 1003]))
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, '#FFF', 16, [15, 1003]))
+
+      // main platform (large)
+      offCanvas.drawRect({ ...this, color: '#222' })
+      offCanvas.drawRect({ ...this, height: this.height / 3, color: '#555', y: this.y + this.height / 3 })
+
+      // accent stripe (large)
+      if (this.height >= 30) offCanvas.drawRect({ ...this, height: 2, color: this.rgba, y: this.y + this.height / 15 })
+
+      // platform details (small)
+      if (this.height < 30) {
+        this.imageFx.drawSelectedRect({ ...this }, -26, 14, '#555', 0, [5, 3], offCanvas.context)
+
+        offCanvas.context.filter = 'blur(2px)'
+        offCanvas.drawRect({ ...this, height: 5, color: this.rgba, y: this.y + this.height / 2 - 2 })
+        offCanvas.context.filter = 'none'
+        offCanvas.drawRect({ ...this, height: 5, color: this.rgba, y: this.y + this.height / 2 - 2 })
+      }
+
+      // simple glowy
+      //offCanvas.context.filter = 'blur(1px)'
+      //offCanvas.drawRect({ ...this, color: this.rgba2, x: this.x - 3, y: this.y - 2, width: this.width + 6, height: this.height + 5 })
+      //offCanvas.context.filter = 'none'
     }
 
     if (!this.upgrade && this.type === 'u') offCanvas2.context.clearRect(this.x - 7, this.y - 7, this.width + 14, this.height + 14)
@@ -144,14 +134,11 @@ class Platform {
   drawAll() {
     this.mainCanvas.context.drawImage(offCanvas.canvas, 0, 0)
 
-    //lateRenders.forEach((fn) => fn())
+    lateRenders.forEach(fn => fn())
   }
 
   drawLate() {
     if (offCanvas2) this.mainCanvas.context.drawImage(offCanvas2.canvas, 0, 0)
-    //this.mainCanvas.context.drawImage(offCanvas.canvas, 0, 0)
-    lateRenders.forEach(fn => fn())
-
   }
 }
 

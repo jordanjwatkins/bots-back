@@ -123,14 +123,13 @@ function update(scene, delta, extras) {
   // draw foreground 2 at z of 4
   updateEntities(entities, scene, 4, delta)
 
-  mainCanvas.lateRenders.forEach(drawFn => drawFn())
-
    // draw foreground 3 at z of 5
    updateEntities(entities, scene, 5, delta)
 
+   mainCanvas.lateRenders.forEach(drawFn => drawFn())
+
    // draw overlay at z of 6
    updateEntities(entities, scene, 6, delta)
-
 
   if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#fff')
 
