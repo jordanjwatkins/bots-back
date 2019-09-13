@@ -99,7 +99,6 @@ function update(scene, delta) {
   //mainCanvas.clearCanvas()
 
   // draw background color so zoom works
-
   mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d0b15' })
   mainCanvas.drawRect({ x: 0, y: 200, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#1d122b' })
   mainCanvas.drawRect({ x: 0, y: 400, width: mainCanvas.canvas.width, height: mainCanvas.canvas.height, color: '#34085d' })
@@ -122,13 +121,13 @@ function update(scene, delta) {
   // draw foreground 2 at z of 4
   updateEntities(entities, scene, 4, delta)
 
-   // draw foreground 3 at z of 5
-   updateEntities(entities, scene, 5, delta)
+  // draw foreground 3 at z of 5
+  updateEntities(entities, scene, 5, delta)
 
-   mainCanvas.lateRenders.forEach(drawFn => drawFn())
+  mainCanvas.lateRenders.forEach(drawFn => drawFn())
 
-   // draw overlay at z of 6
-   updateEntities(entities, scene, 6, delta)
+  // draw overlay at z of 6
+  updateEntities(entities, scene, 6, delta)
 
   if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#fff')
 
@@ -145,37 +144,11 @@ function update(scene, delta) {
 
   if (showTitle) mainCanvas.context.drawImage(titleCanvas.canvas, 0, 0, mainCanvas.canvas.width, mainCanvas.canvas.height)
 
-  // mainCanvas.drawRollingLine()
   mainCanvas.drawRollingLineReversed()
-  // mainCanvas.drawRollingLine2()
 
   mainCanvas.drawScanlines()
 
-  //mainCanvas.drawNoise(0.025 * zoom) //if (scaleTitle)
-
   mainCanvas.drawVignette()
-
-  // mainCanvas.drawTriangle2(200, 200, 3, true)
-
-  // mainCanvas.drawTriangleFromPoints([{ x: 200, y: 200 }, { x: 220, y: 220 }, { x: 240, y: 140 }], 3)
-
-  // win scene
-  /*if (scene.flyingBirdCount === scene.birdCount) {
-    if (scene.allFlying) return
-
-    const fired = scene.pulser.pulsesFiredCount
-
-    if (scene.bestScoreForLevel < 1 || fired < scene.bestScoreForLevel) scene.bestScoreForLevel = fired
-
-    scene.openWinSplash()
-
-    scene.allFlying = true
-
-    setTimeout(() => {
-      sounds.quickEnd()
-    }, 500)
-  }*/
-
   if ((scene.currentLevel !== 'basics' || skipAllIntro) && !skipped) {
     skipped = true
     zoom = 1

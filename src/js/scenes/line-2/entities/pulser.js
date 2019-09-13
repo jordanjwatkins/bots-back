@@ -1,11 +1,8 @@
-//import * as sounds from '../sounds'
-//import Pulse from './pulse'
 import Particles from './particles'
-
 import PulserMenu from './pulser-menu'
 
 class Pulser {
-  constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 0, chargeSpeed = 1 }) {
+  constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 0, chargeSpeed = 5 }) {
     this.x = x
     this.y = y
     this.z = 3
@@ -39,29 +36,6 @@ class Pulser {
     if (this.menu) this.menu.destroy()
   }
 
-  /*canPulse() {
-    return (this.chargeCount > 0)
-  }
-
-  firePulse({ lines, entities, allFlying, titleScreen, exposition }, lineToPulse) {
-    if (!this.canPulse() || allFlying || titleScreen || exposition) return
-
-    this.chargeCount -= 1
-
-    this.pulsesFiredCount += 1
-
-    const lineIndex = lines.findIndex(line => line === lineToPulse)
-
-    sounds.pulse(lineIndex)
-
-    entities.push((
-      new Pulse({
-        x: 0,
-        y: lineToPulse.y,
-      })
-    ))
-  }*/
-
   updateChargeProgress(scene) {
     const { mainCanvas } = scene
 
@@ -82,28 +56,6 @@ class Pulser {
     this.drawCharges(mainCanvas)
     this.mainCanvas.context.filter = 'none'
   }
-
-  /*drawChargeProgress(mainCanvas) {
-    const progressIndicatorCount = 10
-    const fullBarWidth = this.width - 6
-    const gutterWidth = 1
-    const chunkWidth = Math.round((fullBarWidth - gutterWidth * (progressIndicatorCount - 1)) / progressIndicatorCount)
-    const chunkCount = Math.floor(this.chargeProgress / progressIndicatorCount)
-
-    for (let i = 0; i < progressIndicatorCount - 1; i++) {
-      let color = (i >= chunkCount) ? '#3a4d94' : 'yellow'
-
-      if (this.dead && !(i >= chunkCount)) color = 'red'
-
-      mainCanvas.drawRect({
-        x: this.x + 6 + chunkWidth * i + gutterWidth * i,
-        y: this.y + this.height - chunkWidth - 4,
-        width: chunkWidth,
-        height: chunkWidth,
-        color,
-      })
-    }
-  }*/
 
   drawCharges(mainCanvas) {
     const gutterWidth = 2
@@ -293,7 +245,6 @@ class Pulser {
     //this.fightParticles2.draw()
     //this.mainCanvas.lateRenders.push(() => this.fightParticles2.draw())
   }
-
 }
 
 export default Pulser
