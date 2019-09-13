@@ -164,10 +164,10 @@ class Line2 {
   }
 
   initializeDom() {
-    this.canvasContainer = dom.make('<div class="canvas-container"></div>')
+    this.canvasContainer = dom.make('<div class="cc" />')
     this.canvasContainer.appendChild(this.mainCanvas.canvas)
 
-    this.sceneContainer = dom.make('<div class="scene-container"><div></div></div>')
+    this.sceneContainer = dom.make('<div class="sc"><div></div></div>')
     this.sceneContainer.appendChild(this.canvasContainer)
 
     document.body.appendChild(this.sceneContainer)
@@ -208,12 +208,9 @@ class Line2 {
   }
 
   startNextLevel() {
-    //this.currentLevel = this.nextLevel
     this.seenIntro = true
 
     if (this.levelSelect) this.levelSelect.switchToLevel(this.nextLevel)
-
-    //this.freshStart()
   }
 }
 

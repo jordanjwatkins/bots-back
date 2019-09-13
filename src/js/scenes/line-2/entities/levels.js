@@ -203,7 +203,9 @@ export default (scene) => {
             //this.spawnScanOffset -= 0.4
           }
 
-          if (scene.e3) { // && scene.e2 && scene.e3) {
+          mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 150, y: 550 }, { x: 990, y: 550 }], 1, '#FFF'))
+
+          if (scene.e1 && scene.e2 && scene.e3) { // && scene.e2 && scene.e3) {
 
             console.log('game won');
             if (!this.startStatic) {
@@ -221,6 +223,9 @@ export default (scene) => {
               setTimeout(() => {
                 this.gameWon = true
 
+                setTimeout(() => {
+                  this.winText = true
+                }, 800)
               }, 300)
             }
 

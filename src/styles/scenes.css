@@ -1,9 +1,9 @@
-.scene-container {
+.sc {
     width: 100%;
     height: 100%;
 }
 
-.canvas-container {
+.cc {
     display: flex;
     flex-wrap: wrap;
     height: 100%;

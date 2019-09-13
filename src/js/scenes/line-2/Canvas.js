@@ -92,14 +92,6 @@ class MainCanvas {
   isClickHit(event, clickRect, scale = 1) {
     const canvasRect = this.boundingRect
 
-    //console.log('bounding',this.boundingRect, this.boundingRect.y);
-
-
-    //console.log('lick hit y1', event.pageY, canvasRect.y + clickRect.y + clickRect.height, event.pageY < canvasRect.y + clickRect.y + clickRect.height);
-    //console.log('lick hit y2', event.pageY, canvasRect.y + clickRect.y, event.pageY > canvasRect.y + clickRect.y);
-
-    //console.log(event.pageY, canvasRect.y, clickRect.y, scale);
-
     return (
       event.pageY < canvasRect.y + clickRect.y * scale + clickRect.height * scale &&
       event.pageY > canvasRect.y + clickRect.y * scale &&
@@ -142,12 +134,8 @@ class MainCanvas {
     }
   }
 
-  drawSelectedRect(srcRect, offset, lineWidth, color, lineDashOffset) {
-    this.imageFx.drawSelectedRect(srcRect, offset, lineWidth, color, lineDashOffset)
-  }
-
-  drawSelectedRect2(srcRect, offset, lineWidth, color, lineDashOffset) {
-    this.imageFx.drawSelectedRect2(srcRect, offset, lineWidth, color, lineDashOffset)
+  drawSelectedRect(...args) {
+    this.imageFx.drawSelectedRect(...args)
   }
 
   makeScanlines(vh, vw) {
@@ -215,9 +203,6 @@ class MainCanvas {
     canvas.width = this.canvas.width
     canvas.height = this.canvas.height
 
-    const vh = canvas.height
-    const vw = canvas.width
-
     context.save()
 
     context.setTransform(1, 0, 0, 1, 0, 0)
@@ -228,7 +213,7 @@ class MainCanvas {
     context.lineWidth = '0.1'
     context.strokeStyle = '#000'
 
-    this.scanlines = this.scanlines || this.makeScanlines(vh, vw)
+    this.scanlines = this.scanlines || this.makeScanlines(canvas.height, canvas.width)
 
     this.scanlines.forEach((line) => {
       context.lineWidth = line.width
@@ -247,108 +232,6 @@ class MainCanvas {
     this.scanlinesCanvas = canvas
   }
 
-  /*drawStar(x, y, color, size) {
-    const { context } = this
-
-    context.save()
-
-    const length = size
-
-    context.translate(x, y)
-
-    // initial offset rotation so our star is straight
-    context.rotate((Math.PI * 1 / 10))
-
-    context.beginPath()
-
-    // make a point, 5 times
-    for (let i = 5; i--;) {
-      // draw line up
-      context.lineTo(0, length)
-      // move origin to current same location as pen
-      context.translate(0, length)
-      // rotate the drawing board
-      context.rotate((Math.PI * 2 / 10))
-      // draw line down
-      context.lineTo(0, -length)
-      // again, move origin to pen...
-      context.translate(0, -length)
-      // ...and rotate, ready for next arm
-      context.rotate(-(Math.PI * 6 / 10))
-    }
-
-    // last line to connect things up
-    context.lineTo(0, length)
-    context.closePath()
-
-    context.fillStyle = color
-    context.strokeStyle = color
-
-    // stroke the path, you could also .fill()
-    context.stroke()
-    context.fill()
-
-    context.restore()
-  }*/
-
-  /*drawTriangle(x, y, scale, flip = false) {
-    const { context } = this
-
-    const colorPrimary = '#000'
-
-    context.save()
-
-    context.globalAlpha = 0.9
-
-    context.translate(x, y)
-
-    if (flip) context.scale(-1, 1)
-
-    context.lineWidth = 3
-    context.strokeStyle = colorPrimary
-    context.fillStyle = colorPrimary
-
-    context.beginPath()
-    context.moveTo(0, 0)
-    context.lineTo(0, 20 * scale)
-    context.lineTo(20 * scale, 10 * scale)
-    context.closePath()
-
-    context.stroke()
-    context.fill()
-
-    context.restore()
-  }
-
-  drawTriangle2(x, y, scale, flip = false) {
-    const { context } = this
-
-    const colorPrimary = '#000'
-
-    context.save()
-
-    context.globalAlpha = 0.9
-
-    context.translate(x, y)
-
-    if (flip) context.scale(1, -1)
-
-    context.lineWidth = 3
-    context.strokeStyle = colorPrimary
-    context.fillStyle = colorPrimary
-
-    context.beginPath()
-    context.moveTo(10 * scale, 0)
-    context.lineTo(0, 20 * scale)
-    context.lineTo(20 * scale, 20 * scale)
-    context.closePath()
-
-    context.stroke()
-    context.fill()
-
-    context.restore()
-  }*/
-
   drawTriangleFromPoints(points, scale, color = '#FFF') {
     const { context } = this
 
@@ -363,10 +246,6 @@ class MainCanvas {
     context.globalAlpha = this.globalAlpha
 
     const [{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }] = points
-
-    //context.translate(x1, y1)
-
-    //if (flip) context.scale(1, -1)
 
     context.lineWidth = 3
     context.strokeStyle = color

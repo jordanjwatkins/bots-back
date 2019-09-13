@@ -40,7 +40,7 @@ setTimeout(() => {
   scaleTitle = true
 }, 3000)
 
-function update(scene, delta, extras) {
+function update(scene, delta) {
   //console.log(scene.currentLevel !== 'basics', !skipped);
 
 
@@ -93,7 +93,6 @@ function update(scene, delta, extras) {
     titleCanvas.context.fillText(`Back`, 110 - fontSize / 3, fontSize / 3 + 200)
   }
 
-
   mainCanvas.lateRenders = []
 
   if (level.update) scene.level.update()
@@ -133,8 +132,12 @@ function update(scene, delta, extras) {
 
   if (mainCanvas.selected && mainCanvas.selected.selected && !mainCanvas.selected.bad) mainCanvas.drawSelectedRect(mainCanvas.selected, 10, 2, '#fff')
 
-  if (extras) extras()
+  if (level.gameWon) {
+    mainCanvas.drawRect({ x: 0, y: 0, width: mainCanvas.width, height: mainCanvas.width, color: '#FFF' })
 
+    mainCanvas.context.fillStyle = '#000'
+    if (level.winText) mainCanvas.context.fillText('JS13K', 100, 100)
+  }
 
   zoomOut(mainCanvas)
 
