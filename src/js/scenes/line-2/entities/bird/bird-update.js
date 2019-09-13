@@ -23,7 +23,7 @@ export default {
   },
 
   allyBelow() {
-    return collisions(this, this.allies, { x: 10 * this.directionX, y: 20, width: 20 })
+    return collisions(this, this.allies, { x: 10 * this.directionX, y: 20, width: 40 })
   },
 
   enemyHere() {
@@ -217,7 +217,10 @@ export default {
     if (this.isFrozen) {
       this.speedY -= 2
       this.speed.x = 0
-      if (this.y > 600) this.dead = true
+      if (this.y > 600) {
+        this.dead = true
+        this.hp = -50
+      }
     }
 
     this.fly()
