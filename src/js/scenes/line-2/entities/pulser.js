@@ -146,20 +146,20 @@ class Pulser {
     if (this.eyeOffset > 16) this.updateChargeProgress(scene)
 
     // eye
-    //this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -15
+    this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -15
 
     if (true) this.eyeOffset = 40
 
-    //this.eyeOffset += 0.1
+    this.eyeOffset += 0.1
 
-    //if (scene.seenIntro) this.eyeOffset += 0.5
+    if (scene.seenIntro) this.eyeOffset += 0.5
 
-    //if (this.eyeOffset > 100) this.eyeOffset = 100
+    if (this.eyeOffset > 100) this.eyeOffset = 100
 
-    //if (this.dead) {
-     // this.eyeOffset -= 5
-      //if (this.eyeOffset < 20) this.eyeOffset = 20
-    //}
+    if (this.dead) {
+      this.eyeOffset -= 5
+      if (this.eyeOffset < 20) this.eyeOffset = 20
+    }
 
     if (this.eyeOffset > 10) {
       scene.mainCanvas.drawRect({
