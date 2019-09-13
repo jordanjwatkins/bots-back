@@ -11,11 +11,7 @@ class Platform {
     lateRenders = []
   }
 
-  constructor({ x = 0, y = 0, width = 60, height = 20, upgrade }) {
-
-
-    //this.offCanvas = offCanvas
-
+  constructor({ x = 0, y = 0, width = 60, height = 20, upgrade, color = '#39ff14' }) {
     this.x = x
     this.y = y
     this.z = 6
@@ -23,9 +19,7 @@ class Platform {
     this.width = width
     this.height = height
 
-    this.moving = true
-
-    this.color = 'green'
+    this.color = color
 
     this.entry = this.getUpperRightCorner()
     this.exit = { x: this.x, y: this.y }
@@ -56,6 +50,14 @@ class Platform {
     offCanvas = offCanvas || this.imageFx.initOffCanvas({})
     offCanvas2 = offCanvas2 || this.imageFx.initOffCanvas({})
 
+    if (this.upgrade === 'e1') delete scene.storage.state[this.upgrade]
+    ///if (this.upgrade === 'e2') delete scene.storage.state[this.upgrade]
+    //if (this.upgrade === 'e3') delete scene.storage.state[this.upgrade]
+
+    if (scene.storage.state[this.upgrade] || scene[this.upgrade]) {
+      return
+    }
+
     this.draw()
   }
 
@@ -79,19 +81,23 @@ class Platform {
     this.mainCanvas.context.filter = 'none'
   }*/
 
-  drawUpgrade() {
-    offCanvas2.strokeRect({ ...this, color: '#39ff14', width: 20, x: this.x + 5, y: this.y + 5, height: 20 })
+  drawUpgrade(color) {
+    offCanvas2.strokeRect({ ...this, color, width: 20, x: this.x + 5, y: this.y + 5, height: 20 })
     offCanvas2.context.lineWidth = 3
-    offCanvas2.strokeRect({ ...this, color: '#39ff14'})
+    offCanvas2.strokeRect({ ...this, color })
     offCanvas2.context.filter = 'blur(5px)'
-    offCanvas2.strokeRect({ ...this, color: '#39ff14'})
+    offCanvas2.strokeRect({ ...this, color })
+    offCanvas2.context.filter = 'none'
+    offCanvas2.context.lineWidth = 1
   }
 
   draw() {
     if (!this.drawn || this.drawn === 1) {
       this.drawn = true
 
-      if (this.upgrade) return this.drawUpgrade()
+      if (this.upgrade) return this.drawUpgrade(this.color)
+
+      if (this.type === 'u') return
 
       //this.drawn = (this.drawn === 1) ? true : 1
       //this.offCanvas = offCanvas
@@ -132,7 +138,7 @@ class Platform {
       lateRenders.push(() => this.imageFx.drawSelectedRect({ x: -100, y: 210, width: 1100, height: 220 }, 0, 3, '#FFF', 16, [15, 1003]))
     }
 
-    if (!this.upgrade && this.type === 'u') offCanvas2.clear()
+    if (!this.upgrade && this.type === 'u') offCanvas2.context.clearRect(this.x - 7, this.y - 7, this.width + 14, this.height + 14)
   }
 
   drawAll() {

@@ -349,10 +349,8 @@ class MainCanvas {
     context.restore()
   }*/
 
-  drawTriangleFromPoints(points, scale, flip = false) {
+  drawTriangleFromPoints(points, scale, color = '#FFF') {
     const { context } = this
-
-    this.colorPrimary = this.colorPrimary || '#FFF'
 
     this.globalAlpha = this.globalAlpha || 0.2
 
@@ -368,11 +366,11 @@ class MainCanvas {
 
     //context.translate(x1, y1)
 
-    if (flip) context.scale(1, -1)
+    //if (flip) context.scale(1, -1)
 
     context.lineWidth = 3
-    context.strokeStyle = this.colorPrimary
-    context.fillStyle = this.colorPrimary
+    context.strokeStyle = color
+    context.fillStyle = color
 
     context.beginPath()
     context.moveTo(x1, y1)

@@ -27,6 +27,7 @@ class Storage {
   }
 
   save() {
+    console.log(this.state);
     try {
       window.localStorage.setItem(this.namespace, JSON.stringify(this.state))
     } catch (e) {}

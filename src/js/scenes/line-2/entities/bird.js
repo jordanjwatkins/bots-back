@@ -12,9 +12,9 @@ class Bird {
       x: 0,
       y: 0,
       z: 3,
-      width: 20,
-      height: 20,
-      color: '#AC3232',
+      width: 30,
+      height: 30,
+      color: '#2472ff',
       speed: {
         x: 0,
         y: 0,
@@ -41,13 +41,14 @@ class Bird {
     if (this.bad) {
       this.damage = 2
       this.hp = 150
+      this.color = '#000'
     }
   }
 
   onClick = event => this.onClickFn(event)
 
   destroy() {
-    this.menu.destroy()
+    if (this.menu) this.menu.destroy()
     if (this.eventsAttached) this.detachEvents(this.mainCanvas)
   }
 }

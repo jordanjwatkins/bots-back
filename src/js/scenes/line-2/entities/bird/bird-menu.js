@@ -20,6 +20,14 @@ class BirdMenu {
       //'dont-climb',
     ]
 
+    if (this.bird.scene.storage.state.thruster) {
+      this.menuItems.push('dont-climb')
+    }
+
+    if (this.bird.scene.storage.state.booster) {
+      this.menuItems.push('slow-fast')
+    }
+
     this.menuCanvas = (!this.bird.bad) ?
       this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 200, height: this.menuItems.length * 30 + 25, bgColor: '#000' }) :
       this.mainCanvas.imageFx.initOffCanvas({ key: 'birdMenu', width: 30, height: 30 })
@@ -46,6 +54,7 @@ class BirdMenu {
 
     this.fontSize = 18
     this.padding = 7
+    this.yOffset = -20
   }
 
   resetHeight() {
@@ -65,13 +74,13 @@ class BirdMenu {
   }
 
   addMenuFieldOnClick() {
-    console.log('add menu field');
+    //console.log('add menu field');
 
     this.onMenuFieldClickHandler = event => this.onMenuFieldClick(event)
 
     this.mainCanvas.canvas.addEventListener('click', this.onMenuFieldClickHandler)
 
-    console.log('add menu field', this.onMenuFieldClickHandler);
+    //console.log('add menu field', this.onMenuFieldClickHandler);
   }
 
   removeMenuFieldOnClick() {
@@ -83,10 +92,10 @@ class BirdMenu {
     this.menuItems.forEach((fieldKey) => {
       const field = this.menuFields[fieldKey]
       const { rect } = field
-      console.log('click menu field', field.value)
+      //console.log('click menu field', field.value)
 
       if (this.isMenuFieldClick(event, rect) && !field.disabled) {
-        console.log('click menu field', field.value)
+        //console.log('click menu field', field.value)
 
         field.value = (field.values[0] === field.value) ? field.values[1] : field.values[0]
       }
@@ -179,11 +188,11 @@ class BirdMenu {
 
     let x = this.bird.x + this.bird.width / 2 - width / 2
 
-    if (!this.bird.bad) {
+    if (!this.bird.bad && this.type ==='bird') {
       x = this.bird.x + this.bird.width + 10
     }
 
-    const y = this.bird.y - this.menuCanvas.canvas.height - 20
+    const y = this.bird.y - this.menuCanvas.canvas.height + this.yOffset
     const margin = 20
 
     const paddedRightX = x + width + margin
@@ -255,12 +264,12 @@ class BirdMenu {
       return this.getTextRect(y)
     }
 
-    if (Array.isArray(text)) {
+    if (Array.isArray(text) && text[1]) {
       const textParts = [text[1].toUpperCase()]//text.join('// - //').split('//')
 
       textParts.forEach((textPart, index) => {
-        if (!field.disabled) context.fillStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
-        if (!field.disabled) context.strokeStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
+        //if (!field.disabled) context.fillStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
+        //if (!field.disabled) context.strokeStyle = (textPart.toLowerCase() === field.value || textPart === ' / ') ? '#FFF' : '#999'
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + fontSize + (fontSize * y))
 
         //context.fillText(textPart, padding + this.totalWidth, padding + (padding * 2 * y) + 15 + (15 * y))
@@ -270,7 +279,7 @@ class BirdMenu {
         this.totalWidth += context.measureText(textPart).width
       })
     } else {
-      //context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
+      context.fillText(text, 20 + padding + this.totalWidth, 10 + padding + (padding * 2.2 * y) + 15 + (15 * y))
     }
 
     return this.getTextRect(y)

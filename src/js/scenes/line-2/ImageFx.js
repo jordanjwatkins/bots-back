@@ -80,7 +80,7 @@ class ImageFx {
     context.lineDashOffset += 0.1
   }*/
 
-  drawSelectedRect(srcRect, offset = 2, lineWidth = 1, color = '#fff', speed = 0.1, lineDash = [5, 3]) {
+  drawSelectedRect(srcRect, offset = 2, lineWidth = 1, color = '#fff', speed = 0.1, lineDash = [5, 3], auxContext) {
     const cacheKey = `k${srcRect.width}${srcRect.height}${offset}${color}`
 
     if (!this.offCanvases[cacheKey]) {
@@ -100,13 +100,23 @@ class ImageFx {
     context.clearRect(0, 0, canvas.width, canvas.height)
     context.strokeRect(lineWidth / 2, lineWidth / 2, srcRect.width + lineWidth + offset, srcRect.height + lineWidth + offset)
 
-    this.context.drawImage(
-      canvas,
-      0, 0, canvas.width, canvas.height,
-      srcRect.x - offset / 2 - lineWidth,
-      srcRect.y - offset / 2 - lineWidth,
-      canvas.width, canvas.height,
-    )
+    if (auxContext) {
+      auxContext.drawImage(
+        canvas,
+        0, 0, canvas.width, canvas.height,
+        srcRect.x - offset / 2 - lineWidth,
+        srcRect.y - offset / 2 - lineWidth,
+        canvas.width, canvas.height,
+      )
+    } else {
+      this.context.drawImage(
+        canvas,
+        0, 0, canvas.width, canvas.height,
+        srcRect.x - offset / 2 - lineWidth,
+        srcRect.y - offset / 2 - lineWidth,
+        canvas.width, canvas.height,
+      )
+    }
 
     context.lineDashOffset += speed
   }

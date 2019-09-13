@@ -1,4 +1,4 @@
-import { boxesCollide, collisions } from '../../../../libs/collisions'
+import { collisions } from '../../../../libs/collisions'
 import Particles from '../particles'
 import ImageFx from '../../ImageFx'
 
@@ -35,7 +35,17 @@ export default {
   update(scene) {
     const { mainCanvas, entities, level, pulser } = scene
 
+    this.scene = scene
 
+    if (this.reverseScan && !this.dead) {
+      if (this.hp < -40) this.dead = true
+      this.fightParticles.draw()
+      this.draw(mainCanvas)
+      this.hp -= 2
+      //this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
+       // this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
+      return
+    }
 
     if (this.dead) {
       if (this.hp > -40) {
@@ -45,14 +55,16 @@ export default {
           this.splat = true
         }
 
-        this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
-        this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
+        //this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
+        //this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
       }
 
       this.hp -= 1
 
       return
     }
+
+    if (this.hp < -40) return
 
     if (this.isFrozen) {
       this.speed.x = 0
@@ -85,6 +97,10 @@ export default {
 
     const stopGo = this.menu.getField('stop-go')
 
+    if (this.reverseScan) {
+      stopGo.value = 'stop'
+    }
+
     // jump down from spawner
     if ((stopGo.value === 'go') && this.y + this.height === level.startY - 5) {
       this.y += 5
@@ -107,7 +123,7 @@ export default {
     }
 
     if (stopGo.value === 'go') {
-      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 2.5 : 2) * this.directionX
+      this.speed.x = ((this.menu.getField('slow-fast').value === 'fast') ? 3 : 2) * this.directionX
       this.flying = true
     } else {
       this.speed.x = 0

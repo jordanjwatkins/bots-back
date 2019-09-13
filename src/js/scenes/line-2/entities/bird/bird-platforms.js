@@ -2,44 +2,118 @@ import { boxesCollide, collisions } from '../../../../libs/collisions'
 
 export default {
   closeMountablePlatforms() {
-    //if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
+    // if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return []
 
-    //console.log('plats allowed', this.target);
+    // console.log('plats allowed', this.target);
 
 
     return this.level.groups.platforms.filter((platform) => {
+      console.log(platform.type);
+
+      if (platform.type === 'u') {
+        console.log('upgrade plat', platform.upgrade);
+
+        if (platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 25 && Math.abs(platform.x + platform.width / 2 - this.x) < 15) {
+          console.log('upgrade touch')
+          this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
+
+          let upgradeField
+
+          if (platform.upgrade === 'thruster' && !this.scene.storage.state.thruster) {
+            upgradeField = 'dont-climb'
+
+
+            this.scene.storage.state.thruster = true
+          } else if (platform.upgrade === 'booster' && !this.scene.storage.state.booster) {
+            upgradeField = 'slow-fast'
+
+
+            this.scene.storage.state.booster = true
+          } else if (!this.scene[platform.upgrade]) {
+            this.scene[platform.upgrade] = true
+            this.reverseScan = true
+          }
+
+          if (upgradeField) this.menu.menuItems.push(upgradeField)
+
+          this.menu.resetHeight()
+
+          platform.upgrade = false
+        }
+
+        return false
+      }
+
+      if (this.movingToBack || this.movingToGround || this.backOccupied || this.bad) return false
+
+      /* console.log(
+        //(platform.type === 'u'),
+        //this,
+        (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad)),
+        this.movingToBack , this.movingToGround , this.backOccupied , this.bad,
+        platform.entry.x < this.x,
+      ) */
+
+      //! (this.platform && platform === this.platform) &&
+      //! platform.entry.occupied &&
+
+      // platform.entry.y < this.y &&
+
+      /* Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 ,
+
+      !collisions(
+        { x: platform.entry.x - this.width, y: platform.entry.y - this.height, width: this.width, height: this.height },
+        this.level.entities.filter(entity => entity.type === 'bird'),
+      )); */
       if (
-        (platform.type === 'u' || (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad) && platform.entry.x < this.x)) &&
-        //!(this.platform && platform === this.platform) &&
-        //!platform.entry.occupied &&
+        // (platform.type === 'u' || (!(this.movingToBack || this.movingToGround || this.backOccupied || this.bad) && platform.entry.x < this.x)) &&
+        //! (this.platform && platform === this.platform) &&
+        //! platform.entry.occupied &&
 
-        //platform.entry.y < this.y &&
-
+        // platform.entry.y < this.y &&
+        platform.entry.x < this.x &&
         Math.abs(platform.entry.y - this.y) < 50 && Math.abs(platform.entry.x - this.x) < 50 &&
 
         !collisions(
           { x: platform.entry.x - this.width, y: platform.entry.y - this.height, width: this.width, height: this.height },
           this.level.entities.filter(entity => entity.type === 'bird'),
         )
-
       ) {
-        console.log('close mountable plat');
-        if (platform.type === 'u' && platform.upgrade && Math.abs(platform.entry.y - this.y) < 30 && Math.abs(platform.entry.x - this.x) < 30) {
+        console.log('close mountable plat')
+        /*if (platform.type === 'u' && platform.upgrade && Math.abs(platform.y + platform.height / 2 - this.y) < 30 && Math.abs(platform.x + platform.width / 2 - this.x) < 30) {
           console.log('upgrade', platform.upgrade)
 
           this.allies.forEach(ally => ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight())
 
-          this.menu.menuItems.push('dont-climb')
+          let upgradeField
+
+          if (platform.upgrade === 'thruster' && !this.scene.storage.state.thruster) {
+            upgradeField = 'dont-climb'
+
+
+            this.scene.storage.state.thruster = true
+          } else if (platform.upgrade === 'booster' && !this.scene.storage.state.booster) {
+            upgradeField = 'slow-fast'
+
+
+            this.scene.storage.state.booster = true
+          } else if (!this.scene[platform.upgrade]) {
+            this.scene[platform.upgrade] = true
+          }
+
+
+          if (upgradeField) this.menu.menuItems.push(upgradeField)
+
           this.menu.resetHeight()
 
-          platform.upgrade = false
+          platform.upgrade = false*/
 
-          let parentSpawn = this.level.spawn.bind(this.level)
+          /* const parentSpawn = this.level.spawn.bind(this.level)
 
           this.level.spawn = (entity) => {
             parentSpawn(entity)
 
-            console.log('level spawn');
+            console.log('level spawn')
 
 
             setTimeout(() => {
@@ -48,12 +122,11 @@ export default {
             }, 100)
 
 
-            //this.level.resetBaddie()
-          }
-        }
+            // this.level.resetBaddie()
+          } */
+        //}
 
-
-        if (platform.type === 'u') return false
+        //if (platform.type === 'u') return false
 
         return platform
       }
@@ -63,9 +136,9 @@ export default {
   },
 
   closePlatformExit() {
-    if (this.movingToBack || this.movingToGround || this.backOccupied || !this.target || !this.target.entity) return false
+    if (this.movingToBack || this.movingToGround || this.backOccupied || !this.host) return false
 
-    const { exit } = this.target.entity
+    const { exit } = this.host
 
     if (
       exit.x > this.x + this.width / 2 &&
@@ -79,10 +152,14 @@ export default {
     return false
   },
 
-  getTargetPlatform() {
+  getTargetPlatform(climb) {
+    console.log('get target');
+
     const closePlatforms = this.closeMountablePlatforms()
 
-    if (!this.bad && !this.backOccupied && closePlatforms.length > 0 && !this.target) {
+    // console.log(!this.bad , !this.backOccupied , closePlatforms.length > 0 , !this.target)
+
+    if (!this.bad && !this.backOccupied && closePlatforms.length > 0 && !this.target && climb) {
       console.log('platform!!!', closePlatforms[0])
 
       this.jump()
@@ -92,13 +169,13 @@ export default {
       this.target = { ...platform.entry, entity: platform }
       this.targetHost = platform
 
-      console.log(platform);
+      // console.log(platform);
 
-      if (platform.type === 'u') {
-        console.log('upgrade');
+      // if (platform.type === 'u') {
+      // console.log('upgrade');
 
-        //this.target.y += 220
-      }
+      // this.target.y += 220
+      // }
 
       this.movingFn = this.moveTowardEntry
     }
@@ -133,6 +210,8 @@ export default {
     this.y = target.y - this.height
 
     this.host = this.target.entity
+
+    this.target = null
   },
 
   land() {
@@ -150,13 +229,13 @@ export default {
   },
 
   moveTowardEntry() {
-    console.log('moving to platform', this.target.x, this.target.y, this.x, this.y)
+    // console.log('moving to platform', this.target.x, this.target.y, this.x, this.y)
 
     let { dx, dy } = this.distanceToTarget()
 
     dx = Math.floor(dx / 30)
 
-    console.log(dx, dy)
+    // console.log(dx, dy)
 
     // if (dx === 0 && dy === 0) {
     if (Math.abs(dx * 10) < 5) { //  && Math.abs(dy * 10) < 5
@@ -173,7 +252,7 @@ export default {
   },
 
   moveOffPlatform() {
-    console.log('moving off platform')
+    // console.log('moving off platform')
 
     let { dx, dy } = this.distanceToTarget()
 
@@ -196,7 +275,7 @@ export default {
   },
 
   onLandOffPlatform() {
-    console.log('landed off platform')
+    // console.log('landed off platform')
 
     this.land()
 
@@ -216,6 +295,8 @@ export default {
   },
 
   shouldExitPlatform() {
+    // console.log(this.onPlatform, this.closePlatformExit(), !this.movingToTarge, !this.movingToBack);
+
     return this.onPlatform && this.closePlatformExit() && !this.movingToTarget && !this.movingToBack
   },
 
@@ -224,7 +305,7 @@ export default {
 
     const climb = this.menu.getField('dont-climb').value === 'climb'
 
-    if (climb) this.getTargetPlatform()
+    this.getTargetPlatform(climb)
 
     if (this.shouldExitPlatform()) {
       console.log('platform exit')
@@ -234,7 +315,7 @@ export default {
 
       this.target = { x: this.x - this.width, y: this.level.groundY, width: 1, height: 1 }
 
-      console.log((this.level.groundY - this.y));
+      console.log((this.level.groundY - this.y))
 
       if (this.level.groundY - this.y > 110) this.fallDead = true
 
@@ -242,7 +323,7 @@ export default {
 
       this.movingFn = this.moveOffPlatform
 
-      //this.jump()
+      // this.jump()
     }
 
     if (this.movingToTarget) {

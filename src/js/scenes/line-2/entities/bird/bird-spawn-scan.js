@@ -1,8 +1,9 @@
 export default {
   spawnScan() {
+    if (this.reverseScan) return
     if (this.bad || this.preSpawned) this.spawnScanOffset = this.height + 5
 
-    if (this.spawnScanOffset > this.height + 4) return
+    if (this.spawnScanOffset > this.height + 4) return //this.reverseScan = true
 
     this.spawnScanOffset = this.spawnScanOffset || 1
     this.frameCount = this.frameCount || 1

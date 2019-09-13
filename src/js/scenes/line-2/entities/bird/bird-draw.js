@@ -1,11 +1,11 @@
 export default {
   drawToCanvas() {
     this.offCanvas = this.offCanvas || this.imageFx.initOffCanvas({ width: this.width + 10, height: this.height + 4 })
-
+    this.offCanvas.clear()
     this.offCanvas.drawRect({
-      x: 0,
-      y: 0,
-      width: this.width,
+      x: 2 + ((this.bad) ? 3 : 0),
+      y: -2,
+      width: this.width - 8,
       height: this.height,
       color: this.color,
     })
@@ -13,7 +13,7 @@ export default {
     const yellow = '#FBF236'
 
     // feet
-    this.offCanvas.drawRect({
+    /*this.offCanvas.drawRect({
       x: 0 + 2,
       y: 0 + this.height,
       width: 3,
@@ -27,12 +27,12 @@ export default {
       width: 3,
       height: 3,
       color: yellow,
-    })
+    })*/
 
     if (this.sleeping) return
 
     // eyes
-    if (this.heavy) {
+  /*  if (this.heavy) {
       // Clear right eye overflow
       if (this.absorbed === 0) this.offCanvas.context.clearRect(this.width, 0, this.width + 5, this.offCanvas.canvas.height)
 
@@ -89,40 +89,69 @@ export default {
           color: '#FFF',
         })
       }
-    }
+    }*/
 
-    const eyeColor = (this.bad) ? '#FFF' : '#000'
+    let eyeColor = (this.bad) ? 'red' : 'yellow'
+
+    if (this.reverseScan) eyeColor = '#FFF'
+
+    //this.offCanvas.context.filter = 'blur(1px)'
 
     this.offCanvas.drawRect({
-      x: 0 + 2,
+      x: 0 + 2 + ((this.bad) ? 8 : 0),
       y: 0 + 5,
-      width: 3,
+      width: ((this.bad) ? 15 : 15),
       height: 3,
       color: eyeColor,
     })
 
-    this.offCanvas.drawRect({
-      x: 0 + this.width - 5,
+    /*this.offCanvas.drawRect({
+      x: 0 + this.width - 5 + ((this.bad) ? -5 : 0),
       y: 0 + 5,
-      width: 3,
+      width:  ((this.bad) ? 5 : 3),
       height: 3,
       color: eyeColor,
-    })
+    })*/
+
 
     // beak
-    this.offCanvas.drawRect({
+    /*this.offCanvas.drawRect({
       x: 0 + 9,
       y: 0 + 8,
       width: 3,
       height: 4,
       color: yellow,
-    })
+    })*/
+
+    const speed = (this.flying) ? 0.4 : 0
+
+
+    this.imageFx.drawSelectedRect({
+      x: 4,
+      y: 24,
+      width: 24,
+      height: 4,
+    }, 0, 4, ((this.bad) ? 'red' : 'yellow'), this.bad ? -speed : speed, [5, 3], this.offCanvas.context)
+    this.offCanvas.context.filter = 'none'
+    //this.drew = false
+
   },
 
   draw(mainCanvas) {
-    if (!this.drew ) {
+    if (!this.drew) {
       this.drawToCanvas()
       this.drew = true
+    }
+
+    if (this.flying) this.drew = false
+
+    if (this.reverseScan) {
+      this.spawnScanOffset -= 0.4
+      this.drew = false
+      this.selected = false
+      this.isFrozen = true
+      this.menu.isMenuOpen = false
+      this.flying = false
     }
 
     mainCanvas.context.drawImage(
@@ -134,7 +163,7 @@ export default {
     )
 
     // wings
-    if (this.flying && Math.sin(Date.now() / 26) > 0) {
+    /*if (this.flying && Math.sin(Date.now() / 26) > 0) {
       mainCanvas.drawRect({
         x: this.x - 8,
         y: this.y + 5,
@@ -150,6 +179,26 @@ export default {
         height: 3,
         color: this.color,
       })
-    }
+    }*/
+    /*if (this.flying) {
+      mainCanvas.drawSelectedRect({
+        x: this.x, //+ Math.sin(Date.now() / 126) * 20,
+        y: this.y + 22,
+        width: 18,
+        height: 3,
+        color: 'yellow',
+      }, 0, 3, 'yellow', 0.4)
+
+      this.drew = false
+    } else {
+      mainCanvas.drawSelectedRect({
+        x: this.x, //+ Math.sin(Date.now() / 126) * 20,
+        y: this.y + 22,
+        width: 18,
+        height: 3,
+        color: 'yellow',
+      }, 0, 3, 'yellow', 0)
+    }*/
+
   },
 }

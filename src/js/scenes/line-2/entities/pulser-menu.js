@@ -14,12 +14,12 @@ class PulserMenu extends BirdMenu {
 
     this.menuFields = {
       'spawn-1': { values: ['spawn'], value: 'spawn', rect: {} },
-      small: { values: ['small'], value: 'small', rect: {} },
-      heavy: { values: ['heavy'], value: 'heavy', rect: {} },
-      small2: { values: ['small'], value: 'small', rect: {} },
-      heavy2: { values: ['heavy'], value: 'heavy', rect: {} },
-      small3: { values: ['small'], value: 'small', rect: {} },
-      small4: { values: ['small'], value: 'small', rect: {} },
+      //small: { values: ['small'], value: 'small', rect: {} },
+      //heavy: { values: ['heavy'], value: 'heavy', rect: {} },
+      //small2: { values: ['small'], value: 'small', rect: {} },
+     //heavy2: { values: ['heavy'], value: 'heavy', rect: {} },
+      //small3: { values: ['small'], value: 'small', rect: {} },
+      //small4: { values: ['small'], value: 'small', rect: {} },
     }
 
     this.menuItems = [
@@ -30,6 +30,8 @@ class PulserMenu extends BirdMenu {
       //'small3',
       //'small4',
     ]
+
+    this.yOffset = -200
   }
 
   onMenuFieldClick(event) {
@@ -53,10 +55,12 @@ class PulserMenu extends BirdMenu {
         field.disabled = true
         //field.blocked = true
 
-        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 25 }))
+        if (value === 'small' || value === 'spawn') level.spawn(new Bird({ x: 830, y: level.startY - 35, heavy: true, absorbed: 2 }))
         if (value === 'heavy') level.spawn(new Bird({ x: 820, y: level.startY - 40, width: 40, height: 40, heavy: true }))
 
         this.bird.pulsesFiredCount += 1
+
+        if (this.bird.pulsesFiredCount >= this.bird.maxChargeCount) return
 
         setTimeout(() => {
           field.hot = false
@@ -65,38 +69,6 @@ class PulserMenu extends BirdMenu {
     })
   }
 
-  drawMenuText(x, y, text, field) {
-    const { context, canvas } = this.menuCanvas
-
-    const fontSize = this.fontSize
-    const padding = this.padding
-
-    const lineHeight = 15
-
-    context.fillStyle = (field.disabled) ? '#999' : '#FFF'
-    context.font = `${fontSize}px monospace`
-    context.textAlign = 'center'
-
-    this.totalWidth = 0
-
-    const scale = this.mainCanvas.scaleInDom
-
-    if (Array.isArray(text)) {
-      const textParts = text.join('// / //').split('//')
-
-      textParts.forEach((textPart, index) => {
-        if (!field.disabled) context.fillStyle = (textPart === field.value || textPart === ' / ') ? '#FFF' : '#333'
-
-        context.fillText(textPart, 50 + this.totalWidth, 10 + padding + (padding * 2.2 * y) + lineHeight + (lineHeight * y))
-
-        this.totalWidth += context.measureText(textPart).width
-      })
-    } else {
-      //context.fillText(text, padding, (padding * y * 2) + padding + fontSize / 2 + (fontSize * y))
-    }
-
-    return this.getTextRect(y)
-  }
 
   getTextRect(y) {
     const fontSize = this.fontSize
@@ -115,30 +87,9 @@ class PulserMenu extends BirdMenu {
     return { x: -10, y: (10 + (15 + padding * 2 + 5) * y) * scale, width: 200, height: 15 + padding * 2 }
   }
 
-  getMenuXy() {
-    const { width } = this.menuCanvas.canvas
-
-    let x = this.bird.x + this.bird.width / 2 - width / 2
-    const y = this.bird.y - this.menuCanvas.canvas.height - 200
-    const margin = 20
-
-    const paddedRightX = x + width + margin
-
-    if (paddedRightX > this.mainCanvas.canvas.width) {
-      x -= (paddedRightX - this.mainCanvas.canvas.width)
-    }
-
-    if (x - margin < 0) {
-      x = margin
-    }
-
-    return { x, y }
-  }
 
   closeMenu() {
-    console.log('pulser close');
     return false
-
   }
 }
 

@@ -36,7 +36,7 @@ class Pulser {
   destroy(scene) {
     scene.entities = scene.entities.filter(entity => entity !== this)
 
-    this.menu.destroy()
+    if (this.menu) this.menu.destroy()
   }
 
   /*canPulse() {
@@ -286,12 +286,12 @@ class Pulser {
     //this.drawLifter(scene)
 
     if (!this.fightParticles) this.fightParticles = new Particles({ target: this })
-    if (!this.fightParticles2) this.fightParticles2 = new Particles({ target: { ...this, x: 9, y: 589, directionX: 0, width: 99, height: 99 } })
+    //if (!this.fightParticles2) this.fightParticles2 = new Particles({ target: { ...this, x: 9, y: 589, directionX: 0, width: 99, height: 99 } })
 
     //this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
     if (this.eyeOffset > -10 && this.eyeOffset < 10) this.fightParticles.draw()
     //this.fightParticles2.draw()
-    this.mainCanvas.lateRenders.push(() => this.fightParticles2.draw())
+    //this.mainCanvas.lateRenders.push(() => this.fightParticles2.draw())
   }
 
   drawLifter(scene) {
