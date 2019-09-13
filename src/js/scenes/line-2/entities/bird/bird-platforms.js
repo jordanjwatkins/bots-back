@@ -11,20 +11,20 @@ export default {
 
           let upgradeField
 
-          if (platform.upgrade === 'thruster' && !this.scene.thruster) {
+          if (platform.upgrade === 'thruster' && !this.scene['thruster']) {
             upgradeField = 'dont-climb'
 
 
-            this.scene.thruster = true
+            this.scene['thruster'] = true
 
             this.allies.forEach((ally) => {
               if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()
             })
-          } else if (platform.upgrade === 'booster' && !this.scene.booster) {
+          } else if (platform.upgrade === 'booster' && !this.scene['booster']) {
             upgradeField = 'slow-fast'
 
 
-            this.scene.booster = true
+            this.scene['booster'] = true
 
             this.allies.forEach((ally) => {
               if (!ally.menu.menuItems.includes('dont-climb')) ally.menu.menuItems.push('dont-climb') && ally.menu.resetHeight()

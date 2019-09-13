@@ -51,7 +51,7 @@ export default {
       this.draw(mainCanvas)
       this.hp -= 2
       //this.mainCanvas.lateRenders.push(() => this.fightParticles.draw())
-       // this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
+      // this.mainCanvas.lateRenders.push(() => this.drawJumpParticles())
       return
     }
 

@@ -11,7 +11,6 @@ class BirdMenu {
       'stop-go': { values: ['stop', 'go'], value: 'stop', rect: {} },
       'slow-fast': { values: ['slow', 'fast'], value: 'slow', rect: {} },
       'dont-climb': { values: ['dont', 'climb'], value: 'climb', rect: {} },
-      'dont-climb2': { values: ['dont', 'climb'], value: 'dont', rect: {} },
     }
 
     this.menuItems = [
@@ -20,11 +19,11 @@ class BirdMenu {
       //'dont-climb',
     ]
 
-    if (this.bird.scene.thruster) {
+    if (this.bird.scene['thruster']) {
       this.menuItems.push('dont-climb')
     }
 
-    if (this.bird.scene.booster) {
+    if (this.bird.scene['booster']) {
       this.menuItems.push('slow-fast')
     }
 
@@ -118,13 +117,6 @@ class BirdMenu {
       width: this.menuCanvas.canvas.width,
     }
 
-    const debug2 = false
-
-    if (debug2 && this.bird.width !== 20) {
-      this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 10)
-    }
-
-
     return mainCanvas.isClickHit(event, clickRect, scale)
   }
 
@@ -142,12 +134,6 @@ class BirdMenu {
       y: y + srcRect.y / scale,
       height: srcRect.height,
       width: srcRect.width,
-    }
-
-    const debug2 = false
-
-    if (debug2) {
-      this.debugRectFn = mainCanvas.clickAreaDebug(clickRect, 0)
     }
 
     return mainCanvas.isClickHit(event, clickRect, scale)

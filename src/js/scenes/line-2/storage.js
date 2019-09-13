@@ -1,7 +1,7 @@
 const initialState = () => ({
-  currentLevel: 'oneLineTwoSimple',
+  currentLevel: '',
   levels: {
-    oneLineTwoSimple: {},
+
   },
 })
 

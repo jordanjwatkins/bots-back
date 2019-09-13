@@ -7,7 +7,7 @@ export default (scene) => {
   const { mainCanvas } = scene
 
   const levels = {
-    basics: () => {
+    'basics': () => {
       const groundY = 550
       const startY = groundY
 
@@ -95,7 +95,7 @@ export default (scene) => {
       }
     },
 
-    stackAttack: () => {
+    'stackAttack': () => {
       const groundY = 550
       const startY = groundY - 120
 
@@ -140,7 +140,7 @@ export default (scene) => {
       }
     },
 
-    bridgeRun: () => {
+    'bridgeRun': () => {
       const groundY = 550
       const startY = groundY
 

@@ -2,7 +2,7 @@ import Particles from './particles'
 import PulserMenu from './pulser-menu'
 
 class Pulser {
-  constructor({ x = 0, y = 0, width = 100, height = 50, speedX = 4, speedY = 0, chargeCount = 0, chargeSpeed = 5 }) {
+  constructor({ x = 0, y = 0, width = 40, height = 50, speedX = 4, speedY = 0, chargeCount = 0, chargeSpeed = 0.9 }) {
     this.x = x
     this.y = y
     this.z = 3
@@ -28,6 +28,8 @@ class Pulser {
     this.type = 'pulser'
 
     this.directionX = 0
+
+    this.x += 30
   }
 
   destroy(scene) {
@@ -59,7 +61,7 @@ class Pulser {
 
   drawCharges(mainCanvas) {
     const gutterWidth = 2
-    const fullBarWidth = this.width
+    const fullBarWidth = this.height * 1.4
     const chunkWidth = (fullBarWidth - gutterWidth * (this.maxChargeCount * 2 - 1)) / this.maxChargeCount * 2
 
     for (let i = 0; i < this.maxChargeCount; i++) {
@@ -67,13 +69,13 @@ class Pulser {
 
       if (this.dead) color = Math.sin(Date.now() / 300) > 0 ? 'red' : '#3a4d94'
 
-      let y = (i < this.maxChargeCount / 2) ? 0 : chunkWidth + 2
-      let x = (i < this.maxChargeCount / 2) ? 0 : -(chunkWidth * (this.maxChargeCount / 2) + gutterWidth * (this.maxChargeCount / 2))
+      let y = (i < this.maxChargeCount / 2) ? 0 : -(chunkWidth * (this.maxChargeCount / 2) + gutterWidth * (this.maxChargeCount / 2))
+      let x = (i < this.maxChargeCount / 2) ? 0 : chunkWidth * 2 + 2
 
       mainCanvas.drawRect({
-        x: this.x + 3 + chunkWidth * i + gutterWidth * i + x,
-        y: this.y + 4 + y,
-        width: chunkWidth,
+        x: this.x + 3 + x,
+        y: this.y + 4 + y + chunkWidth * i + gutterWidth * i,
+        width: chunkWidth * 2,
         height: chunkWidth,
         color,
       })
@@ -144,20 +146,20 @@ class Pulser {
     if (this.eyeOffset > 16) this.updateChargeProgress(scene)
 
     // eye
-    this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -15
+    //this.eyeOffset = (this.eyeOffset !== undefined) ? this.eyeOffset : -15
 
     if (true) this.eyeOffset = 40
 
-    this.eyeOffset += 0.1
+    //this.eyeOffset += 0.1
 
-    if (scene.seenIntro) this.eyeOffset += 0.5
+    //if (scene.seenIntro) this.eyeOffset += 0.5
 
-    if (this.eyeOffset > 100) this.eyeOffset = 100
+    //if (this.eyeOffset > 100) this.eyeOffset = 100
 
-    if (this.dead) {
-      this.eyeOffset -= 5
-      if (this.eyeOffset < 20) this.eyeOffset = 20
-    }
+    //if (this.dead) {
+     // this.eyeOffset -= 5
+      //if (this.eyeOffset < 20) this.eyeOffset = 20
+    //}
 
     if (this.eyeOffset > 10) {
       scene.mainCanvas.drawRect({
@@ -231,6 +233,22 @@ class Pulser {
           width: 55,
           height: 3,
           color: '#333',
+        })
+
+        scene.mainCanvas.drawRect({
+          x: this.x + 25,
+          y: this.y + 5,
+          width: 12,
+          height: 12,
+          color: '#fff',
+        })
+
+        scene.mainCanvas.drawRect({
+          x: this.x + 29,
+          y: this.y + 9,
+          width: 4,
+          height: 4,
+          color: '#000',
         })
       }
     }

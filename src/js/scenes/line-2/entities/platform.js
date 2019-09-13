@@ -75,7 +75,7 @@ class Platform {
     if (!this.drawn || this.drawn === 1) {
       this.drawn = true
 
-      if (this.upgrade) return this.drawUpgrade(this.color)
+      if (this.upgrade && !this.scene[this.upgrade]) return this.drawUpgrade(this.color)
 
       if (this.type === 'u') return
 
