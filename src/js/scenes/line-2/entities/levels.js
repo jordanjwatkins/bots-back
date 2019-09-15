@@ -178,13 +178,13 @@ export default (scene) => {
         },
 
         update() {
-          if (scene.e3) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 90, y: 550 }, { x: 190, y: 550 }], 1, '#f73434'))
+          if (scene['e3']) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 90, y: 550 }, { x: 190, y: 550 }], 1, '#f73434'))
 
-          if (scene.e2) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 410, y: 550 }, { x: 590, y: 550 }], 1, '#ff9292'))
+          if (scene['e2']) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 410, y: 550 }, { x: 590, y: 550 }], 1, '#ff9292'))
 
-          if (scene.e1) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 750, y: 550 }, { x: 890, y: 550 }], 1, 'red'))
+          if (scene['e1']) mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 750, y: 550 }, { x: 890, y: 550 }], 1, 'red'))
 
-          if (scene.e1 && scene.e2 && scene.e3) {
+          if (scene['e1'] && scene['e2'] && scene['e3']) {
             mainCanvas.lateRenders.push(() => mainCanvas.drawTriangleFromPoints([{ x: -20, y: 100 }, { x: 50, y: 550 }, { x: 990, y: 550 }], 1, '#FFF'))
             if (!this.startStatic) {
               this.startStatic = true

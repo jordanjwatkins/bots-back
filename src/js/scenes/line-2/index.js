@@ -32,7 +32,7 @@ class Line2 {
 
     this.levels = levels(this)
 
-    this.storage = new Storage('OfflineDevLine7')
+    this.storage = new Storage('BotsBack')
 
     this.showedTitle = true
     this.showedExposition = true

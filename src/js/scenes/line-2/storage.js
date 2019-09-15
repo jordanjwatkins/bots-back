@@ -1,7 +1,7 @@
 const initialState = () => ({
-  currentLevel: '',
+  currentLevel: 'basics',
   levels: {
-
+    'basics': {},
   },
 })
 

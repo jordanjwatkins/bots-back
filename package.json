@@ -1,6 +1,6 @@
 {
-  "name": "america-offline",
-  "displayName": "America Offline",
+  "name": "bots-back",
+  "displayName": "Bot's Back",
   "version": "1.0.0",
   "scripts": {
     "start": "npm run dev",
