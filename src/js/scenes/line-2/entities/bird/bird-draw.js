@@ -158,6 +158,7 @@ export default {
       this.flying = false
     }
 
+    // If the draw height (spawnScanOffset) is larger than the source canvas, nothing renders in iOS
     mainCanvas.context.drawImage(
       this.offCanvas.canvas,
       0, 0,
